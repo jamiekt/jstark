@@ -1,0 +1,62 @@
+from abc import ABC
+from datetime import date
+from enum import Enum
+
+
+class PeriodUnitOfMeasure(Enum):
+    DAY = 1
+    WEEK = 2
+    MONTH = 3
+    QUARTER = 4
+    YEAR = 5
+
+
+class FeaturePeriod(object):
+    """Encapsulate the period of a feature, defined by a unit of time measure, a start and an end"""
+
+    def __init__(
+        self, period_unit_of_measure: PeriodUnitOfMeasure, start: int, end: int
+    ) -> None:
+        self.period_unit_of_measure = period_unit_of_measure
+        self.start = start
+        self.end = end
+
+    @property
+    def start(self) -> int:
+        return self.__start
+
+    @start.setter
+    def start(self, value: int) -> None:
+        self.__start = value
+
+    @property
+    def end(self) -> int:
+        return self.__end
+
+    @end.setter
+    def end(self, value: int) -> None:
+        self.__end = value
+
+    @property
+    def period_unit_of_measure(self) -> PeriodUnitOfMeasure:
+        return self.__period_unit_of_measure
+
+    @period_unit_of_measure.setter
+    def period_unit_of_measure(self, value: PeriodUnitOfMeasure) -> None:
+        self.__period_unit_of_measure = value
+
+    @property
+    def description(self) -> str:
+        """Description of the feature period
+
+        Pretty sure this will change in time, but this initial implementation will do for now
+
+        Returns:
+            str: description
+        """
+        return f"Between {self.start} and {self.end} {self.period_unit_of_measure.name.lower()}s ago"
+
+
+class Feature(ABC):
+    def __init__(self, as_at: date, feature_period: FeaturePeriod) -> None:
+        pass

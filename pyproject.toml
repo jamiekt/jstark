@@ -40,6 +40,7 @@ path = "jstark/__about__.py"
 dependencies = [
   "pytest",
   "pytest-cov",
+  "black"
 ]
 [tool.hatch.envs.default.scripts]
 cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=jstark --cov=tests {args}"
