@@ -24,7 +24,8 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = [
-  "pyspark"
+  "pyspark",
+  "hatchling>=1.11.0",
 ]
 dynamic = ["version"]
 
