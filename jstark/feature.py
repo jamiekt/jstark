@@ -20,33 +20,21 @@ class FeaturePeriod(object):
     ) -> None:
         if end > start:
             raise FeaturePeriodEndGreaterThanStartError(start=start, end = end)
-        self.period_unit_of_measure = period_unit_of_measure
-        self.start = start
-        self.end = end
+        self.__period_unit_of_measure = period_unit_of_measure
+        self.__start = start
+        self.__end = end
 
     @property
     def start(self) -> int:
         return self.__start
 
-    @start.setter
-    def start(self, value: int) -> None:
-        self.__start = value
-
     @property
     def end(self) -> int:
         return self.__end
 
-    @end.setter
-    def end(self, value: int) -> None:
-        self.__end = value
-
     @property
     def period_unit_of_measure(self) -> PeriodUnitOfMeasure:
         return self.__period_unit_of_measure
-
-    @period_unit_of_measure.setter
-    def period_unit_of_measure(self, value: PeriodUnitOfMeasure) -> None:
-        self.__period_unit_of_measure = value
 
     @property
     def description(self) -> str:
