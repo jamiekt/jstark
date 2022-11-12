@@ -1,6 +1,7 @@
 from abc import ABC
 from datetime import date
 from enum import Enum
+from .exceptions import FeaturePeriodEndGreaterThanStartError
 
 
 class PeriodUnitOfMeasure(Enum):
@@ -17,6 +18,8 @@ class FeaturePeriod(object):
     def __init__(
         self, period_unit_of_measure: PeriodUnitOfMeasure, start: int, end: int
     ) -> None:
+        if end > start:
+            raise FeaturePeriodEndGreaterThanStartError(start=start, end = end)
         self.period_unit_of_measure = period_unit_of_measure
         self.start = start
         self.end = end
