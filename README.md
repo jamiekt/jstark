@@ -29,5 +29,5 @@ The symptom of this was that when trying to install pyspark I got error
 
 > Modulenotfounderror: No Module Named _ctypes for Linux System
 
-Solved it by installing **libffi-dev** as per https://www.pythonpool.com/modulenotfounderror-no-module-named-_ctypes-solved/
+Solved it by installing **libffi-dev** as per [https://www.pythonpool.com/modulenotfounderror-no-module-named-_ctypes-solved/](https://www.pythonpool.com/modulenotfounderror-no-module-named-_ctypes-solved/)
 and *then* installing my chosen python version (which happened to be python 3.10). 
