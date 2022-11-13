@@ -1,6 +1,7 @@
 from abc import ABC
 from datetime import date
 from enum import Enum
+
 from .exceptions import FeaturePeriodEndGreaterThanStartError
 
 
