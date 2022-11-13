@@ -12,7 +12,7 @@ from pyspark.sql.types import (
 
 
 @pytest.fixture(scope="session")
-def purchases_schema():
+def purchases_schema() -> StructType:
     return StructType(
         [
             StructField("Customer", StringType(), True),
