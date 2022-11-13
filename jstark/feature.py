@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from datetime import date
 from enum import Enum
 
-from pyspark.sql import DataFrame
+from pyspark.sql import DataFrame, Column
 
 from .exceptions import FeaturePeriodEndGreaterThanStartError
 
@@ -65,5 +65,5 @@ class Feature(ABC):
         return self.__as_at
 
     @abstractmethod
-    def formula(self, df: DataFrame):
+    def columnExpression(self, df: DataFrame) -> Column:
         pass
