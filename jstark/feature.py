@@ -19,7 +19,7 @@ class FeaturePeriod(object):
         self, period_unit_of_measure: PeriodUnitOfMeasure, start: int, end: int
     ) -> None:
         if end > start:
-            raise FeaturePeriodEndGreaterThanStartError(start=start, end = end)
+            raise FeaturePeriodEndGreaterThanStartError(start=start, end=end)
         self.__period_unit_of_measure = period_unit_of_measure
         self.__start = start
         self.__end = end
