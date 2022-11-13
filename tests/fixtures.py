@@ -1,21 +1,29 @@
 import pytest
 from pyspark.sql import DataFrame, SparkSession
-from pyspark.sql.types import StructType, StructField, StringType, IntegerType, DecimalType
+from pyspark.sql.types import (
+    StructType,
+    StructField,
+    StringType,
+    IntegerType,
+    DecimalType,
+)
 from decimal import Decimal
-
 
 
 @pytest.fixture
 def purchases_schema():
-    return StructType([
-        StructField("Customer",StringType(),True), 
-        StructField("Store",StringType(),True), 
-        StructField("Channel",StringType(),True), 
-        StructField("Product", StringType(), True), 
-        StructField("Quantity", IntegerType(), True), 
-        StructField("Basket", StringType(), True) ,
-        StructField("GrossSpend", DecimalType(10, 2), True)
-    ])
+    return StructType(
+        [
+            StructField("Customer", StringType(), True),
+            StructField("Store", StringType(), True),
+            StructField("Channel", StringType(), True),
+            StructField("Product", StringType(), True),
+            StructField("Quantity", IntegerType(), True),
+            StructField("Basket", StringType(), True),
+            StructField("GrossSpend", DecimalType(10, 2), True),
+        ]
+    )
+
 
 @pytest.fixture
 def dataframe_of_purchases(purchases_schema) -> DataFrame:
@@ -23,5 +31,6 @@ def dataframe_of_purchases(purchases_schema) -> DataFrame:
     return spark.createDataFrame(
         data=[
             ("Leia", "Hammersmith", "Instore", "Cheddar", 2, "Basket1", Decimal(2.50))
-        ], schema=purchases_schema
+        ],
+        schema=purchases_schema,
     )
