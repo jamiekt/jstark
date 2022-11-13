@@ -1,11 +1,9 @@
 from platform import python_version
 
 import pytest
-from packaging import version
-
 from jstark.exceptions import FeaturePeriodEndGreaterThanStartError
 from jstark.feature import FeaturePeriod, PeriodUnitOfMeasure
-
+from packaging import version
 
 def test_feature_period_description():
     assert (
