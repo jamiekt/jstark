@@ -1,6 +1,8 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 from datetime import date
 from enum import Enum
+
+from pyspark.sql import DataFrame
 
 from .exceptions import FeaturePeriodEndGreaterThanStartError
 
@@ -51,4 +53,18 @@ class FeaturePeriod(object):
 
 class Feature(ABC):
     def __init__(self, as_at: date, feature_period: FeaturePeriod) -> None:
+        self.__feature_period = feature_period
+        self.__as_at = as_at
+    
+    @property
+    def feature_period(self) -> FeaturePeriod:
+        return self.__feature_period
+    
+    @property
+    def as_at(self) -> date:
+        return self.__as_at
+    
+    @property
+    @abstractmethod
+    def formula(self, df: DataFrame):
         pass
