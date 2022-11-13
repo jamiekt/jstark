@@ -64,7 +64,6 @@ class Feature(ABC):
     def as_at(self) -> date:
         return self.__as_at
 
-    @property
     @abstractmethod
     def formula(self, df: DataFrame):
         pass
