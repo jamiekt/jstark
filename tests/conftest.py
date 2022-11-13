@@ -11,7 +11,7 @@ from pyspark.sql.types import (
 )
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def purchases_schema():
     return StructType(
         [
@@ -26,7 +26,7 @@ def purchases_schema():
     )
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def dataframe_of_purchases(purchases_schema) -> DataFrame:
     spark = SparkSession.builder.getOrCreate()
     return spark.createDataFrame(
