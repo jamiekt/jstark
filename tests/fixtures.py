@@ -7,7 +7,7 @@ from pyspark.sql.types import (
     IntegerType,
     StringType,
     StructField,
-    StructType
+    StructType,
 )
 
 
