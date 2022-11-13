@@ -1,13 +1,9 @@
+from decimal import Decimal
+
 import pytest
 from pyspark.sql import DataFrame, SparkSession
-from pyspark.sql.types import (
-    StructType,
-    StructField,
-    StringType,
-    IntegerType,
-    DecimalType,
-)
-from decimal import Decimal
+from pyspark.sql.types import (DecimalType, IntegerType, StringType,
+                               StructField, StructType)
 
 
 @pytest.fixture
