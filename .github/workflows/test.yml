@@ -35,4 +35,4 @@ jobs:
         pip install -e .
     
     - name: Run tests
-      run: hatch run pytest -vvv
+      run: hatch run pytest -vvv --durations=0
