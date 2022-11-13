@@ -5,6 +5,7 @@ from jstark.exceptions import FeaturePeriodEndGreaterThanStartError
 from jstark.feature import FeaturePeriod, PeriodUnitOfMeasure
 from packaging import version
 
+
 def test_feature_period_description():
     assert (
         FeaturePeriod(PeriodUnitOfMeasure.DAY, 3, 2).description
