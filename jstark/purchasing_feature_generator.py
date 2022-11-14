@@ -1,6 +1,7 @@
 from pyspark.sql import DataFrame
 from pyspark.sql.types import TimestampType
 from datetime import date
+import pyspark.sql.functions as f
 
 from jstark.gross_spend_feature import GrossSpendFeature
 from jstark.feature import FeaturePeriod, PeriodUnitOfMeasure
@@ -16,6 +17,8 @@ class PurchasingFeatureGenerator(object):
             or df.schema["Timestamp"].dataType is not TimestampType()
         ):
             raise DataFrameDoesNotIncludeTimestampColumn()
+        # Need a column containing the date of the transaction.
+        df = df.withColumn("~date~", f.to_date("Timestamp"))
 
     def get_df(self):
         gross_spend_feature = GrossSpendFeature(
