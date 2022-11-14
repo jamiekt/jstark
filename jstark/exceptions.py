@@ -1,3 +1,6 @@
+from pyspark.sql import Column
+
+
 class FeaturePeriodEndGreaterThanStartError(Exception):
     """Exception indicating end of a feature period cannot be before the start"""
 
@@ -8,3 +11,13 @@ class FeaturePeriodEndGreaterThanStartError(Exception):
 
     def __str__(self) -> str:
         return f"End of the feature period ({self.end}) cannot be before the start of the feature period ({self.start})"
+
+
+class DataFrameDoesNotIncludeTimestampColumn(Exception):
+    "Exception indicating DataFrame does not include a column called Timestamp of type Timestamp"
+
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)
+
+    def __str__(self) -> str:
+        return "DataFrame does not include column Timestamp of tyoe TimestampType"

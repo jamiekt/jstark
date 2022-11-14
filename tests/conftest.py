@@ -1,4 +1,5 @@
 from decimal import Decimal
+from datetime import datetime
 
 import pytest
 from pyspark.sql import DataFrame, SparkSession
@@ -8,6 +9,7 @@ from pyspark.sql.types import (
     StringType,
     StructField,
     StructType,
+    TimestampType,
 )
 
 
@@ -15,6 +17,7 @@ from pyspark.sql.types import (
 def purchases_schema() -> StructType:
     return StructType(
         [
+            StructField("Timestamp", TimestampType(), True),
             StructField("Customer", StringType(), True),
             StructField("Store", StringType(), True),
             StructField("Channel", StringType(), True),
@@ -31,7 +34,16 @@ def dataframe_of_purchases(purchases_schema) -> DataFrame:
     spark = SparkSession.builder.getOrCreate()
     return spark.createDataFrame(
         data=[
-            ("Leia", "Hammersmith", "Instore", "Cheddar", 2, "Basket1", Decimal(2.50))
+            (
+                datetime.now(),
+                "Leia",
+                "Hammersmith",
+                "Instore",
+                "Cheddar",
+                2,
+                "Basket1",
+                Decimal(2.50),
+            )
         ],
         schema=purchases_schema,
     )
