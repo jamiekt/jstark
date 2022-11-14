@@ -17,4 +17,6 @@ class DataFrameDoesNotIncludeTimestampColumn(Exception):
         super().__init__(*args)
 
     def __str__(self) -> str:
-        return "DataFrame does not include column called Timestamp of type TimestampType"
+        return (
+            "DataFrame does not include column called Timestamp of type TimestampType"
+        )
