@@ -10,8 +10,6 @@ from jstark.exceptions import DataFrameDoesNotIncludeTimestampColumn
 
 class PurchasingFeatureGenerator(object):
     def __init__(self, as_at: date, df: DataFrame) -> None:
-        self.__df = df
-        self.__as_at = as_at
         if (
             "Timestamp" not in df.schema.fieldNames()
             or df.schema["Timestamp"].dataType is not TimestampType()
@@ -19,6 +17,8 @@ class PurchasingFeatureGenerator(object):
             raise DataFrameDoesNotIncludeTimestampColumn()
         # Need a column containing the date of the transaction.
         df = df.withColumn("~date~", f.to_date("Timestamp"))
+        self.__df = df
+        self.__as_at = as_at
 
     def get_df(self):
         gross_spend_feature = GrossSpendFeature(
