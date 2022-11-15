@@ -3,7 +3,7 @@ from pyspark.sql.types import TimestampType
 from datetime import date
 import pyspark.sql.functions as f
 
-from jstark.gross_spend_feature import GrossSpendFeature
+from jstark.gross_spend_feature import GrossSpend
 from jstark.feature import FeaturePeriod, PeriodUnitOfMeasure
 from jstark.exceptions import DataFrameDoesNotIncludeTimestampColumn
 
@@ -21,11 +21,11 @@ class PurchasingFeatureGenerator(object):
         self.__as_at = as_at
 
     def get_df(self):
-        gross_spend_feature = GrossSpendFeature(
+        gross_spend = GrossSpend(
             as_at=self.__as_at,
             feature_period=FeaturePeriod(PeriodUnitOfMeasure.DAY, 2, 1),
         )
-        expressions = [gross_spend_feature.columnExpression(df=self.__df)]
+        expressions = [gross_spend.columnExpression(df=self.__df)]
         output_df = self.__df.groupBy(["Customer", "Product", "Store", "Channel"]).agg(
             *expressions
         )

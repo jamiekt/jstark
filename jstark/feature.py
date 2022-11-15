@@ -40,6 +40,21 @@ class FeaturePeriod(object):
         return self.__period_unit_of_measure
 
     @property
+    def code(self) -> str:
+        uom_abbreviation = (
+            "d"
+            if self.period_unit_of_measure.name == "DAY"
+            else "w"
+            if self.period_unit_of_measure.name == "WEEK"
+            else "m"
+            if self.period_unit_of_measure.name == "MONTH"
+            else "q"
+            if self.period_unit_of_measure.name == "QUARTER"
+            else "y"
+        )
+        return f"{self.start}{uom_abbreviation}{self.end}"
+
+    @property
     def description(self) -> str:
         """Description of the feature period
 
@@ -67,3 +82,7 @@ class Feature(ABC):
     @abstractmethod
     def columnExpression(self, df: DataFrame) -> Column:
         pass
+
+    @property
+    def feature_name(self) -> str:
+        return f"{type(self).__name__}_{self.feature_period.code}"
