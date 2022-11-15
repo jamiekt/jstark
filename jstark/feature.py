@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from datetime import date
 from enum import Enum
+from typing import Literal
 
 from pyspark.sql import Column, DataFrame
 
@@ -44,7 +45,7 @@ class FeaturePeriod(object):
         uom_abbreviation = self.__uom_abbreviation()
         return f"{self.start}{uom_abbreviation}{self.end}"
 
-    def __uom_abbreviation(self):
+    def __uom_abbreviation(self) -> Literal["d", "w", "m", "q", "y"]:
         return (
             "d"
             if self.period_unit_of_measure.name == "DAY"
