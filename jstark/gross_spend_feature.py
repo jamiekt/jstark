@@ -7,8 +7,8 @@ from .feature import Feature, FeaturePeriod
 
 
 class GrossSpend(Feature):
-    def __init__(self, as_at: date, feature_period: FeaturePeriod) -> None:
-        super().__init__(as_at, feature_period)
+    def __init__(self, as_at: date, feature_period: FeaturePeriod, df: DataFrame) -> None:
+        super().__init__(as_at, feature_period, df)
 
-    def columnExpression(self, df: DataFrame) -> Column:
-        return f.sum(df["GrossSpend"]).alias(self.feature_name)
+    def columnExpression(self) -> Column:
+        return f.sum(self.df["GrossSpend"])

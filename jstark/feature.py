@@ -67,9 +67,10 @@ class FeaturePeriod(object):
 
 
 class Feature(ABC):
-    def __init__(self, as_at: date, feature_period: FeaturePeriod) -> None:
+    def __init__(self, as_at: date, feature_period: FeaturePeriod, df: DataFrame) -> None:
         self.__feature_period = feature_period
         self.__as_at = as_at
+        self.__df = df
 
     @property
     def feature_period(self) -> FeaturePeriod:
@@ -79,10 +80,18 @@ class Feature(ABC):
     def as_at(self) -> date:
         return self.__as_at
 
+    @property
+    def df(self) -> DataFrame:
+        return self.__df
+
     @abstractmethod
-    def columnExpression(self, df: DataFrame) -> Column:
+    def columnExpression(self) -> Column:
         pass
 
     @property
     def feature_name(self) -> str:
         return f"{type(self).__name__}_{self.feature_period.code}"
+    
+    @property
+    def column(self) -> Column:
+        return self.columnExpression().alias(self.feature_name)

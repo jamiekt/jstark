@@ -23,9 +23,9 @@ class PurchasingFeatureGenerator(object):
     def get_df(self):
         gross_spend = GrossSpend(
             as_at=self.__as_at,
-            feature_period=FeaturePeriod(PeriodUnitOfMeasure.DAY, 2, 1),
+            feature_period=FeaturePeriod(PeriodUnitOfMeasure.DAY, 2, 1),df=self.__df
         )
-        expressions = [gross_spend.columnExpression(df=self.__df)]
+        expressions = [gross_spend.column]
         output_df = self.__df.groupBy(["Customer", "Product", "Store", "Channel"]).agg(
             *expressions
         )
