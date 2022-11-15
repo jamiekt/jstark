@@ -46,15 +46,16 @@ class FeaturePeriod(object):
         return f"{self.start}{uom_abbreviation}{self.end}"
 
     def __uom_abbreviation(self) -> Literal["d", "w", "m", "q", "y"]:
+        uom_name = self.period_unit_of_measure.name
         return (
             "d"
-            if self.period_unit_of_measure.name == "DAY"
+            if uom_name == "DAY"
             else "w"
-            if self.period_unit_of_measure.name == "WEEK"
+            if uom_name == "WEEK"
             else "m"
-            if self.period_unit_of_measure.name == "MONTH"
+            if uom_name == "MONTH"
             else "q"
-            if self.period_unit_of_measure.name == "QUARTER"
+            if uom_name == "QUARTER"
             else "y"
         )
 
