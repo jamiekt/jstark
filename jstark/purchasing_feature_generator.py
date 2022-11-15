@@ -1,11 +1,12 @@
+from datetime import date
+
+import pyspark.sql.functions as f
 from pyspark.sql import DataFrame
 from pyspark.sql.types import TimestampType
-from datetime import date
-import pyspark.sql.functions as f
 
-from jstark.gross_spend_feature import GrossSpend
-from jstark.feature import FeaturePeriod, PeriodUnitOfMeasure
 from jstark.exceptions import DataFrameDoesNotIncludeTimestampColumn
+from jstark.feature import FeaturePeriod, PeriodUnitOfMeasure
+from jstark.gross_spend_feature import GrossSpend
 
 
 class PurchasingFeatureGenerator(object):

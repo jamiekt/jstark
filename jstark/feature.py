@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from datetime import date
 from enum import Enum
 
-from pyspark.sql import DataFrame, Column
+from pyspark.sql import Column, DataFrame
 
 from .exceptions import FeaturePeriodEndGreaterThanStartError
 
