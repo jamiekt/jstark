@@ -41,7 +41,11 @@ class FeaturePeriod(object):
 
     @property
     def code(self) -> str:
-        uom_abbreviation = (
+        uom_abbreviation = self.__uom_abbreviation()
+        return f"{self.start}{uom_abbreviation}{self.end}"
+
+    def __uom_abbreviation(self):
+        return (
             "d"
             if self.period_unit_of_measure.name == "DAY"
             else "w"
@@ -52,7 +56,6 @@ class FeaturePeriod(object):
             if self.period_unit_of_measure.name == "QUARTER"
             else "y"
         )
-        return f"{self.start}{uom_abbreviation}{self.end}"
 
     @property
     def description(self) -> str:
