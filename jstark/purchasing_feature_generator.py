@@ -1,4 +1,5 @@
 from datetime import date
+from typing import List
 
 import pyspark.sql.functions as f
 from pyspark.sql import DataFrame
@@ -34,7 +35,7 @@ class PurchasingFeatureGenerator(object):
         self.__channel_attr = channel_attr
 
     @property
-    def grain(self) -> list[str]:
+    def grain(self) -> List[str]:
         grain = []
         if self.__customer_attr != "All":
             grain.append(self.__customer_attr)
