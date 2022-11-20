@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 from datetime import date
 from enum import Enum
-from typing import Literal
 
 from pyspark.sql import Column, DataFrame
 
