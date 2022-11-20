@@ -9,11 +9,11 @@ from .exceptions import FeaturePeriodEndGreaterThanStartError
 
 
 class PeriodUnitOfMeasure(Enum):
-    DAY = 1
-    WEEK = 2
-    MONTH = 3
-    QUARTER = 4
-    YEAR = 5
+    DAY = "d"
+    WEEK = "w"
+    MONTH = "m"
+    QUARTER = "q"
+    YEAR = "y"
 
 
 class FeaturePeriod(object):
@@ -42,22 +42,7 @@ class FeaturePeriod(object):
 
     @property
     def code(self) -> str:
-        uom_abbreviation = self.__uom_abbreviation()
-        return f"{self.start}{uom_abbreviation}{self.end}"
-
-    def __uom_abbreviation(self) -> Literal["d", "w", "m", "q", "y"]:
-        uom_name = self.period_unit_of_measure.name
-        return (
-            "d"
-            if uom_name == "DAY"
-            else "w"
-            if uom_name == "WEEK"
-            else "m"
-            if uom_name == "MONTH"
-            else "q"
-            if uom_name == "QUARTER"
-            else "y"
-        )
+        return f"{self.start}{self.period_unit_of_measure.value}{self.end}"
 
     @property
     def description(self) -> str:
