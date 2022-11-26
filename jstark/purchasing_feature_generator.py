@@ -5,7 +5,7 @@ import pyspark.sql.functions as f
 from pyspark.sql import DataFrame
 from pyspark.sql.types import TimestampType
 
-from jstark.exceptions import DataFrameDoesNotIncludeTimestampColumn
+from jstark.exceptions import DataFrameDoesNotIncludeTimestampColumn, AsAtIsNotADate
 from jstark.feature import FeaturePeriod, PeriodUnitOfMeasure
 from jstark.gross_spend_feature import GrossSpend
 
@@ -27,8 +27,10 @@ class PurchasingFeatureGenerator(object):
             raise DataFrameDoesNotIncludeTimestampColumn()
         # Need a column containing the date of the transaction.
         df = df.withColumn("~date~", f.to_date("Timestamp"))
-        self.__df = df
+        if (not isinstance(as_at, date)):
+            raise AsAtIsNotADate
         self.__as_at = as_at
+        self.__df = df.withColumn("asAt", f.lit(self.__as_at))
         self.__customer_attr = customer_attr
         self.__product_attr = product_attr
         self.__store_attr = store_attr

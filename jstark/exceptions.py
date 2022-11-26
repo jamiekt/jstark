@@ -20,3 +20,12 @@ class DataFrameDoesNotIncludeTimestampColumn(Exception):
         return (
             "DataFrame does not include column called Timestamp of type TimestampType"
         )
+
+class AsAtIsNotADate(Exception):
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)
+    
+    def __str__(self) -> str:
+        return (
+            "as_at value must be of type Date"
+        )
