@@ -27,7 +27,7 @@ class PurchasingFeatureGenerator(object):
             raise DataFrameDoesNotIncludeTimestampColumn()
         # Need a column containing the date of the transaction.
         df = df.withColumn("~date~", f.to_date("Timestamp"))
-        if (not isinstance(as_at, date)):
+        if not isinstance(as_at, date):
             raise AsAtIsNotADate
         self.__as_at = as_at
         self.__df = df.withColumn("asAt", f.lit(self.__as_at))
