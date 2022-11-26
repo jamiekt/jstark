@@ -1,6 +1,6 @@
 # Contribution Guide
 
-jstark has been built using [Hatch](https://hatch.pypa.io/) for environment management and for its build system, hatchling.
+jstark has been built using [Hatch](https://hatch.pypa.io/) for environment management and for its build tool, hatchling.
 It is suggested that you do the same (though I suppose you don't have to) and this guide assumes that you are.
 
 Install Hatch using the instructions at [https://hatch.pypa.io/latest/install/](https://hatch.pypa.io/latest/install/).
