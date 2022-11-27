@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from datetime import date
 from enum import Enum
+from typing import Callable
 
 from pyspark.sql import Column, DataFrame
 import pyspark.sql.functions as f
@@ -71,6 +72,11 @@ class Feature(ABC):
         return f.count(column)
 
     @property
+    @abstractmethod
+    def aggregator(self) -> Callable[[Column], Column]:
+        pass
+
+    @property
     def feature_period(self) -> FeaturePeriod:
         return self.__feature_period
 
@@ -92,4 +98,4 @@ class Feature(ABC):
 
     @property
     def column(self) -> Column:
-        return self.sum_aggregator(self.columnExpression()).alias(self.feature_name)
+        return self.aggregator(self.columnExpression()).alias(self.feature_name)
