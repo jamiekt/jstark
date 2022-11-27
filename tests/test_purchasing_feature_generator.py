@@ -1,6 +1,5 @@
 import pytest
 
-from decimal import Decimal
 from pyspark.sql import DataFrame
 from datetime import date
 import pyspark.sql.functions as f
