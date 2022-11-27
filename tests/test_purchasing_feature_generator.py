@@ -1,5 +1,6 @@
 import pytest
 
+from decimal import Decimal
 from pyspark.sql import DataFrame
 from datetime import date
 import pyspark.sql.functions as f
@@ -34,3 +35,13 @@ def test_input_df_field_timestamp_is_not_of_type_timestamp(
     dataframe_of_purchases = dataframe_of_purchases.withColumn("Timestamp", f.lit(""))
     with pytest.raises(DataFrameDoesNotIncludeTimestampColumn):
         PurchasingFeatureGenerator(as_at=date.today(), df=dataframe_of_purchases)
+
+
+def test_gross_spend(dataframe_of_purchases):
+    first = (
+        PurchasingFeatureGenerator(as_at=date.today(), df=dataframe_of_purchases)
+        .get_df()
+        .first()
+    )
+    assert first is not None
+    assert float(first["GrossSpend_2d1"]) == 5.5

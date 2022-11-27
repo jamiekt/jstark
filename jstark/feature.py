@@ -3,6 +3,7 @@ from datetime import date
 from enum import Enum
 
 from pyspark.sql import Column, DataFrame
+import pyspark.sql.functions as f
 
 from .exceptions import FeaturePeriodEndGreaterThanStartError
 
@@ -63,6 +64,12 @@ class Feature(ABC):
         self.__as_at = as_at
         self.__df = df
 
+    def sum_aggregator(self, column: Column) -> Column:
+        return f.sum(column)
+
+    def count_aggregator(self, column: Column) -> Column:
+        return f.count(column)
+
     @property
     def feature_period(self) -> FeaturePeriod:
         return self.__feature_period
@@ -85,4 +92,4 @@ class Feature(ABC):
 
     @property
     def column(self) -> Column:
-        return self.columnExpression().alias(self.feature_name)
+        return self.sum_aggregator(self.columnExpression()).alias(self.feature_name)

@@ -13,4 +13,4 @@ class GrossSpend(Feature):
         super().__init__(as_at, feature_period, df)
 
     def columnExpression(self) -> Column:
-        return f.sum(self.df["GrossSpend"])
+        return f.col("GrossSpend")
