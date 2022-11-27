@@ -18,7 +18,10 @@ class PeriodUnitOfMeasure(Enum):
 
 
 class FeaturePeriod(object):
-    """Encapsulate the period of a feature, defined by a unit of time measure, a start and an end"""
+    """
+    Encapsulate the period of a feature, defined by a unit of time
+    measure, a start and an end
+    """
 
     def __init__(
         self, period_unit_of_measure: PeriodUnitOfMeasure, start: int, end: int
@@ -49,12 +52,16 @@ class FeaturePeriod(object):
     def description(self) -> str:
         """Description of the feature period
 
-        Pretty sure this will change in time, but this initial implementation will do for now
+        Pretty sure this will change in time, but this initial implementation
+        will do for now
 
         Returns:
             str: description
         """
-        return f"Between {self.start} and {self.end} {self.period_unit_of_measure.name.lower()}s ago"
+        return (
+            f"Between {self.start} and {self.end} "
+            + f"{self.period_unit_of_measure.name.lower()}s ago"
+        )
 
 
 class Feature(ABC):
@@ -98,4 +105,4 @@ class Feature(ABC):
 
     @property
     def column(self) -> Column:
-        return self.aggregator(self.columnExpression()).alias(self.feature_name)
+        return self.aggregator()(self.columnExpression()).alias(self.feature_name)
