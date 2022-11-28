@@ -2,7 +2,7 @@ from platform import python_version
 
 import pytest
 from jstark.exceptions import FeaturePeriodEndGreaterThanStartError
-from jstark.feature import FeaturePeriod, PeriodUnitOfMeasure
+from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
 from packaging import version
 
 
@@ -46,9 +46,9 @@ def test_feature_period_periodunitofmeasure_is_immutable():
     if version.parse(python_version()) < version.parse("3.11"):
         assert "can't set attribute" in str(excInfo.value)
     else:
-        assert (
-            str(excInfo.value)
-            == "property 'period_unit_of_measure' of 'FeaturePeriod' object has no setter"
+        assert str(excInfo.value) == (
+            "property 'period_unit_of_measure' of "
+            + "'FeaturePeriod' object has no setter"
         )
 
 
@@ -57,7 +57,8 @@ def test_feature_period_end_greater_than_start_raises_exception():
         FeaturePeriod(PeriodUnitOfMeasure.DAY, 2, 3)
     assert (
         str(excInfo.value)
-        == "End of the feature period (3) cannot be before the start of the feature period (2)"
+        == "End of the feature period (3) cannot be "
+        + "before the start of the feature period (2)"
     )
 
 

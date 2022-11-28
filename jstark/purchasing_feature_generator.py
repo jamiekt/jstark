@@ -6,7 +6,7 @@ from pyspark.sql import DataFrame
 from pyspark.sql.types import TimestampType
 
 from jstark.exceptions import DataFrameDoesNotIncludeTimestampColumn, AsAtIsNotADate
-from jstark.feature import FeaturePeriod, PeriodUnitOfMeasure
+from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
 from jstark.gross_spend_feature import GrossSpend
 
 
