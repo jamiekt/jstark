@@ -11,7 +11,7 @@ class PurchasingFeatureGenerator(object):
         self,
         as_at: date,
         feature_periods: List[FeaturePeriod] = [
-            FeaturePeriod(PeriodUnitOfMeasure.DAY, 2, 1),
+            FeaturePeriod(PeriodUnitOfMeasure.DAY, 2, 0),
             FeaturePeriod(PeriodUnitOfMeasure.DAY, 4, 3),
         ],
     ) -> None:

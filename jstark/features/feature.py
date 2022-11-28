@@ -5,7 +5,7 @@ from typing import Callable
 from pyspark.sql import Column
 import pyspark.sql.functions as f
 
-from jstark.feature_period import FeaturePeriod
+from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
 from jstark.exceptions import AsAtIsNotADate
 
 
@@ -52,4 +52,32 @@ class Feature(ABC):
 
     @property
     def column(self) -> Column:
-        return self.aggregator()(self.columnExpression()).alias(self.feature_name)
+        as_at_col = f.lit(self.as_at)
+        date_of_occurrence_col = f.col("Timestamp")
+        days_since_occurrence = f.datediff(f.to_date(date_of_occurrence_col), as_at_col)
+        weeks_since_occurrence = f.ceil(days_since_occurrence / 7)
+        months_since_occurrence = f.ceil(
+            f.months_between(as_at_col, date_of_occurrence_col)
+        )
+        quarters_since_occurrence = f.ceil(months_since_occurrence / 3)
+        years_since_occurrence = f.ceil(months_since_occurrence / 12)
+        puom = self.feature_period.period_unit_of_measure
+        start = self.feature_period.start
+        end = self.feature_period.end
+        periods_since_occurrence = (
+            days_since_occurrence
+            if puom == PeriodUnitOfMeasure.DAY
+            else weeks_since_occurrence
+            if puom == PeriodUnitOfMeasure.WEEK
+            else months_since_occurrence
+            if puom == PeriodUnitOfMeasure.MONTH
+            else quarters_since_occurrence
+            if puom == PeriodUnitOfMeasure.QUARTER
+            else years_since_occurrence
+        )
+        return self.aggregator()(
+            f.when(
+                (periods_since_occurrence <= start) & (periods_since_occurrence >= end),
+                self.columnExpression(),
+            )
+        ).alias(self.feature_name)

@@ -6,13 +6,12 @@ from jstark.purchasing_feature_generator import PurchasingFeatureGenerator
 
 
 def test_gross_spend(dataframe_of_purchases: DataFrame):
-    first = (
-        dataframe_of_purchases.groupBy()
-        .agg(*PurchasingFeatureGenerator(as_at=date.today()).features)
-        .first()
+    df = dataframe_of_purchases.groupBy().agg(
+        *PurchasingFeatureGenerator(as_at=date.today()).features
     )
+    first = df.first()
     assert first is not None
-    assert float(first["GrossSpend_2d1"]) == 8.5
+    assert float(first["GrossSpend_2d0"]) == 8.5
 
 
 def test_count_exists(dataframe_of_purchases: DataFrame):
@@ -29,4 +28,4 @@ def test_count(dataframe_of_purchases: DataFrame):
     df = df.where(f.col("Store") == "Hammersmith")
     first = df.first()
     assert first is not None
-    assert first["Count_2d1"] == 2
+    assert first["Count_2d0"] == 2
