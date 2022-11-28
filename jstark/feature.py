@@ -78,7 +78,6 @@ class Feature(ABC):
     def count_aggregator(self, column: Column) -> Column:
         return f.count(column)
 
-    @property
     @abstractmethod
     def aggregator(self) -> Callable[[Column], Column]:
         pass
