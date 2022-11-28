@@ -54,6 +54,16 @@ def dataframe_of_purchases(purchases_schema) -> DataFrame:
                 "Basket1",
                 Decimal(3.00),
             ),
+            (
+                datetime.now(),
+                "Luke",
+                "Ealing",
+                "Instore",
+                "Custard Creams",
+                1,
+                "Basket2",
+                Decimal(3.00),
+            ),
         ],
         schema=purchases_schema,
     )
