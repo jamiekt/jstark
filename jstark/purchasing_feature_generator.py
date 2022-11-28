@@ -3,8 +3,7 @@ from typing import List
 
 from pyspark.sql import Column
 from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
-from jstark.gross_spend_feature import GrossSpend
-from jstark.count import Count
+from jstark.features import Count, GrossSpend
 
 
 class PurchasingFeatureGenerator(object):
@@ -40,8 +39,8 @@ class PurchasingFeatureGenerator(object):
     @property
     def features(self) -> List[Column]:
         return [
-            f.column
-            for f in [
+            feature.column
+            for feature in [
                 f[0](as_at=self.as_at, feature_period=f[1])
                 for f in (
                     (cls, fp)
