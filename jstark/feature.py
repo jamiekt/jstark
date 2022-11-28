@@ -14,6 +14,12 @@ class Feature(ABC):
         self.feature_period = feature_period
         self.as_at = as_at
 
+    @classmethod
+    def get_subclasses(cls):
+        for subclass in cls.__subclasses__():
+            yield from subclass.get_subclasses()
+            yield subclass
+
     def sum_aggregator(self, column: Column) -> Column:
         return f.sum(column)
 
