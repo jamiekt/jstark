@@ -15,5 +15,4 @@ class PurchasingFeatureGenerator(object):
             as_at=self.__as_at,
             feature_period=FeaturePeriod(PeriodUnitOfMeasure.DAY, 2, 1),
         )
-        expressions = [gross_spend.column]
-        return expressions
+        return [feature.column for feature in [gross_spend]]
