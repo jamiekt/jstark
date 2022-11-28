@@ -5,6 +5,10 @@
 
 -----
 
+## Why is it called jstark?
+
+jstark is phonetically similar to PySpark (which jstark requires) and as a boy I was a fan of [comic book character Jon Stark](https://www.worthpoint.com/worthopedia/football-picture-story-monthly-stark-423630034).
+
 ## Installation
 
 ```console
