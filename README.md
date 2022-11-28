@@ -8,7 +8,7 @@
 
 ## Why is it called jstark?
 
-jstark is phonetically similar to PySpark (which jstark requires) and its a homage to [comic book character Jon Stark](https://www.worthpoint.com/worthopedia/football-picture-story-monthly-stark-423630034) who I was a fan of as a boy.
+jstark is phonetically similar to PySpark (which jstark requires) and is a homage to [comic book character Jon Stark](https://www.worthpoint.com/worthopedia/football-picture-story-monthly-stark-423630034) who I was a fan of as a boy.
 
 ## Installation
 
