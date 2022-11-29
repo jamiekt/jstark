@@ -1,6 +1,6 @@
 from decimal import Decimal
 from datetime import datetime
-from typing import Dict, List, Any
+from typing import Dict, Any, Iterable
 
 import pytest
 from pyspark.sql import DataFrame, SparkSession
@@ -60,21 +60,18 @@ def dataframe_of_purchases(purchases_schema) -> DataFrame:
             ],
         },
     ]
-    flattened_transactions: List[Dict[str, Any]] = []
-    for transaction in transactions:
-        flattened_transactions.extend(
-            {
-                "Timestamp": transaction["Timestamp"],
-                "Customer": transaction["Customer"],
-                "Store": transaction["Store"],
-                "Channel": transaction["Channel"],
-                "Basket": transaction["Basket"],
-                "Product": item["Product"],
-                "Quantity": item["Quantity"],
-                "GrossSpend": item["GrossSpend"],
-            }
-            for item in transaction["items"]  # type: ignore
-        )
+    flattened_transactions: Iterable[Dict[str, Any]] = [
+        {
+            "Customer": d["Customer"],
+            "Store": d["Store"],
+            "Basket": d["Basket"],
+            "Channel": d["Channel"],
+            "Timestamp": d["Timestamp"],
+            **d2,
+        }
+        for d in transactions
+        for d2 in d["items"]  # type: ignore
+    ]
     return spark.createDataFrame(
         flattened_transactions, schema=purchases_schema  # type: ignore
     )
