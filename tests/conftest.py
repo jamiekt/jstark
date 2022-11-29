@@ -1,5 +1,6 @@
 from decimal import Decimal
 from datetime import datetime
+from typing import Dict, List, Any
 
 import pytest
 from pyspark.sql import DataFrame, SparkSession
@@ -32,38 +33,48 @@ def purchases_schema() -> StructType:
 @pytest.fixture(scope="session")
 def dataframe_of_purchases(purchases_schema) -> DataFrame:
     spark = SparkSession.builder.getOrCreate()
+    transactions = [
+        {
+            "Timestamp": datetime.now(),
+            "Customer": "Leia",
+            "Store": "Hammersmith",
+            "Channel": "Instore",
+            "Basket": "basket1",
+            "items": [
+                {"Product": "Cheddar", "Quantity": 2, "GrossSpend": Decimal(2.50)},
+                {"Product": "Grapes", "Quantity": 1, "GrossSpend": Decimal(3.00)},
+            ],
+        },
+        {
+            "Timestamp": datetime.now(),
+            "Customer": "Luke",
+            "Store": "Ealing",
+            "Channel": "Instore",
+            "Basket": "basket2",
+            "items": [
+                {
+                    "Product": "Custard Creams",
+                    "Quantity": 1,
+                    "GrossSpend": Decimal(3.00),
+                }
+            ],
+        },
+    ]
+    flattened_transactions: List[Dict[str, Any]] = []
+    for transaction in transactions:
+        flattened_transactions.extend(
+            {
+                "Timestamp": transaction["Timestamp"],
+                "Customer": transaction["Customer"],
+                "Store": transaction["Store"],
+                "Channel": transaction["Channel"],
+                "Basket": transaction["Basket"],
+                "Product": item["Product"],
+                "Quantity": item["Quantity"],
+                "GrossSpend": item["GrossSpend"],
+            }
+            for item in transaction["items"]  # type: ignore
+        )
     return spark.createDataFrame(
-        data=[
-            (
-                datetime.now(),
-                "Leia",
-                "Hammersmith",
-                "Instore",
-                "Cheddar",
-                2,
-                "Basket1",
-                Decimal(2.50),
-            ),
-            (
-                datetime.now(),
-                "Leia",
-                "Hammersmith",
-                "Instore",
-                "Grapes",
-                1,
-                "Basket1",
-                Decimal(3.00),
-            ),
-            (
-                datetime.now(),
-                "Luke",
-                "Ealing",
-                "Instore",
-                "Custard Creams",
-                1,
-                "Basket2",
-                Decimal(3.00),
-            ),
-        ],
-        schema=purchases_schema,
+        flattened_transactions, schema=purchases_schema  # type: ignore
     )
