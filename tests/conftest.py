@@ -5,6 +5,7 @@ from typing import Dict, Any, Iterable
 
 import pytest
 from pyspark.sql import DataFrame, SparkSession
+import pyspark.sql.functions as f
 from pyspark.sql.types import (
     DecimalType,
     IntegerType,
@@ -104,4 +105,11 @@ def dataframe_of_purchases(
     ]
     return spark_session.createDataFrame(
         flattened_transactions, schema=purchases_schema  # type: ignore
+    )
+
+
+@pytest.fixture(scope="session")
+def luke_and_leia_purchases(dataframe_of_purchases):
+    return dataframe_of_purchases.where(
+        (f.col("Customer") == "Leia") | (f.col("Customer") == "Luke")
     )

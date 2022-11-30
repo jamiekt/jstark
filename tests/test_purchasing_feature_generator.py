@@ -6,21 +6,40 @@ from jstark.purchasing_feature_generator import PurchasingFeatureGenerator
 from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
 
 
-def test_gross_spend(dataframe_of_purchases: DataFrame):
-    dataframe_of_purchases = dataframe_of_purchases.where(
-        (f.col("Customer") == "Leia") | (f.col("Customer") == "Luke")
-    )
-    df = dataframe_of_purchases.groupBy().agg(
+def test_gross_spend_0d0(luke_and_leia_purchases: DataFrame):
+    df = luke_and_leia_purchases.groupBy().agg(
         *PurchasingFeatureGenerator(
             as_at=date.today(),
             feature_periods=[
                 FeaturePeriod(PeriodUnitOfMeasure.DAY, 0, 0),
+            ],
+        ).features
+    )
+    first = df.first()
+    assert first is not None
+    assert float(first["GrossSpend_0d0"]) == 5.5
+
+
+def test_gross_spend_1d0(luke_and_leia_purchases: DataFrame):
+    df = luke_and_leia_purchases.groupBy().agg(
+        *PurchasingFeatureGenerator(
+            as_at=date.today(),
+            feature_periods=[
                 FeaturePeriod(PeriodUnitOfMeasure.DAY, 1, 0),
+            ],
+        ).features
+    )
+    first = df.first()
+    assert first is not None
+    assert float(first["GrossSpend_1d0"]) == 9.5
+
+
+def test_gross_spend_2d0(luke_and_leia_purchases: DataFrame):
+    df = luke_and_leia_purchases.groupBy().agg(
+        *PurchasingFeatureGenerator(
+            as_at=date.today(),
+            feature_periods=[
                 FeaturePeriod(PeriodUnitOfMeasure.DAY, 2, 0),
-                FeaturePeriod(PeriodUnitOfMeasure.DAY, 2, 2),
-                FeaturePeriod(PeriodUnitOfMeasure.WEEK, 0, 0),
-                FeaturePeriod(PeriodUnitOfMeasure.WEEK, 1, 1),
-                FeaturePeriod(PeriodUnitOfMeasure.WEEK, 1, 0),
             ],
         ).features
     )
@@ -29,12 +48,62 @@ def test_gross_spend(dataframe_of_purchases: DataFrame):
     input dataframe according to each the respective feature period
     """
     assert first is not None
-    assert float(first["GrossSpend_0d0"]) == 5.5
-    assert float(first["GrossSpend_1d0"]) == 9.5
     assert float(first["GrossSpend_2d0"]) == 9.5
+
+
+def test_gross_spend_2d2(luke_and_leia_purchases: DataFrame):
+    df = luke_and_leia_purchases.groupBy().agg(
+        *PurchasingFeatureGenerator(
+            as_at=date.today(),
+            feature_periods=[
+                FeaturePeriod(PeriodUnitOfMeasure.DAY, 2, 2),
+            ],
+        ).features
+    )
+    first = df.first()
+    assert first is not None
     assert float(first["GrossSpend_2d2"]) == 0
+
+
+def test_gross_spend_0w0(luke_and_leia_purchases: DataFrame):
+    df = luke_and_leia_purchases.groupBy().agg(
+        *PurchasingFeatureGenerator(
+            as_at=date.today(),
+            feature_periods=[
+                FeaturePeriod(PeriodUnitOfMeasure.WEEK, 0, 0),
+            ],
+        ).features
+    )
+    first = df.first()
+    assert first is not None
     assert float(first["GrossSpend_0w0"]) == 9.5
+
+
+def test_gross_spend_1w1(luke_and_leia_purchases: DataFrame):
+    df = luke_and_leia_purchases.groupBy().agg(
+        *PurchasingFeatureGenerator(
+            as_at=date.today(),
+            feature_periods=[
+                FeaturePeriod(PeriodUnitOfMeasure.WEEK, 1, 1),
+            ],
+        ).features
+    )
+    first = df.first()
+    assert first is not None
     assert float(first["GrossSpend_1w1"]) == 3.25
+
+
+def test_gross_spend_1w0(luke_and_leia_purchases: DataFrame):
+    df = luke_and_leia_purchases.groupBy().agg(
+        *PurchasingFeatureGenerator(
+            as_at=date.today(),
+            feature_periods=[
+                FeaturePeriod(PeriodUnitOfMeasure.WEEK, 1, 0),
+            ],
+        ).features
+    )
+    first = df.first()
+    assert first is not None
     assert float(first["GrossSpend_1w0"]) == 12.75
 
 
