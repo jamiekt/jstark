@@ -1,5 +1,5 @@
 from decimal import Decimal
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Dict, Any, Iterable
 
 import pytest
@@ -12,6 +12,14 @@ from pyspark.sql.types import (
     StructType,
     TimestampType,
 )
+
+
+@pytest.fixture(scope="session")
+def as_at_timestamp() -> datetime:
+    """return a datetime to be used as as_at. This can be used in other fixtures to
+    generate datetimes relative to this datetime
+    """
+    return datetime(2022, 11, 30, 10, 12, 13)
 
 
 @pytest.fixture(scope="session")
@@ -31,11 +39,13 @@ def purchases_schema() -> StructType:
 
 
 @pytest.fixture(scope="session")
-def dataframe_of_purchases(purchases_schema) -> DataFrame:
+def dataframe_of_purchases(
+    as_at_timestamp: datetime, purchases_schema: StructType
+) -> DataFrame:
     spark = SparkSession.builder.getOrCreate()
     transactions = [
         {
-            "Timestamp": datetime.now(),
+            "Timestamp": as_at_timestamp,
             "Customer": "Leia",
             "Store": "Hammersmith",
             "Channel": "Instore",
@@ -46,7 +56,7 @@ def dataframe_of_purchases(purchases_schema) -> DataFrame:
             ],
         },
         {
-            "Timestamp": datetime.now(),
+            "Timestamp": as_at_timestamp - timedelta(days=1),
             "Customer": "Luke",
             "Store": "Ealing",
             "Channel": "Instore",

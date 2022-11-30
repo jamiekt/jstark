@@ -14,5 +14,8 @@ class GrossSpend(Feature):
     def aggregator(self) -> Callable[[Column], Column]:
         return self.sum_aggregator
 
-    def columnExpression(self) -> Column:
+    def column_expression(self) -> Column:
         return f.col("GrossSpend")
+
+    def default_value(self) -> Column:
+        return f.lit(0)

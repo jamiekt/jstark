@@ -20,6 +20,12 @@ class Feature(ABC):
     def count_aggregator(self, column: Column) -> Column:
         return f.count(column)
 
+    def max_aggregator(self, column: Column) -> Column:
+        return f.max(column)
+
+    def min_aggregator(self, column: Column) -> Column:
+        return f.min(column)
+
     @abstractmethod
     def aggregator(self) -> Callable[[Column], Column]:
         pass
@@ -43,7 +49,14 @@ class Feature(ABC):
         self.__as_at = value
 
     @abstractmethod
-    def columnExpression(self) -> Column:
+    def column_expression(self) -> Column:
+        pass
+
+    @abstractmethod
+    def default_value(self) -> Column:
+        """Default value of the feature, typically used when zero rows match
+        the feature's feature_period
+        """
         pass
 
     @property
@@ -54,7 +67,7 @@ class Feature(ABC):
     def column(self) -> Column:
         as_at_col = f.lit(self.as_at)
         date_of_occurrence_col = f.col("Timestamp")
-        days_since_occurrence = f.datediff(f.to_date(date_of_occurrence_col), as_at_col)
+        days_since_occurrence = f.datediff(as_at_col, f.to_date(date_of_occurrence_col))
         weeks_since_occurrence = f.ceil(days_since_occurrence / 7)
         months_since_occurrence = f.ceil(
             f.months_between(as_at_col, date_of_occurrence_col)
@@ -76,8 +89,12 @@ class Feature(ABC):
             else years_since_occurrence
         )
         return self.aggregator()(
-            f.when(
-                (periods_since_occurrence <= start) & (periods_since_occurrence >= end),
-                self.columnExpression(),
+            f.coalesce(
+                f.when(
+                    (periods_since_occurrence <= start)
+                    & (periods_since_occurrence >= end),
+                    self.column_expression(),
+                ),
+                self.default_value(),
             )
         ).alias(self.feature_name)

@@ -14,5 +14,8 @@ class Count(Feature):
     def aggregator(self) -> Callable[[Column], Column]:
         return self.count_aggregator
 
-    def columnExpression(self) -> Column:
+    def column_expression(self) -> Column:
         return f.lit(1)
+
+    def default_value(self) -> Column:
+        return f.lit(0)
