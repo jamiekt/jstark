@@ -1,3 +1,4 @@
+import uuid
 from decimal import Decimal
 from datetime import datetime, timedelta
 from typing import Dict, Any, Iterable
@@ -15,10 +16,16 @@ from pyspark.sql.types import (
 
 
 @pytest.fixture(scope="session")
+def spark_session() -> SparkSession:
+    return SparkSession.builder.getOrCreate()
+
+
+@pytest.fixture(scope="session")
 def as_at_timestamp() -> datetime:
     """return a datetime to be used as as_at. This can be used in other fixtures to
     generate datetimes relative to this datetime
     """
+    # This is a Wednesday. That's important as it affects week calculations.
     return datetime(2022, 11, 30, 10, 12, 13)
 
 
@@ -40,19 +47,21 @@ def purchases_schema() -> StructType:
 
 @pytest.fixture(scope="session")
 def dataframe_of_purchases(
-    as_at_timestamp: datetime, purchases_schema: StructType
+    spark_session: SparkSession, as_at_timestamp: datetime, purchases_schema: StructType
 ) -> DataFrame:
-    spark = SparkSession.builder.getOrCreate()
     transactions = [
         {
-            "Timestamp": as_at_timestamp,
-            "Customer": "Leia",
-            "Store": "Hammersmith",
+            "Timestamp": as_at_timestamp - timedelta(days=4),
+            "Customer": "Luke",
+            "Store": "Ealing",
             "Channel": "Instore",
-            "Basket": "basket1",
+            "Basket": uuid.uuid4(),
             "items": [
-                {"Product": "Cheddar", "Quantity": 2, "GrossSpend": Decimal(2.50)},
-                {"Product": "Grapes", "Quantity": 1, "GrossSpend": Decimal(3.00)},
+                {
+                    "Product": "Apples",
+                    "Quantity": 6,
+                    "GrossSpend": Decimal(3.25),
+                }
             ],
         },
         {
@@ -60,13 +69,24 @@ def dataframe_of_purchases(
             "Customer": "Luke",
             "Store": "Ealing",
             "Channel": "Instore",
-            "Basket": "basket2",
+            "Basket": uuid.uuid4(),
             "items": [
                 {
                     "Product": "Custard Creams",
                     "Quantity": 1,
-                    "GrossSpend": Decimal(3.00),
+                    "GrossSpend": Decimal(4.00),
                 }
+            ],
+        },
+        {
+            "Timestamp": as_at_timestamp,
+            "Customer": "Leia",
+            "Store": "Hammersmith",
+            "Channel": "Instore",
+            "Basket": uuid.uuid4(),
+            "items": [
+                {"Product": "Cheddar", "Quantity": 2, "GrossSpend": Decimal(2.50)},
+                {"Product": "Grapes", "Quantity": 1, "GrossSpend": Decimal(3.00)},
             ],
         },
     ]
@@ -82,6 +102,6 @@ def dataframe_of_purchases(
         for d in transactions
         for d2 in d["items"]  # type: ignore
     ]
-    return spark.createDataFrame(
+    return spark_session.createDataFrame(
         flattened_transactions, schema=purchases_schema  # type: ignore
     )

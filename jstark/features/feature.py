@@ -65,19 +65,35 @@ class Feature(ABC):
 
     @property
     def column(self) -> Column:
+        periods_since_occurrence = self.get_periods_since_occurrence()
+        return self.aggregator()(
+            f.coalesce(
+                f.when(
+                    (periods_since_occurrence <= self.feature_period.start)
+                    & (periods_since_occurrence >= self.feature_period.end),
+                    self.column_expression(),
+                ),
+                self.default_value(),
+            )
+        ).alias(self.feature_name)
+
+    def get_periods_since_occurrence(self):
         as_at_col = f.lit(self.as_at)
         date_of_occurrence_col = f.col("Timestamp")
         days_since_occurrence = f.datediff(as_at_col, f.to_date(date_of_occurrence_col))
-        weeks_since_occurrence = f.ceil(days_since_occurrence / 7)
+        weeks_since_occurrence_quotient = f.floor(days_since_occurrence / 7)
+        weeks_since_occurrence_remainder = days_since_occurrence % 7
+        weeks_since_occurrence = f.when(
+            f.dayofweek(as_at_col) > weeks_since_occurrence_remainder,
+            weeks_since_occurrence_quotient,
+        ).otherwise(weeks_since_occurrence_quotient + 1)
         months_since_occurrence = f.ceil(
             f.months_between(as_at_col, date_of_occurrence_col)
         )
         quarters_since_occurrence = f.ceil(months_since_occurrence / 3)
         years_since_occurrence = f.ceil(months_since_occurrence / 12)
         puom = self.feature_period.period_unit_of_measure
-        start = self.feature_period.start
-        end = self.feature_period.end
-        periods_since_occurrence = (
+        return (
             days_since_occurrence
             if puom == PeriodUnitOfMeasure.DAY
             else weeks_since_occurrence
@@ -88,13 +104,3 @@ class Feature(ABC):
             if puom == PeriodUnitOfMeasure.QUARTER
             else years_since_occurrence
         )
-        return self.aggregator()(
-            f.coalesce(
-                f.when(
-                    (periods_since_occurrence <= start)
-                    & (periods_since_occurrence >= end),
-                    self.column_expression(),
-                ),
-                self.default_value(),
-            )
-        ).alias(self.feature_name)
