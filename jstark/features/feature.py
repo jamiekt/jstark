@@ -66,15 +66,15 @@ class Feature(ABC):
     @property
     def column(self) -> Column:
         periods_since_occurrence = self.get_periods_since_occurrence()
-        return self.aggregator()(
-            f.coalesce(
+        return f.coalesce(
+            self.aggregator()(
                 f.when(
                     (periods_since_occurrence <= self.feature_period.start)
                     & (periods_since_occurrence >= self.feature_period.end),
                     self.column_expression(),
-                ),
-                self.default_value(),
-            )
+                )
+            ),
+            self.default_value(),
         ).alias(self.feature_name)
 
     def get_periods_since_occurrence(self):

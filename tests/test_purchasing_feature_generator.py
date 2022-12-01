@@ -6,6 +6,21 @@ from jstark.purchasing_feature_generator import PurchasingFeatureGenerator
 from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
 
 
+def test_count_0d0(as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame):
+    df = luke_and_leia_purchases.groupBy().agg(
+        *PurchasingFeatureGenerator(
+            as_at=as_at_timestamp.date(),
+            feature_periods=[
+                FeaturePeriod(PeriodUnitOfMeasure.DAY, 0, 0),
+            ],
+        ).features
+    )
+    result = df.first()
+    assert result is not None
+    assert float(result["Count_0d0"]) == 2
+    return result
+
+
 def test_gross_spend_0d0(as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame):
     def _validate_expected_value(df, expected):
         result = df.first()
