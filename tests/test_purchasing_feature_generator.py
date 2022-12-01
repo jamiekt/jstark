@@ -1,15 +1,15 @@
 from pyspark.sql import DataFrame
-from datetime import date
+from datetime import date, datetime
 import pyspark.sql.functions as f
 
 from jstark.purchasing_feature_generator import PurchasingFeatureGenerator
 from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
 
 
-def test_gross_spend_0d0(luke_and_leia_purchases: DataFrame):
+def test_gross_spend_0d0(as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame):
     df = luke_and_leia_purchases.groupBy().agg(
         *PurchasingFeatureGenerator(
-            as_at=date.today(),
+            as_at=as_at_timestamp.date(),
             feature_periods=[
                 FeaturePeriod(PeriodUnitOfMeasure.DAY, 0, 0),
             ],
@@ -20,10 +20,10 @@ def test_gross_spend_0d0(luke_and_leia_purchases: DataFrame):
     assert float(first["GrossSpend_0d0"]) == 5.5
 
 
-def test_gross_spend_1d0(luke_and_leia_purchases: DataFrame):
+def test_gross_spend_1d0(as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame):
     df = luke_and_leia_purchases.groupBy().agg(
         *PurchasingFeatureGenerator(
-            as_at=date.today(),
+            as_at=as_at_timestamp.date(),
             feature_periods=[
                 FeaturePeriod(PeriodUnitOfMeasure.DAY, 1, 0),
             ],
@@ -34,10 +34,10 @@ def test_gross_spend_1d0(luke_and_leia_purchases: DataFrame):
     assert float(first["GrossSpend_1d0"]) == 9.5
 
 
-def test_gross_spend_2d0(luke_and_leia_purchases: DataFrame):
+def test_gross_spend_2d0(as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame):
     df = luke_and_leia_purchases.groupBy().agg(
         *PurchasingFeatureGenerator(
-            as_at=date.today(),
+            as_at=as_at_timestamp.date(),
             feature_periods=[
                 FeaturePeriod(PeriodUnitOfMeasure.DAY, 2, 0),
             ],
@@ -51,10 +51,10 @@ def test_gross_spend_2d0(luke_and_leia_purchases: DataFrame):
     assert float(first["GrossSpend_2d0"]) == 9.5
 
 
-def test_gross_spend_2d2(luke_and_leia_purchases: DataFrame):
+def test_gross_spend_2d2(as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame):
     df = luke_and_leia_purchases.groupBy().agg(
         *PurchasingFeatureGenerator(
-            as_at=date.today(),
+            as_at=as_at_timestamp.date(),
             feature_periods=[
                 FeaturePeriod(PeriodUnitOfMeasure.DAY, 2, 2),
             ],
@@ -65,10 +65,10 @@ def test_gross_spend_2d2(luke_and_leia_purchases: DataFrame):
     assert float(first["GrossSpend_2d2"]) == 0
 
 
-def test_gross_spend_0w0(luke_and_leia_purchases: DataFrame):
+def test_gross_spend_0w0(as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame):
     df = luke_and_leia_purchases.groupBy().agg(
         *PurchasingFeatureGenerator(
-            as_at=date.today(),
+            as_at=as_at_timestamp.date(),
             feature_periods=[
                 FeaturePeriod(PeriodUnitOfMeasure.WEEK, 0, 0),
             ],
@@ -79,10 +79,10 @@ def test_gross_spend_0w0(luke_and_leia_purchases: DataFrame):
     assert float(first["GrossSpend_0w0"]) == 9.5
 
 
-def test_gross_spend_1w1(luke_and_leia_purchases: DataFrame):
+def test_gross_spend_1w1(as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame):
     df = luke_and_leia_purchases.groupBy().agg(
         *PurchasingFeatureGenerator(
-            as_at=date.today(),
+            as_at=as_at_timestamp.date(),
             feature_periods=[
                 FeaturePeriod(PeriodUnitOfMeasure.WEEK, 1, 1),
             ],
@@ -93,10 +93,10 @@ def test_gross_spend_1w1(luke_and_leia_purchases: DataFrame):
     assert float(first["GrossSpend_1w1"]) == 3.25
 
 
-def test_gross_spend_1w0(luke_and_leia_purchases: DataFrame):
+def test_gross_spend_1w0(as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame):
     df = luke_and_leia_purchases.groupBy().agg(
         *PurchasingFeatureGenerator(
-            as_at=date.today(),
+            as_at=as_at_timestamp.date(),
             feature_periods=[
                 FeaturePeriod(PeriodUnitOfMeasure.WEEK, 1, 0),
             ],
