@@ -18,7 +18,6 @@ def test_count_0d0(as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame
     result = df.first()
     assert result is not None
     assert float(result["Count_0d0"]) == 2
-    return result
 
 
 def test_gross_spend_0d0(as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame):
