@@ -28,7 +28,7 @@ def as_at_timestamp() -> datetime:
     generate datetimes relative to this datetime
     """
     # This is a Wednesday. That's important to know because
-    # # it affects week calculations.
+    # it affects week calculations.
     return datetime(2022, 11, 30, 10, 12, 13)
 
 
