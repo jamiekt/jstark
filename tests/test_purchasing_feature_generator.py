@@ -257,6 +257,54 @@ def test_gross_spend_this_quarter_and_last_quarter(
     assert float(first["GrossSpend_1q0"]) == 25.75
 
 
+def test_gross_spend_this_year(
+    as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame
+):
+    df = luke_and_leia_purchases.groupBy().agg(
+        *PurchasingFeatureGenerator(
+            as_at=as_at_timestamp.date(),
+            feature_periods=[
+                FeaturePeriod(PeriodUnitOfMeasure.YEAR, 0, 0),
+            ],
+        ).features
+    )
+    first = df.first()
+    assert first is not None
+    assert float(first["GrossSpend_0y0"]) == 25.75
+
+
+def test_gross_spend_last_year(
+    as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame
+):
+    df = luke_and_leia_purchases.groupBy().agg(
+        *PurchasingFeatureGenerator(
+            as_at=as_at_timestamp.date(),
+            feature_periods=[
+                FeaturePeriod(PeriodUnitOfMeasure.YEAR, 1, 1),
+            ],
+        ).features
+    )
+    first = df.first()
+    assert first is not None
+    assert float(first["GrossSpend_1y1"]) == 8
+
+
+def test_gross_spend_this_year_and_last_year(
+    as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame
+):
+    df = luke_and_leia_purchases.groupBy().agg(
+        *PurchasingFeatureGenerator(
+            as_at=as_at_timestamp.date(),
+            feature_periods=[
+                FeaturePeriod(PeriodUnitOfMeasure.YEAR, 1, 0),
+            ],
+        ).features
+    )
+    first = df.first()
+    assert first is not None
+    assert float(first["GrossSpend_1y0"]) == 33.75
+
+
 def test_count_exists(dataframe_of_purchases: DataFrame):
     df = dataframe_of_purchases.groupBy().agg(
         *PurchasingFeatureGenerator(as_at=date.today()).features

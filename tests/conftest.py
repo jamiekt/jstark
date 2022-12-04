@@ -53,20 +53,20 @@ def dataframe_of_purchases(
     spark_session: SparkSession, as_at_timestamp: datetime, purchases_schema: StructType
 ) -> DataFrame:
     transactions = [
-        # {
-        #     "Timestamp": as_at_timestamp - relativedelta(months=3),
-        #     "Customer": "Luke",
-        #     "Store": "Ealing",
-        #     "Channel": "Instore",
-        #     "Basket": uuid.uuid4(),
-        #     "items": [
-        #         {
-        #             "Product": "Kleenex",
-        #             "Quantity": 1,
-        #             "GrossSpend": Decimal(8),
-        #         }
-        #     ],
-        # },
+        {
+            "Timestamp": as_at_timestamp - relativedelta(months=12),
+            "Customer": "Luke",
+            "Store": "Ealing",
+            "Channel": "Instore",
+            "Basket": uuid.uuid4(),
+            "items": [
+                {
+                    "Product": "Kleenex",
+                    "Quantity": 1,
+                    "GrossSpend": Decimal(8),
+                }
+            ],
+        },
         {
             "Timestamp": as_at_timestamp - relativedelta(months=2),
             "Customer": "Luke",

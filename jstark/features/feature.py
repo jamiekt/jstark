@@ -113,7 +113,7 @@ class Feature(ABC):
             )
             / 3
         )
-        years_since_occurrence = f.ceil(months_since_occurrence / 12)
+        years_since_occurrence = f.year(as_at_col) - f.year(date_of_occurrence_col)
         puom = self.feature_period.period_unit_of_measure
         return (
             days_since_occurrence
