@@ -91,21 +91,19 @@ class Feature(ABC):
         ).cast("date")
 
     def get_periods_since_occurrence(self) -> Column:
-        as_at_col = f.lit(self.as_at)
-        date_of_occurrence_col = f.col("Timestamp")
-        days_since_occurrence = f.datediff(as_at_col, f.to_date(date_of_occurrence_col))
+        as_at = f.lit(self.as_at)
+        date_of_occurrence = f.col("Timestamp")
+        days_since_occurrence = f.datediff(as_at, f.to_date(date_of_occurrence))
         weeks_since_occurrence_quotient = f.floor(days_since_occurrence / 7)
         weeks_since_occurrence_remainder = days_since_occurrence % 7
         weeks_since_occurrence = f.when(
-            f.dayofweek(as_at_col) > weeks_since_occurrence_remainder,
+            f.dayofweek(as_at) > weeks_since_occurrence_remainder,
             weeks_since_occurrence_quotient,
         ).otherwise(weeks_since_occurrence_quotient + 1)
-        months_since_occurrence = f.floor(
-            f.months_between(as_at_col, date_of_occurrence_col)
-        )
-        as_at_first_day_of_quarter = self.first_day_of_quarter(as_at_col)
+        months_since_occurrence = f.floor(f.months_between(as_at, date_of_occurrence))
+        as_at_first_day_of_quarter = self.first_day_of_quarter(as_at)
         date_of_occurrence_first_day_of_quarter = self.first_day_of_quarter(
-            date_of_occurrence_col
+            date_of_occurrence
         )
         quarters_since_occurrence = f.floor(
             f.months_between(
@@ -113,7 +111,7 @@ class Feature(ABC):
             )
             / 3
         )
-        years_since_occurrence = f.year(as_at_col) - f.year(date_of_occurrence_col)
+        years_since_occurrence = f.year(as_at) - f.year(date_of_occurrence)
         puom = self.feature_period.period_unit_of_measure
         return (
             days_since_occurrence
