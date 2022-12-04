@@ -147,6 +147,48 @@ def test_gross_spend_1w0(as_at_timestamp: datetime, luke_and_leia_purchases: Dat
     assert float(first["GrossSpend_1w0"]) == 12.75
 
 
+def test_gross_spend_0m0(as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame):
+    df = luke_and_leia_purchases.groupBy().agg(
+        *PurchasingFeatureGenerator(
+            as_at=as_at_timestamp.date(),
+            feature_periods=[
+                FeaturePeriod(PeriodUnitOfMeasure.MONTH, 0, 0),
+            ],
+        ).features
+    )
+    first = df.first()
+    assert first is not None
+    assert float(first["GrossSpend_0m0"]) == 12.75
+
+
+def test_gross_spend_1m1(as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame):
+    df = luke_and_leia_purchases.groupBy().agg(
+        *PurchasingFeatureGenerator(
+            as_at=as_at_timestamp.date(),
+            feature_periods=[
+                FeaturePeriod(PeriodUnitOfMeasure.MONTH, 1, 1),
+            ],
+        ).features
+    )
+    first = df.first()
+    assert first is not None
+    assert float(first["GrossSpend_1m1"]) == 6.0
+
+
+def test_gross_spend_1m0(as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame):
+    df = luke_and_leia_purchases.groupBy().agg(
+        *PurchasingFeatureGenerator(
+            as_at=as_at_timestamp.date(),
+            feature_periods=[
+                FeaturePeriod(PeriodUnitOfMeasure.MONTH, 1, 0),
+            ],
+        ).features
+    )
+    first = df.first()
+    assert first is not None
+    assert float(first["GrossSpend_1m0"]) == 18.75
+
+
 def test_count_exists(dataframe_of_purchases: DataFrame):
     df = dataframe_of_purchases.groupBy().agg(
         *PurchasingFeatureGenerator(as_at=date.today()).features

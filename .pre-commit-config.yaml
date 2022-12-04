@@ -33,5 +33,6 @@ repos:
     name: mypy jstark
     files: ^jstark
   - id: mypy
+    additional_dependencies: [types-python-dateutil]
     name: mypy tests
     files: ^tests

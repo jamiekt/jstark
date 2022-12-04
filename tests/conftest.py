@@ -1,6 +1,7 @@
 import uuid
 from decimal import Decimal
 from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
 from typing import Dict, Any, Iterable
 
 import pytest
@@ -26,7 +27,8 @@ def as_at_timestamp() -> datetime:
     """return a datetime to be used as as_at. This can be used in other fixtures to
     generate datetimes relative to this datetime
     """
-    # This is a Wednesday. That's important as it affects week calculations.
+    # This is a Wednesday. That's important to know because
+    # # it affects week calculations.
     return datetime(2022, 11, 30, 10, 12, 13)
 
 
@@ -51,6 +53,20 @@ def dataframe_of_purchases(
     spark_session: SparkSession, as_at_timestamp: datetime, purchases_schema: StructType
 ) -> DataFrame:
     transactions = [
+        {
+            "Timestamp": as_at_timestamp - relativedelta(months=1),
+            "Customer": "Leia",
+            "Store": "Ealing",
+            "Channel": "Instore",
+            "Basket": uuid.uuid4(),
+            "items": [
+                {
+                    "Product": "Tiger Bread",
+                    "Quantity": 3,
+                    "GrossSpend": Decimal(6),
+                }
+            ],
+        },
         {
             "Timestamp": as_at_timestamp - timedelta(days=4),
             "Customer": "Luke",

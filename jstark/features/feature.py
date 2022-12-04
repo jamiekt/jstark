@@ -87,7 +87,7 @@ class Feature(ABC):
             f.dayofweek(as_at_col) > weeks_since_occurrence_remainder,
             weeks_since_occurrence_quotient,
         ).otherwise(weeks_since_occurrence_quotient + 1)
-        months_since_occurrence = f.ceil(
+        months_since_occurrence = f.floor(
             f.months_between(as_at_col, date_of_occurrence_col)
         )
         quarters_since_occurrence = f.ceil(months_since_occurrence / 3)
