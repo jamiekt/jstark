@@ -154,12 +154,12 @@ def test_count_exists(dataframe_of_purchases: DataFrame):
     assert "Count_4d3" in df.schema.fieldNames()
 
 
-def test_count(dataframe_of_purchases: DataFrame):
+def test_count(as_at_timestamp: datetime, dataframe_of_purchases: DataFrame):
     dataframe_of_purchases = dataframe_of_purchases.where(
         f.col("Store") == "Hammersmith"
     )
     df = dataframe_of_purchases.groupBy("Store").agg(
-        *PurchasingFeatureGenerator(as_at=date.today()).features
+        *PurchasingFeatureGenerator(as_at=as_at_timestamp.date()).features
     )
     first = df.first()
     assert first is not None
