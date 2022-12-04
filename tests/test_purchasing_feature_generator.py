@@ -6,7 +6,7 @@ from jstark.purchasing_feature_generator import PurchasingFeatureGenerator
 from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
 
 
-def test_count_0d0(as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame):
+def test_count_today(as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame):
     df = luke_and_leia_purchases.groupBy().agg(
         *PurchasingFeatureGenerator(
             as_at=as_at_timestamp.date(),
@@ -20,7 +20,9 @@ def test_count_0d0(as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame
     assert float(result["Count_0d0"]) == 2
 
 
-def test_gross_spend_0d0(as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame):
+def test_gross_spend_today(
+    as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame
+):
     def _validate_expected_value(df, expected):
         result = df.first()
         assert result is not None
@@ -47,7 +49,9 @@ def test_gross_spend_0d0(as_at_timestamp: datetime, luke_and_leia_purchases: Dat
     _validate_expected_value(df, 4.0)
 
 
-def test_gross_spend_1d0(as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame):
+def test_gross_spend_today_and_yesterday(
+    as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame
+):
     def _validate_expected_value(df, expected):
         result = df.first()
         assert result is not None
@@ -74,7 +78,9 @@ def test_gross_spend_1d0(as_at_timestamp: datetime, luke_and_leia_purchases: Dat
     _validate_expected_value(df, 4.0)
 
 
-def test_gross_spend_2d0(as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame):
+def test_gross_spend_today_yesterday_and_day_before_yesterday(
+    as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame
+):
     df = luke_and_leia_purchases.groupBy().agg(
         *PurchasingFeatureGenerator(
             as_at=as_at_timestamp.date(),
@@ -91,7 +97,9 @@ def test_gross_spend_2d0(as_at_timestamp: datetime, luke_and_leia_purchases: Dat
     assert float(first["GrossSpend_2d0"]) == 9.5
 
 
-def test_gross_spend_2d2(as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame):
+def test_gross_spend_day_before_yesterday(
+    as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame
+):
     df = luke_and_leia_purchases.groupBy().agg(
         *PurchasingFeatureGenerator(
             as_at=as_at_timestamp.date(),
@@ -105,7 +113,9 @@ def test_gross_spend_2d2(as_at_timestamp: datetime, luke_and_leia_purchases: Dat
     assert float(first["GrossSpend_2d2"]) == 0
 
 
-def test_gross_spend_0w0(as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame):
+def test_gross_spend_this_week(
+    as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame
+):
     df = luke_and_leia_purchases.groupBy().agg(
         *PurchasingFeatureGenerator(
             as_at=as_at_timestamp.date(),
@@ -119,7 +129,9 @@ def test_gross_spend_0w0(as_at_timestamp: datetime, luke_and_leia_purchases: Dat
     assert float(first["GrossSpend_0w0"]) == 9.5
 
 
-def test_gross_spend_1w1(as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame):
+def test_gross_spend_last_week(
+    as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame
+):
     df = luke_and_leia_purchases.groupBy().agg(
         *PurchasingFeatureGenerator(
             as_at=as_at_timestamp.date(),
@@ -133,7 +145,9 @@ def test_gross_spend_1w1(as_at_timestamp: datetime, luke_and_leia_purchases: Dat
     assert float(first["GrossSpend_1w1"]) == 3.25
 
 
-def test_gross_spend_1w0(as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame):
+def test_gross_spend_this_week_and_last_week(
+    as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame
+):
     df = luke_and_leia_purchases.groupBy().agg(
         *PurchasingFeatureGenerator(
             as_at=as_at_timestamp.date(),
@@ -147,7 +161,9 @@ def test_gross_spend_1w0(as_at_timestamp: datetime, luke_and_leia_purchases: Dat
     assert float(first["GrossSpend_1w0"]) == 12.75
 
 
-def test_gross_spend_0m0(as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame):
+def test_gross_spend_this_month(
+    as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame
+):
     df = luke_and_leia_purchases.groupBy().agg(
         *PurchasingFeatureGenerator(
             as_at=as_at_timestamp.date(),
@@ -161,7 +177,9 @@ def test_gross_spend_0m0(as_at_timestamp: datetime, luke_and_leia_purchases: Dat
     assert float(first["GrossSpend_0m0"]) == 12.75
 
 
-def test_gross_spend_1m1(as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame):
+def test_gross_spend_last_month(
+    as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame
+):
     df = luke_and_leia_purchases.groupBy().agg(
         *PurchasingFeatureGenerator(
             as_at=as_at_timestamp.date(),
@@ -175,7 +193,9 @@ def test_gross_spend_1m1(as_at_timestamp: datetime, luke_and_leia_purchases: Dat
     assert float(first["GrossSpend_1m1"]) == 6.0
 
 
-def test_gross_spend_1m0(as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame):
+def test_gross_spend_this_month_and_last_month(
+    as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame
+):
     df = luke_and_leia_purchases.groupBy().agg(
         *PurchasingFeatureGenerator(
             as_at=as_at_timestamp.date(),
