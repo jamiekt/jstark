@@ -77,7 +77,20 @@ class Feature(ABC):
             self.default_value(),
         ).alias(self.feature_name)
 
-    def get_periods_since_occurrence(self):
+    def first_day_of_quarter(self, date_col: Column) -> Column:
+        return f.concat_ws(
+            "-",
+            f.year(date_col),
+            f.lit(
+                f.when(f.month(date_col).isin(1, 2, 3), 1)
+                .when(f.month(date_col).isin(4, 5, 6), 4)
+                .when(f.month(date_col).isin(7, 8, 9), 7)
+                .otherwise(10)
+            ),
+            f.lit(1),
+        ).cast("date")
+
+    def get_periods_since_occurrence(self) -> Column:
         as_at_col = f.lit(self.as_at)
         date_of_occurrence_col = f.col("Timestamp")
         days_since_occurrence = f.datediff(as_at_col, f.to_date(date_of_occurrence_col))
@@ -90,7 +103,16 @@ class Feature(ABC):
         months_since_occurrence = f.floor(
             f.months_between(as_at_col, date_of_occurrence_col)
         )
-        quarters_since_occurrence = f.ceil(months_since_occurrence / 3)
+        as_at_first_day_of_quarter = self.first_day_of_quarter(as_at_col)
+        date_of_occurrence_first_day_of_quarter = self.first_day_of_quarter(
+            date_of_occurrence_col
+        )
+        quarters_since_occurrence = f.floor(
+            f.months_between(
+                as_at_first_day_of_quarter, date_of_occurrence_first_day_of_quarter
+            )
+            / 3
+        )
         years_since_occurrence = f.ceil(months_since_occurrence / 12)
         puom = self.feature_period.period_unit_of_measure
         return (
