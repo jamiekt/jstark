@@ -6,6 +6,43 @@ from jstark.purchasing_feature_generator import PurchasingFeatureGenerator
 from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
 
 
+def test_parse_references_grossspend():
+    """
+    PurchasingFeatureGenerator.parse_references() is only an internal helper function
+    but still a good idea to have a couple of little tests here to verify and
+    document its behaviour
+    """
+    assert PurchasingFeatureGenerator.parse_references(
+        "List('Timestamp, 'GrossSpend)"
+    ) == ["GrossSpend", "Timestamp"]
+
+
+def test_parse_references_count():
+    assert PurchasingFeatureGenerator.parse_references("List('Timestamp)") == [
+        "Timestamp"
+    ]
+
+
+def test_references_count(as_at_timestamp: datetime):
+    feature_generator = PurchasingFeatureGenerator(
+        as_at=as_at_timestamp,
+        feature_periods=[
+            FeaturePeriod(PeriodUnitOfMeasure.DAY, 0, 0),
+        ],
+    )
+    assert feature_generator.references["Count_0d0"] == ["Timestamp"]
+
+
+def test_references_grossspend(as_at_timestamp: datetime):
+    feature_generator = PurchasingFeatureGenerator(
+        as_at=as_at_timestamp,
+        feature_periods=[
+            FeaturePeriod(PeriodUnitOfMeasure.DAY, 0, 0),
+        ],
+    )
+    assert feature_generator.references["GrossSpend_0d0"] == ["GrossSpend", "Timestamp"]
+
+
 def test_count_today(as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame):
     df = luke_and_leia_purchases.groupBy().agg(
         *PurchasingFeatureGenerator(

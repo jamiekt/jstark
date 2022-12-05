@@ -1,7 +1,7 @@
 from datetime import date
-from typing import List
+from typing import List, Dict
 
-from pyspark.sql import Column
+from pyspark.sql import Column, SparkSession
 from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
 from jstark.features import Count, GrossSpend
 
@@ -49,3 +49,28 @@ class PurchasingFeatureGenerator(object):
                 )
             ]
         ]
+
+    @property
+    def references(self) -> Dict[str, List[str]]:
+        # this function requires a SparkSession in order to do its thing.
+        # In normal operation a SparkSession will probably already exist
+        # but in unit tests that might not be the case, so getOrCreate one
+        SparkSession.builder.getOrCreate()
+        return {
+            expr.name(): PurchasingFeatureGenerator.parse_references(
+                expr.references().toList().toString()
+            )
+            for expr in [c._jc.expr() for c in self.features]  # type: ignore
+        }
+
+    @staticmethod
+    def parse_references(references: str) -> List[str]:
+        return sorted(
+            "".join(
+                references.replace("'", "")
+                .replace("List(", "")
+                .replace(")", "")
+                .replace(")", "")
+                .split()
+            ).split(",")
+        )
