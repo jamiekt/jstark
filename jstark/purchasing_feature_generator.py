@@ -57,9 +57,7 @@ class PurchasingFeatureGenerator(object):
         # but in unit tests that might not be the case, so getOrCreate one
         SparkSession.builder.getOrCreate()
         return {
-            expr.name(): PurchasingFeatureGenerator.parse_references(
-                expr.references().toList().toString()
-            )
+            expr.name(): self.parse_references(expr.references().toList().toString())
             for expr in [c._jc.expr() for c in self.features]  # type: ignore
         }
 

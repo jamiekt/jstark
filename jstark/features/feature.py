@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
-from datetime import date
+from datetime import date, timedelta
+from dateutil.relativedelta import relativedelta
 from typing import Callable
+import calendar
 
 from pyspark.sql import Column
 import pyspark.sql.functions as f
@@ -65,6 +67,7 @@ class Feature(ABC):
 
     @property
     def column(self) -> Column:
+        metadata = {"createdBy": "jstark"}
         periods_since_occurrence = self.get_periods_since_occurrence()
         return f.coalesce(
             self.aggregator()(
@@ -75,7 +78,7 @@ class Feature(ABC):
                 )
             ),
             self.default_value(),
-        ).alias(self.feature_name)
+        ).alias(self.feature_name, metadata=metadata)
 
     def first_day_of_quarter(self, date_col: Column) -> Column:
         return f.concat_ws(
@@ -89,6 +92,77 @@ class Feature(ABC):
             ),
             f.lit(1),
         ).cast("date")
+
+    @property
+    def start_date(self) -> date:
+        n_weeks_ago = self.as_at - timedelta(weeks=self.feature_period.start)
+        n_quarters_ago = self.as_at - relativedelta(
+            months=self.feature_period.start * 3
+        )
+        first_day_of_quarter = (
+            date(n_quarters_ago.year, 1, 1)
+            if n_quarters_ago.month in [1, 2, 3]
+            else date(n_quarters_ago.year, 4, 1)
+            if n_quarters_ago.month in [4, 5, 6]
+            else date(n_quarters_ago.year, 7, 1)
+            if n_quarters_ago.month in [7, 8, 9]
+            else date(n_quarters_ago.year, 10, 1)
+        )
+        puom = self.feature_period.period_unit_of_measure
+        return (
+            self.as_at - timedelta(days=self.feature_period.start)
+            if puom == PeriodUnitOfMeasure.DAY
+            else n_weeks_ago - timedelta(days=int(n_weeks_ago.strftime("%w")))
+            # Use strftime because we want Sunday to be first day of the week.
+            # date.DayOfWeek() has different behaviour
+            if puom == PeriodUnitOfMeasure.WEEK
+            else self.as_at - relativedelta(months=self.feature_period.start, day=1)
+            if puom == PeriodUnitOfMeasure.MONTH
+            else first_day_of_quarter
+            if puom == PeriodUnitOfMeasure.QUARTER
+            else (
+                self.as_at
+                - relativedelta(years=self.feature_period.start, month=1, day=1)
+            )
+            if puom == PeriodUnitOfMeasure.YEAR
+            else self.as_at
+        )
+
+    @property
+    def end_date(self) -> date:
+        n_weeks_ago = self.as_at - timedelta(weeks=self.feature_period.end)
+        n_months_ago = self.as_at - relativedelta(months=self.feature_period.end)
+        n_quarters_ago = self.as_at - relativedelta(months=self.feature_period.end * 3)
+        last_day_of_quarter = (
+            date(n_quarters_ago.year, 3, 31)
+            if n_quarters_ago.month in [1, 2, 3]
+            else date(n_quarters_ago.year, 6, 30)
+            if n_quarters_ago.month in [4, 5, 6]
+            else date(n_quarters_ago.year, 9, 30)
+            if n_quarters_ago.month in [7, 8, 9]
+            else date(n_quarters_ago.year, 12, 31)
+        )
+        puom = self.feature_period.period_unit_of_measure
+        return (
+            self.as_at - timedelta(days=self.feature_period.end)
+            if puom == PeriodUnitOfMeasure.DAY
+            # Use strftime because we want Sunday to be first day of the week.
+            # date.DayOfWeek() has different behaviour
+            else n_weeks_ago + timedelta(days=6 - int(n_weeks_ago.strftime("%w")))
+            if puom == PeriodUnitOfMeasure.WEEK
+            else n_months_ago.replace(
+                day=calendar.monthrange(n_months_ago.year, n_months_ago.month)[1]
+            )
+            if puom == PeriodUnitOfMeasure.MONTH
+            else last_day_of_quarter
+            if puom == PeriodUnitOfMeasure.QUARTER
+            else (
+                self.as_at
+                - relativedelta(years=self.feature_period.end, month=12, day=31)
+            )
+            if puom == PeriodUnitOfMeasure.YEAR
+            else self.as_at
+        )
 
     def get_periods_since_occurrence(self) -> Column:
         as_at = f.lit(self.as_at)
