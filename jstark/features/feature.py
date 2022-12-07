@@ -143,25 +143,29 @@ class Feature(ABC):
             else date(n_quarters_ago.year, 12, 31)
         )
         puom = self.feature_period.period_unit_of_measure
-        return (
-            self.as_at - timedelta(days=self.feature_period.end)
-            if puom == PeriodUnitOfMeasure.DAY
-            # Use strftime because we want Sunday to be first day of the week.
-            # date.DayOfWeek() has different behaviour
-            else n_weeks_ago + timedelta(days=6 - int(n_weeks_ago.strftime("%w")))
-            if puom == PeriodUnitOfMeasure.WEEK
-            else n_months_ago.replace(
-                day=calendar.monthrange(n_months_ago.year, n_months_ago.month)[1]
-            )
-            if puom == PeriodUnitOfMeasure.MONTH
-            else last_day_of_quarter
-            if puom == PeriodUnitOfMeasure.QUARTER
-            else (
-                self.as_at
-                - relativedelta(years=self.feature_period.end, month=12, day=31)
-            )
-            if puom == PeriodUnitOfMeasure.YEAR
-            else self.as_at
+        # min() is used to ensure we don't return a date later than self.as_at
+        return min(
+            (
+                self.as_at - timedelta(days=self.feature_period.end)
+                if puom == PeriodUnitOfMeasure.DAY
+                # Use strftime because we want Sunday to be first day of the week.
+                # date.DayOfWeek() has different behaviour
+                else n_weeks_ago + timedelta(days=6 - int(n_weeks_ago.strftime("%w")))
+                if puom == PeriodUnitOfMeasure.WEEK
+                else n_months_ago.replace(
+                    day=calendar.monthrange(n_months_ago.year, n_months_ago.month)[1]
+                )
+                if puom == PeriodUnitOfMeasure.MONTH
+                else last_day_of_quarter
+                if puom == PeriodUnitOfMeasure.QUARTER
+                else (
+                    self.as_at
+                    - relativedelta(years=self.feature_period.end, month=12, day=31)
+                )
+                if puom == PeriodUnitOfMeasure.YEAR
+                else self.as_at
+            ),
+            self.as_at,
         )
 
     def get_periods_since_occurrence(self) -> Column:
