@@ -79,76 +79,99 @@ class Feature(ABC):
             self.default_value(),
         ).alias(self.feature_name, metadata=metadata)
 
+    @staticmethod
+    def first_or_last_day_of_quarter(n_quarters_ago: date, start_or_end: str):
+        if start_or_end in {"start", "end"}:
+            return (
+                (
+                    date(n_quarters_ago.year, 1, 1)
+                    if n_quarters_ago.month in [1, 2, 3]
+                    else date(n_quarters_ago.year, 4, 1)
+                    if n_quarters_ago.month in [4, 5, 6]
+                    else date(n_quarters_ago.year, 7, 1)
+                    if n_quarters_ago.month in [7, 8, 9]
+                    else date(n_quarters_ago.year, 10, 1)
+                )
+                if start_or_end == "start"
+                else (
+                    date(n_quarters_ago.year, 3, 31)
+                    if n_quarters_ago.month in [1, 2, 3]
+                    else date(n_quarters_ago.year, 6, 30)
+                    if n_quarters_ago.month in [4, 5, 6]
+                    else date(n_quarters_ago.year, 9, 30)
+                    if n_quarters_ago.month in [7, 8, 9]
+                    else date(n_quarters_ago.year, 12, 31)
+                )
+            )
+        else:
+            raise RuntimeError(f"Don't know what to do with {start_or_end}")
+
+    @staticmethod
+    def get_n_weeks_ago(as_at: date, n: int):
+        return as_at - timedelta(weeks=n)
+
+    @staticmethod
+    def get_n_quarters_ago(as_at: date, n: int):
+        return as_at - relativedelta(months=n * 3)
+
     @property
     def start_date(self) -> date:
-        n_weeks_ago = self.as_at - timedelta(weeks=self.feature_period.start)
-        n_quarters_ago = self.as_at - relativedelta(
-            months=self.feature_period.start * 3
+        n_weeks_ago = self.get_n_weeks_ago(self.as_at, self.feature_period.start)
+        n_quarters_ago = self.get_n_quarters_ago(self.as_at, self.feature_period.start)
+        first_day_of_quarter = self.first_or_last_day_of_quarter(
+            n_quarters_ago, start_or_end="start"
         )
-        first_day_of_quarter = (
-            date(n_quarters_ago.year, 1, 1)
-            if n_quarters_ago.month in [1, 2, 3]
-            else date(n_quarters_ago.year, 4, 1)
-            if n_quarters_ago.month in [4, 5, 6]
-            else date(n_quarters_ago.year, 7, 1)
-            if n_quarters_ago.month in [7, 8, 9]
-            else date(n_quarters_ago.year, 10, 1)
-        )
-        puom = self.feature_period.period_unit_of_measure
         return (
             self.as_at - timedelta(days=self.feature_period.start)
-            if puom == PeriodUnitOfMeasure.DAY
-            else n_weeks_ago - timedelta(days=int(n_weeks_ago.strftime("%w")))
+            if self.feature_period.period_unit_of_measure == PeriodUnitOfMeasure.DAY
             # Use strftime because we want Sunday to be first day of the week.
             # date.DayOfWeek() has different behaviour
-            if puom == PeriodUnitOfMeasure.WEEK
+            else n_weeks_ago - timedelta(days=int(n_weeks_ago.strftime("%w")))
+            if self.feature_period.period_unit_of_measure == PeriodUnitOfMeasure.WEEK
             else self.as_at - relativedelta(months=self.feature_period.start, day=1)
-            if puom == PeriodUnitOfMeasure.MONTH
+            if self.feature_period.period_unit_of_measure == PeriodUnitOfMeasure.MONTH
             else first_day_of_quarter
-            if puom == PeriodUnitOfMeasure.QUARTER
+            if self.feature_period.period_unit_of_measure == PeriodUnitOfMeasure.QUARTER
             else (
                 self.as_at
                 - relativedelta(years=self.feature_period.start, month=1, day=1)
             )
-            if puom == PeriodUnitOfMeasure.YEAR
+            if self.feature_period.period_unit_of_measure == PeriodUnitOfMeasure.YEAR
             else self.as_at
         )
 
     @property
     def end_date(self) -> date:
-        n_weeks_ago = self.as_at - timedelta(weeks=self.feature_period.end)
+        n_weeks_ago = self.get_n_weeks_ago(self.as_at, self.feature_period.end)
         n_months_ago = self.as_at - relativedelta(months=self.feature_period.end)
-        n_quarters_ago = self.as_at - relativedelta(months=self.feature_period.end * 3)
-        last_day_of_quarter = (
-            date(n_quarters_ago.year, 3, 31)
-            if n_quarters_ago.month in [1, 2, 3]
-            else date(n_quarters_ago.year, 6, 30)
-            if n_quarters_ago.month in [4, 5, 6]
-            else date(n_quarters_ago.year, 9, 30)
-            if n_quarters_ago.month in [7, 8, 9]
-            else date(n_quarters_ago.year, 12, 31)
+        n_quarters_ago = self.get_n_quarters_ago(self.as_at, self.feature_period.end)
+        last_day_of_quarter = self.first_or_last_day_of_quarter(
+            n_quarters_ago, start_or_end="end"
         )
-        puom = self.feature_period.period_unit_of_measure
         # min() is used to ensure we don't return a date later than self.as_at
         return min(
             (
                 self.as_at - timedelta(days=self.feature_period.end)
-                if puom == PeriodUnitOfMeasure.DAY
+                if self.feature_period.period_unit_of_measure == PeriodUnitOfMeasure.DAY
                 # Use strftime because we want Sunday to be first day of the week.
                 # date.DayOfWeek() has different behaviour
                 else n_weeks_ago + timedelta(days=6 - int(n_weeks_ago.strftime("%w")))
-                if puom == PeriodUnitOfMeasure.WEEK
+                if self.feature_period.period_unit_of_measure
+                == PeriodUnitOfMeasure.WEEK
                 else n_months_ago.replace(
                     day=calendar.monthrange(n_months_ago.year, n_months_ago.month)[1]
                 )
-                if puom == PeriodUnitOfMeasure.MONTH
+                if self.feature_period.period_unit_of_measure
+                == PeriodUnitOfMeasure.MONTH
                 else last_day_of_quarter
-                if puom == PeriodUnitOfMeasure.QUARTER
+                if self.feature_period.period_unit_of_measure
+                == PeriodUnitOfMeasure.QUARTER
                 else (
                     self.as_at
                     - relativedelta(years=self.feature_period.end, month=12, day=31)
                 )
-                if puom == PeriodUnitOfMeasure.YEAR
+                if self.feature_period.period_unit_of_measure
+                == PeriodUnitOfMeasure.YEAR
                 else self.as_at
             ),
             self.as_at,
