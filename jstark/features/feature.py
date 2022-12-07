@@ -68,30 +68,16 @@ class Feature(ABC):
     @property
     def column(self) -> Column:
         metadata = {"createdBy": "jstark"}
-        periods_since_occurrence = self.get_periods_since_occurrence()
         return f.coalesce(
             self.aggregator()(
                 f.when(
-                    (periods_since_occurrence <= self.feature_period.start)
-                    & (periods_since_occurrence >= self.feature_period.end),
+                    (f.to_date(f.col("Timestamp")) >= f.lit(self.start_date))
+                    & (f.to_date(f.col("Timestamp")) <= f.lit(self.end_date)),
                     self.column_expression(),
                 )
             ),
             self.default_value(),
         ).alias(self.feature_name, metadata=metadata)
-
-    def first_day_of_quarter(self, date_col: Column) -> Column:
-        return f.concat_ws(
-            "-",
-            f.year(date_col),
-            f.lit(
-                f.when(f.month(date_col).isin(1, 2, 3), 1)
-                .when(f.month(date_col).isin(4, 5, 6), 4)
-                .when(f.month(date_col).isin(7, 8, 9), 7)
-                .otherwise(10)
-            ),
-            f.lit(1),
-        ).cast("date")
 
     @property
     def start_date(self) -> date:
@@ -166,39 +152,4 @@ class Feature(ABC):
                 else self.as_at
             ),
             self.as_at,
-        )
-
-    def get_periods_since_occurrence(self) -> Column:
-        as_at = f.lit(self.as_at)
-        date_of_occurrence = f.col("Timestamp")
-        days_since_occurrence = f.datediff(as_at, f.to_date(date_of_occurrence))
-        weeks_since_occurrence_quotient = f.floor(days_since_occurrence / 7)
-        weeks_since_occurrence_remainder = days_since_occurrence % 7
-        weeks_since_occurrence = f.when(
-            f.dayofweek(as_at) > weeks_since_occurrence_remainder,
-            weeks_since_occurrence_quotient,
-        ).otherwise(weeks_since_occurrence_quotient + 1)
-        months_since_occurrence = f.floor(f.months_between(as_at, date_of_occurrence))
-        as_at_first_day_of_quarter = self.first_day_of_quarter(as_at)
-        date_of_occurrence_first_day_of_quarter = self.first_day_of_quarter(
-            date_of_occurrence
-        )
-        quarters_since_occurrence = f.floor(
-            f.months_between(
-                as_at_first_day_of_quarter, date_of_occurrence_first_day_of_quarter
-            )
-            / 3
-        )
-        years_since_occurrence = f.year(as_at) - f.year(date_of_occurrence)
-        puom = self.feature_period.period_unit_of_measure
-        return (
-            days_since_occurrence
-            if puom == PeriodUnitOfMeasure.DAY
-            else weeks_since_occurrence
-            if puom == PeriodUnitOfMeasure.WEEK
-            else months_since_occurrence
-            if puom == PeriodUnitOfMeasure.MONTH
-            else quarters_since_occurrence
-            if puom == PeriodUnitOfMeasure.QUARTER
-            else years_since_occurrence
         )
