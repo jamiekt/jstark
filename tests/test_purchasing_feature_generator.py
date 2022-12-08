@@ -359,3 +359,19 @@ def test_count(as_at_timestamp: datetime, dataframe_of_purchases: DataFrame):
     first = df.first()
     assert first is not None
     assert first["Count_2d0"] == 2
+
+
+def test_grossspend_metadata_description(
+    as_at_timestamp: datetime, dataframe_of_purchases: DataFrame
+):
+    df = dataframe_of_purchases.agg(
+        *PurchasingFeatureGenerator(
+            as_at=as_at_timestamp.date(),
+            feature_periods=[
+                FeaturePeriod(PeriodUnitOfMeasure.DAY, 2, 0),
+            ],
+        ).features
+    )
+    assert [c.metadata["description"] for c in df.schema if c.name == "GrossSpend_2d0"][
+        0
+    ] == "Sum of GrossSpend between 2022-11-28 and 2022-11-30 (inclusive)"

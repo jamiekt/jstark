@@ -101,3 +101,8 @@ def test_start_and_end_date_when_period_unit_of_measure_is_year():
         assert _0y0.end_date == as_at
         assert _1y1.start_date == date(2021, 1, 1)
         assert _1y1.end_date == date(2021, 12, 31)
+
+
+# def test_metadata():
+#     f = GrossSpend(as_at, FeaturePeriod(PeriodUnitOfMeasure.YEAR, 0, 0))
+#     f.

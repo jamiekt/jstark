@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 from dateutil.relativedelta import relativedelta
 from typing import Callable
 
@@ -66,8 +66,23 @@ class Feature(ABC):
         return f"{type(self).__name__}_{self.feature_period.code}"
 
     @property
+    @abstractmethod
+    def description_subject(self) -> str:
+        pass
+
+    @property
     def column(self) -> Column:
-        metadata = {"createdBy": "jstark"}
+        metadata = {
+            "created-with-love-by": "https://github.com/jamiekt/jstark",
+            "start-date": self.start_date.strftime("%Y-%m-%d"),
+            "end-date": self.end_date.strftime("%Y-%m-%d"),
+            "description": (
+                f"{self.description_subject} between "
+                + f'{self.start_date.strftime("%Y-%m-%d")} and '
+                + f'{self.end_date.strftime("%Y-%m-%d")} (inclusive)'
+            ),
+            "generated-at": datetime.now().strftime("%Y-%m-%d"),
+        }
         return f.coalesce(
             self.aggregator()(
                 f.when(

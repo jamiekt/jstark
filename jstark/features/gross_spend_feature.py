@@ -19,3 +19,7 @@ class GrossSpend(Feature):
 
     def default_value(self) -> Column:
         return f.lit(0)
+
+    @property
+    def description_subject(self) -> str:
+        return "Sum of GrossSpend"
