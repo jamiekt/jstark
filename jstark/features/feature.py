@@ -11,6 +11,35 @@ from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
 from jstark.exceptions import AsAtIsNotADate
 
 
+class FirstAndLastDateOfQuarter:
+    def __init__(self, date_within_the_quarter: date) -> None:
+        self.__date_within_the_quarter = date_within_the_quarter
+
+    @property
+    def first_date_in_quarter(self):
+        return (
+            date(self.__date_within_the_quarter.year, 1, 1)
+            if self.__date_within_the_quarter.month in [1, 2, 3]
+            else date(self.__date_within_the_quarter.year, 4, 1)
+            if self.__date_within_the_quarter.month in [4, 5, 6]
+            else date(self.__date_within_the_quarter.year, 7, 1)
+            if self.__date_within_the_quarter.month in [7, 8, 9]
+            else date(self.__date_within_the_quarter.year, 10, 1)
+        )
+
+    @property
+    def last_date_in_quarter(self):
+        return (
+            date(self.__date_within_the_quarter.year, 3, 31)
+            if self.__date_within_the_quarter.month in [1, 2, 3]
+            else date(self.__date_within_the_quarter.year, 6, 30)
+            if self.__date_within_the_quarter.month in [4, 5, 6]
+            else date(self.__date_within_the_quarter.year, 9, 30)
+            if self.__date_within_the_quarter.month in [7, 8, 9]
+            else date(self.__date_within_the_quarter.year, 12, 31)
+        )
+
+
 class Feature(ABC):
     def __init__(self, as_at: date, feature_period: FeaturePeriod) -> None:
         self.feature_period = feature_period
@@ -118,9 +147,9 @@ class Feature(ABC):
     def start_date(self) -> date:
         n_weeks_ago = self.get_n_weeks_ago(self.as_at, self.feature_period.start)
         n_quarters_ago = self.get_n_quarters_ago(self.as_at, self.feature_period.start)
-        first_day_of_quarter = self.first_or_last_day_of_quarter(
-            n_quarters_ago, start_or_end="start"
-        )
+        first_day_of_quarter = FirstAndLastDateOfQuarter(
+            n_quarters_ago
+        ).first_date_in_quarter
         return (
             self.as_at - timedelta(days=self.feature_period.start)
             if self.feature_period.period_unit_of_measure == PeriodUnitOfMeasure.DAY
@@ -145,9 +174,9 @@ class Feature(ABC):
         n_weeks_ago = self.get_n_weeks_ago(self.as_at, self.feature_period.end)
         n_months_ago = self.as_at - relativedelta(months=self.feature_period.end)
         n_quarters_ago = self.get_n_quarters_ago(self.as_at, self.feature_period.end)
-        last_day_of_quarter = self.first_or_last_day_of_quarter(
-            n_quarters_ago, start_or_end="end"
-        )
+        last_day_of_quarter = FirstAndLastDateOfQuarter(
+            n_quarters_ago
+        ).last_date_in_quarter
         # min() is used to ensure we don't return a date later than self.as_at
         return min(
             (
