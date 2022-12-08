@@ -3,7 +3,7 @@ from typing import List, Dict
 
 from pyspark.sql import Column, SparkSession
 from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
-from jstark.features import Count, GrossSpend
+from jstark.features import Count, GrossSpend, RecencyDays
 
 
 class PurchasingFeatureGenerator(object):
@@ -18,7 +18,7 @@ class PurchasingFeatureGenerator(object):
         self.as_at = as_at
         self.feature_periods = feature_periods
 
-    FEATURE_CLASSES = [Count, GrossSpend]
+    FEATURE_CLASSES = [Count, GrossSpend, RecencyDays]
 
     @property
     def as_at(self) -> date:
