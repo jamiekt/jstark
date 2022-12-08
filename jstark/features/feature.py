@@ -71,6 +71,10 @@ class Feature(ABC):
         pass
 
     @property
+    def commentary(self) -> str:
+        return ""
+
+    @property
     def column(self) -> Column:
         metadata = {
             "created-with-love-by": "https://github.com/jamiekt/jstark",
@@ -82,6 +86,7 @@ class Feature(ABC):
                 + f'{self.end_date.strftime("%Y-%m-%d")} (inclusive)'
             ),
             "generated-at": datetime.now().strftime("%Y-%m-%d"),
+            "commentary": self.commentary,
         }
         return f.coalesce(
             self.aggregator()(
