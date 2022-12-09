@@ -18,7 +18,7 @@ class PurchasingFeatureGenerator(object):
         self.as_at = as_at
         self.feature_periods = feature_periods
 
-    FEATURE_CLASSES = [Count, GrossSpend, RecencyDays]
+    FEATURE_CLASSES: list = [Count, GrossSpend, RecencyDays]
 
     @property
     def as_at(self) -> date:
