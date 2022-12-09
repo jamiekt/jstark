@@ -1,9 +1,9 @@
 from datetime import date
-from typing import List, Dict, Type
+from typing import List, Dict
 
 from pyspark.sql import Column, SparkSession
 from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
-from jstark.features import Feature, Count, GrossSpend, RecencyDays
+from jstark.features import Count, GrossSpend, RecencyDays
 
 
 class PurchasingFeatureGenerator(object):
@@ -18,7 +18,9 @@ class PurchasingFeatureGenerator(object):
         self.as_at = as_at
         self.feature_periods = feature_periods
 
-    FEATURE_CLASSES: list[Type[Feature]] = [Count, GrossSpend, RecencyDays]
+    # would preare list[Type[Feature]] as type hint but
+    # this only works on py3.10 and above
+    FEATURE_CLASSES: list = [Count, GrossSpend, RecencyDays]
 
     @property
     def as_at(self) -> date:
