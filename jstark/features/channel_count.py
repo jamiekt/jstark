@@ -7,7 +7,7 @@ from typing import Callable
 from .feature import Feature, FeaturePeriod
 
 
-class StoreCount(Feature):
+class ChannelCount(Feature):
     def __init__(self, as_at: date, feature_period: FeaturePeriod) -> None:
         super().__init__(as_at, feature_period)
 
@@ -15,20 +15,19 @@ class StoreCount(Feature):
         return self.count_distinct_aggregator
 
     def column_expression(self) -> Column:
-        return f.col("Store")
+        return f.col("Channel")
 
     def default_value(self) -> Column:
         return f.lit(0)
 
     @property
     def description_subject(self) -> str:
-        return "Distinct count of Stores"
+        return "Distinct count of Channels"
 
     @property
     def commentary(self) -> str:
         return (
-            "The number of stores. Typically the dataframe supplied "
-            + "to this feature will have many transactions for many baskets for "
-            + "many stores, this feature allows you to determine how many "
-            + "stores those baskets were purchased in."
+            "Channels may be things like 'instore' or 'online', although you can supply"
+            + " whatever values you want. Perhaps they are marketing channels. This "
+            + " feature is the number of distinct channels in which activity occurred."
         )

@@ -73,7 +73,7 @@ def dataframe_of_purchases(
             "Timestamp": as_at_timestamp - relativedelta(months=2),
             "Customer": "Luke",
             "Store": "Twickenham",
-            "Channel": "Instore",
+            "Channel": "Online",
             "Basket": uuid.uuid4(),
             "items": [
                 {
