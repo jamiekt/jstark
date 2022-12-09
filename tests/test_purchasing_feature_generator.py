@@ -375,3 +375,18 @@ def test_grossspend_metadata_description(
     assert [c.metadata["description"] for c in df.schema if c.name == "GrossSpend_2d0"][
         0
     ] == "Sum of GrossSpend between 2022-11-28 and 2022-11-30 (inclusive)"
+
+
+def test_recencydays(as_at_timestamp: datetime, dataframe_of_purchases: DataFrame):
+    dataframe_of_purchases = dataframe_of_purchases.where(
+        f.col("Timestamp") < f.lit(date(2022, 1, 1))
+    )
+    df = dataframe_of_purchases.agg(
+        *PurchasingFeatureGenerator(
+            as_at=as_at_timestamp.date(),
+            feature_periods=[
+                FeaturePeriod(PeriodUnitOfMeasure.YEAR, 2, 0),
+            ],
+        ).features
+    )
+    assert df.first()["RecencyDays_2y0"] == 365
