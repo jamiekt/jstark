@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod
+from abc import ABCMeta, abstractmethod
 from datetime import date, timedelta, datetime
 from dateutil.relativedelta import relativedelta
 from typing import Callable
@@ -11,7 +11,7 @@ from jstark.features.first_and_last_date_of_period import FirstAndLastDateOfPeri
 from jstark.exceptions import AsAtIsNotADate
 
 
-class Feature(ABC):
+class Feature(metaclass=ABCMeta):
     def __init__(self, as_at: date, feature_period: FeaturePeriod) -> None:
         self.feature_period = feature_period
         self.as_at = as_at
