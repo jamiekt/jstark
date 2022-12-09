@@ -5,6 +5,7 @@ from pyspark.sql import Column, SparkSession
 from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
 from jstark.features import (
     Count,
+    NetSpend,
     GrossSpend,
     RecencyDays,
     BasketCount,
@@ -15,6 +16,10 @@ from jstark.features import (
     ApproxCustomerCount,
     ApproxBasketCount,
     Discount,
+    MinGrossSpend,
+    MaxGrossSpend,
+    MinNetSpend,
+    MaxNetSpend,
 )
 
 
@@ -34,6 +39,7 @@ class PurchasingFeatureGenerator(object):
     # this only works on py3.10 and above
     FEATURE_CLASSES: list = [
         Count,
+        NetSpend,
         GrossSpend,
         RecencyDays,
         BasketCount,
@@ -44,6 +50,10 @@ class PurchasingFeatureGenerator(object):
         ApproxBasketCount,
         ApproxCustomerCount,
         Discount,
+        MinGrossSpend,
+        MaxGrossSpend,
+        MinNetSpend,
+        MaxNetSpend,
     ]
 
     @property

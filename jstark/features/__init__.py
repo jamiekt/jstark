@@ -1,4 +1,5 @@
 from .gross_spend import GrossSpend
+from .net_spend import NetSpend
 from .count import Count
 from .recency_days import RecencyDays
 from .feature import Feature
@@ -10,10 +11,15 @@ from .channel_count import ChannelCount
 from .approx_basket_count import ApproxBasketCount
 from .approx_customer_count import ApproxCustomerCount
 from .discount import Discount
+from .min_gross_spend import MinGrossSpend
+from .max_gross_spend import MaxGrossSpend
+from .min_net_spend import MinNetSpend
+from .max_net_spend import MaxNetSpend
 
 __all__ = [
     "Feature",
     "GrossSpend",
+    "NetSpend",
     "Count",
     "RecencyDays",
     "BasketCount",
@@ -24,4 +30,8 @@ __all__ = [
     "ApproxCustomerCount",
     "ApproxBasketCount",
     "Discount",
+    "MinGrossSpend",
+    "MaxGrossSpend",
+    "MinNetSpend",
+    "MaxNetSpend",
 ]

@@ -416,3 +416,23 @@ def test_channel_count_luke_and_leia_0y0(luke_and_leia_purchases_0y0_first: Row)
 
 def test_discount_luke_and_leia_0y0(luke_and_leia_purchases_0y0_first: Row):
     assert float(luke_and_leia_purchases_0y0_first["Discount_0y0"]) == 1.05
+
+
+def test_net_spend_luke_and_leia_0y0(luke_and_leia_purchases_0y0_first: Row):
+    assert float(luke_and_leia_purchases_0y0_first["NetSpend_0y0"]) == 24.25
+
+
+def test_max_net_spend_luke_and_leia_0y0(luke_and_leia_purchases_0y0_first: Row):
+    assert float(luke_and_leia_purchases_0y0_first["MaxNetSpend_0y0"]) == 6.75
+
+
+def test_min_net_spend_luke_and_leia_0y0(luke_and_leia_purchases_0y0_first: Row):
+    assert float(luke_and_leia_purchases_0y0_first["MinNetSpend_0y0"]) == 2.25
+
+
+def test_max_gross_spend_luke_and_leia_0y0(luke_and_leia_purchases_0y0_first: Row):
+    assert float(luke_and_leia_purchases_0y0_first["MaxGrossSpend_0y0"]) == 7.0
+
+
+def test_min_gross_spend_luke_and_leia_0y0(luke_and_leia_purchases_0y0_first: Row):
+    assert float(luke_and_leia_purchases_0y0_first["MinGrossSpend_0y0"]) == 2.5

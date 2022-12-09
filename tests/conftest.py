@@ -46,6 +46,7 @@ def purchases_schema() -> StructType:
             StructField("Quantity", IntegerType(), True),
             StructField("Basket", StringType(), True),
             StructField("GrossSpend", DecimalType(10, 2), True),
+            StructField("NetSpend", DecimalType(10, 2), True),
             StructField("Discount", DecimalType(10, 2), True),
         ]
     )
@@ -67,6 +68,7 @@ def dataframe_of_purchases(
                     "Product": "Kleenex",
                     "Quantity": 1,
                     "GrossSpend": Decimal(8),
+                    "NetSpend": Decimal(7.75),
                     "Discount": Decimal(0.5),
                 }
             ],
@@ -82,6 +84,7 @@ def dataframe_of_purchases(
                     "Product": "WD40",
                     "Quantity": 2,
                     "GrossSpend": Decimal(7),
+                    "NetSpend": Decimal(6.75),
                     "Discount": Decimal(0.0),
                 }
             ],
@@ -97,6 +100,7 @@ def dataframe_of_purchases(
                     "Product": "Tiger Bread",
                     "Quantity": 3,
                     "GrossSpend": Decimal(6),
+                    "NetSpend": Decimal(5.75),
                     "Discount": Decimal(0.1),
                 }
             ],
@@ -112,6 +116,7 @@ def dataframe_of_purchases(
                     "Product": "Apples",
                     "Quantity": 6,
                     "GrossSpend": Decimal(3.25),
+                    "NetSpend": Decimal(3.0),
                     "Discount": Decimal(0.75),
                 }
             ],
@@ -127,6 +132,7 @@ def dataframe_of_purchases(
                     "Product": "Custard Creams",
                     "Quantity": 1,
                     "GrossSpend": Decimal(4.00),
+                    "NetSpend": Decimal(3.75),
                     "Discount": Decimal(0.0),
                 }
             ],
@@ -142,12 +148,14 @@ def dataframe_of_purchases(
                     "Product": "Cheddar",
                     "Quantity": 2,
                     "GrossSpend": Decimal(2.50),
+                    "NetSpend": Decimal(2.25),
                     "Discount": Decimal(0.1),
                 },
                 {
                     "Product": "Grapes",
                     "Quantity": 1,
                     "GrossSpend": Decimal(3.00),
+                    "NetSpend": Decimal(2.75),
                     "Discount": Decimal(0.1),
                 },
             ],
