@@ -1,4 +1,4 @@
-from .gross_spend_feature import GrossSpend
+from .gross_spend import GrossSpend
 from .count import Count
 from .recency_days import RecencyDays
 from .feature import Feature
