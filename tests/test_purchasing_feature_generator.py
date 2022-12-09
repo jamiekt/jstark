@@ -408,3 +408,19 @@ def test_basket_count_this_year(
     first = df.first()
     assert first is not None
     assert float(first["BasketCount_0y0"]) == 5
+
+
+def test_store_count_this_year(
+    as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame
+):
+    df = luke_and_leia_purchases.groupBy().agg(
+        *PurchasingFeatureGenerator(
+            as_at=as_at_timestamp.date(),
+            feature_periods=[
+                FeaturePeriod(PeriodUnitOfMeasure.YEAR, 0, 0),
+            ],
+        ).features
+    )
+    first = df.first()
+    assert first is not None
+    assert float(first["StoreCount_0y0"]) == 3
