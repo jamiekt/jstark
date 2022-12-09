@@ -22,6 +22,9 @@ class Feature(ABC):
     def count_aggregator(self, column: Column) -> Column:
         return f.count(column)
 
+    def count_distinct_aggregator(self, column: Column) -> Column:
+        return f.countDistinct(column)
+
     def max_aggregator(self, column: Column) -> Column:
         return f.max(column)
 
