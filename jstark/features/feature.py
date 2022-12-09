@@ -78,7 +78,7 @@ class Feature(metaclass=ABCMeta):
 
     @property
     def commentary(self) -> str:
-        return ""
+        return "No commentary supplied"
 
     @property
     def column(self) -> Column:
