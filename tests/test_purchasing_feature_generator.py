@@ -412,13 +412,3 @@ def test_customer_count_luke_and_leia_0y0(luke_and_leia_purchases_0y0_first: Row
 
 def test_channel_count_luke_and_leia_0y0(luke_and_leia_purchases_0y0_first: Row):
     assert float(luke_and_leia_purchases_0y0_first["ChannelCount_0y0"]) == 2
-
-
-def test_approx_basket_count_luke_and_leia_0y0(luke_and_leia_purchases_0y0_first: Row):
-    assert float(luke_and_leia_purchases_0y0_first["ApproxBasketCount_0y0"]) == 5
-
-
-def test_approx_customer_count_luke_and_leia_0y0(
-    luke_and_leia_purchases_0y0_first: Row,
-):
-    assert float(luke_and_leia_purchases_0y0_first["ApproxCustomerCount_0y0"]) == 2
