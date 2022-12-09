@@ -12,6 +12,8 @@ from jstark.features import (
     ProductCount,
     CustomerCount,
     ChannelCount,
+    ApproxCustomerCount,
+    ApproxBasketCount,
 )
 
 
@@ -38,6 +40,8 @@ class PurchasingFeatureGenerator(object):
         ProductCount,
         CustomerCount,
         ChannelCount,
+        ApproxBasketCount,
+        ApproxCustomerCount,
     ]
 
     @property

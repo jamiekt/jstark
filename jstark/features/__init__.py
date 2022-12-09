@@ -7,6 +7,9 @@ from .store_count import StoreCount
 from .product_count import ProductCount
 from .customer_count import CustomerCount
 from .channel_count import ChannelCount
+from .approx_basket_count import ApproxBasketCount
+from .approx_customer_count import ApproxCustomerCount
+
 
 __all__ = [
     "Feature",
@@ -18,4 +21,6 @@ __all__ = [
     "ProductCount",
     "CustomerCount",
     "ChannelCount",
+    "ApproxCustomerCount",
+    "ApproxBasketCount",
 ]

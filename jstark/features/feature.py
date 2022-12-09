@@ -25,6 +25,9 @@ class Feature(metaclass=ABCMeta):
     def count_distinct_aggregator(self, column: Column) -> Column:
         return f.countDistinct(column)
 
+    def approx_count_distinct_aggregator(self, column: Column) -> Column:
+        return f.approx_count_distinct(column)
+
     def max_aggregator(self, column: Column) -> Column:
         return f.max(column)
 

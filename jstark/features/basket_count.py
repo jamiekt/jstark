@@ -24,5 +24,5 @@ class BasketCount(DistinctCount):
             "The number of baskets. Typically the dataframe supplied "
             + "to this feature will have many transactions for the same basket, "
             + "this feature allows you to determine how many shopping baskets "
-            + "existed in that corpus of transactions."
+            + "existed in that collection of transactions."
         )
