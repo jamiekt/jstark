@@ -5,7 +5,7 @@ from dateutil.relativedelta import relativedelta
 from typing import Dict, Any, Iterable
 
 import pytest
-from pyspark.sql import DataFrame, SparkSession
+from pyspark.sql import DataFrame, SparkSession, Row
 import pyspark.sql.functions as f
 from pyspark.sql.types import (
     DecimalType,
@@ -15,6 +15,8 @@ from pyspark.sql.types import (
     StructType,
     TimestampType,
 )
+from jstark.purchasing_feature_generator import PurchasingFeatureGenerator
+from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
 
 
 @pytest.fixture(scope="session")
@@ -153,7 +155,30 @@ def dataframe_of_purchases(
 
 
 @pytest.fixture(scope="session")
-def luke_and_leia_purchases(dataframe_of_purchases):
+def luke_and_leia_purchases(dataframe_of_purchases: DataFrame) -> DataFrame:
     return dataframe_of_purchases.where(
         (f.col("Customer") == "Leia") | (f.col("Customer") == "Luke")
     )
+
+
+@pytest.fixture(scope="session")
+def luke_and_leia_purchases_0y0_first(
+    as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame
+) -> Row:
+    """
+    If we only collect once, the tests should run quicker
+    """
+    df = luke_and_leia_purchases.where(
+        (f.col("Customer") == "Leia") | (f.col("Customer") == "Luke")
+    )
+    df = luke_and_leia_purchases.groupBy().agg(
+        *PurchasingFeatureGenerator(
+            as_at=as_at_timestamp.date(),
+            feature_periods=[
+                FeaturePeriod(PeriodUnitOfMeasure.YEAR, 0, 0),
+            ],
+        ).features
+    )
+    first = df.first()
+    assert first is not None
+    return first
