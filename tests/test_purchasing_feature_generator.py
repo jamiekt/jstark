@@ -412,3 +412,7 @@ def test_customer_count_luke_and_leia_0y0(luke_and_leia_purchases_0y0_first: Row
 
 def test_channel_count_luke_and_leia_0y0(luke_and_leia_purchases_0y0_first: Row):
     assert float(luke_and_leia_purchases_0y0_first["ChannelCount_0y0"]) == 2
+
+
+def test_discount_luke_and_leia_0y0(luke_and_leia_purchases_0y0_first: Row):
+    assert float(luke_and_leia_purchases_0y0_first["Discount_0y0"]) == 1.05

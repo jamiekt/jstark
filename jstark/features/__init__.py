@@ -9,7 +9,7 @@ from .customer_count import CustomerCount
 from .channel_count import ChannelCount
 from .approx_basket_count import ApproxBasketCount
 from .approx_customer_count import ApproxCustomerCount
-
+from .discount import Discount
 
 __all__ = [
     "Feature",
@@ -23,4 +23,5 @@ __all__ = [
     "ChannelCount",
     "ApproxCustomerCount",
     "ApproxBasketCount",
+    "Discount",
 ]
