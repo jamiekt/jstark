@@ -50,4 +50,4 @@ jobs:
       run: hatch run pytest -vvv --durations=1 --cov=jstark
 
     - name: generate coverage badge
-      run: hatch run coverage-badge -p coverage.svg -f
+      run: hatch run coverage-badge -o coverage.svg -f
