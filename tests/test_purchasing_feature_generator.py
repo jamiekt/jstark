@@ -251,3 +251,7 @@ def test_avg_gross_spend_per_basket_luke_and_leia_0y0(
     assert (
         float(luke_and_leia_purchases_first["AverageGrossSpendPerBasket_0y0"]) == 5.15
     )
+
+
+def test_quantity_luke_and_leia_0y0(luke_and_leia_purchases_first: Row):
+    assert float(luke_and_leia_purchases_first["Quantity_0y0"]) == 15

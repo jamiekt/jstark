@@ -21,6 +21,7 @@ from jstark.features import (
     MinNetSpend,
     MaxNetSpend,
     AverageGrossSpendPerBasket,
+    Quantity,
 )
 
 
@@ -56,6 +57,7 @@ class PurchasingFeatureGenerator(object):
         MinNetSpend,
         MaxNetSpend,
         AverageGrossSpendPerBasket,
+        Quantity,
     ]
 
     @property
