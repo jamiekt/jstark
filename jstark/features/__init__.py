@@ -17,6 +17,7 @@ from .min_net_spend import MinNetSpend
 from .max_net_spend import MaxNetSpend
 from .average_gross_spend_per_basket import AverageGrossSpendPerBasket
 from .quantity import Quantity
+from .average_quantity_per_basket import AvgQuantityPerBasket
 
 __all__ = [
     "BaseFeature",
@@ -38,4 +39,5 @@ __all__ = [
     "MaxNetSpend",
     "AverageGrossSpendPerBasket",
     "Quantity",
+    "AvgQuantityPerBasket",
 ]
