@@ -58,7 +58,7 @@ jobs:
         git config --global user.email 'jamiekt@users.noreply.github.com'
         git pull
         git add coverage-badges/coverage-${{ matrix.python-version }}-${{ startsWith(matrix.os, 'macos-') && 'macOS' || startsWith(matrix.os, 'windows-') && 'Windows' || 'Linux' }}.svg
-        git commit -am "coerage badge updated"
+        git commit -am "coverage-badges/coverage-${{ matrix.python-version }}-${{ startsWith(matrix.os, 'macos-') && 'macOS' || startsWith(matrix.os, 'windows-') && 'Windows' || 'Linux' }}.svg updated"
         git push
       # uses: EndBug/add-and-commit@v9 # You can change this to use a specific version.
       # with:
