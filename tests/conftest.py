@@ -203,3 +203,29 @@ def luke_and_leia_purchases_0y0_first(
     first = df.first()
     assert first is not None
     return first
+
+
+@pytest.fixture(scope="session")
+def purchasing_feature_generator(
+    as_at_timestamp: datetime,
+) -> PurchasingFeatureGenerator:
+    return PurchasingFeatureGenerator(
+        as_at=as_at_timestamp.date(),
+        feature_periods=[
+            FeaturePeriod(PeriodUnitOfMeasure.DAY, 0, 0),
+            FeaturePeriod(PeriodUnitOfMeasure.DAY, 2, 0),
+            FeaturePeriod(PeriodUnitOfMeasure.DAY, 2, 2),
+            FeaturePeriod(PeriodUnitOfMeasure.WEEK, 0, 0),
+            FeaturePeriod(PeriodUnitOfMeasure.WEEK, 1, 1),
+            FeaturePeriod(PeriodUnitOfMeasure.WEEK, 1, 0),
+            FeaturePeriod(PeriodUnitOfMeasure.MONTH, 0, 0),
+            FeaturePeriod(PeriodUnitOfMeasure.MONTH, 1, 1),
+            FeaturePeriod(PeriodUnitOfMeasure.MONTH, 1, 0),
+            FeaturePeriod(PeriodUnitOfMeasure.QUARTER, 0, 0),
+            FeaturePeriod(PeriodUnitOfMeasure.QUARTER, 1, 1),
+            FeaturePeriod(PeriodUnitOfMeasure.QUARTER, 1, 0),
+            FeaturePeriod(PeriodUnitOfMeasure.YEAR, 1, 1),
+            FeaturePeriod(PeriodUnitOfMeasure.YEAR, 1, 0),
+            FeaturePeriod(PeriodUnitOfMeasure.YEAR, 2, 0),
+        ],
+    )
