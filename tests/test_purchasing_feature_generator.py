@@ -260,3 +260,19 @@ def test_quantity_luke_and_leia_0y0(luke_and_leia_purchases_first: Row):
 
 def test_avg_quantity_per_basket_luke_and_leia_0y0(luke_and_leia_purchases_first: Row):
     assert float(luke_and_leia_purchases_first["AvgQuantityPerBasket_0y0"]) == 3.0
+
+
+def test_min_net_price_luke_and_leia_0y0(luke_and_leia_purchases_first: Row):
+    assert float(luke_and_leia_purchases_first["MinNetPrice_0y0"]) == 0.5
+
+
+def test_max_net_price_luke_and_leia_0y0(luke_and_leia_purchases_first: Row):
+    assert float(luke_and_leia_purchases_first["MaxNetPrice_0y0"]) == 3.75
+
+
+def test_min_gross_price_luke_and_leia_0y0(luke_and_leia_purchases_first: Row):
+    assert float(luke_and_leia_purchases_first["MinGrossPrice_0y0"]) == 0.5416666666667
+
+
+def test_max_gross_price_luke_and_leia_0y0(luke_and_leia_purchases_first: Row):
+    assert float(luke_and_leia_purchases_first["MaxGrossPrice_0y0"]) == 4.0

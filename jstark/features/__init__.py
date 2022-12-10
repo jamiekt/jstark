@@ -19,6 +19,10 @@ from .average_gross_spend_per_basket import AverageGrossSpendPerBasket
 from .quantity import Quantity
 from .average_quantity_per_basket import AvgQuantityPerBasket
 from .most_recent_purchase_date import MostRecentPurchaseDate
+from .min_net_price import MinNetPrice
+from .max_net_price import MaxNetPrice
+from .min_gross_price import MinGrossPrice
+from .max_gross_price import MaxGrossPrice
 
 __all__ = [
     "BaseFeature",
@@ -42,4 +46,8 @@ __all__ = [
     "Quantity",
     "AvgQuantityPerBasket",
     "MostRecentPurchaseDate",
+    "MinNetPrice",
+    "MaxNetPrice",
+    "MinGrossPrice",
+    "MaxGrossPrice",
 ]

@@ -24,6 +24,10 @@ from jstark.features import (
     Quantity,
     AvgQuantityPerBasket,
     MostRecentPurchaseDate,
+    MinNetPrice,
+    MaxNetPrice,
+    MinGrossPrice,
+    MaxGrossPrice,
 )
 
 
@@ -62,6 +66,10 @@ class PurchasingFeatureGenerator(object):
         Quantity,
         AvgQuantityPerBasket,
         MostRecentPurchaseDate,
+        MinNetPrice,
+        MaxNetPrice,
+        MinGrossPrice,
+        MaxGrossPrice,
     ]
 
     @property

@@ -17,3 +17,10 @@ class NetSpend(Sum):
     @property
     def description_subject(self) -> str:
         return "Sum of NetSpend"
+
+    @property
+    def commentary(self) -> str:
+        return (
+            "The definition of NetSpend can be whatever you want "
+            + "it to be though typically its the price exclusive of any tax paid"
+        )
