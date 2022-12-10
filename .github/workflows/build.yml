@@ -51,3 +51,45 @@ jobs:
 
     - name: generate coverage badge
       run: hatch run coverage-badge -o coverage.svg -f
+
+    - uses: EndBug/add-and-commit@v9 # You can change this to use a specific version.
+      with:
+        # The arguments for the `git add` command (see the paragraph below for more info)
+        # Default: '.'
+        add: coverage.svg
+
+        # Arguments for the git fetch command. If set to false, the action won't fetch the repo.
+        # For more info as to why fetching is usually recommended, please see the "Performance on large repos" FAQ.
+        # Default: --tags --force
+        fetch: false
+
+        # The message for the commit.
+        # Default: 'Commit from GitHub Actions (name of the workflow)'
+        message: Update coverage badge
+
+        # The way the action should handle pathspec errors from the add and remove commands. Three options are available:
+        # - ignore -> errors will be logged but the step won't fail
+        # - exitImmediately -> the action will stop right away, and the step will fail
+        # - exitAtEnd -> the action will go on, every pathspec error will be logged at the end, the step will fail.
+        # Default: ignore
+        pathspec_error_handling: ignore
+
+        # Arguments for the git pull command. By default, the action does not pull.
+        # Default: ''
+        # pull: '--rebase --autostash ...'
+
+        # Whether to push the commit and, if any, its tags to the repo. It can also be used to set the git push arguments (see the paragraph below for more info)
+        # Default: true
+        push: true
+
+        # The arguments for the `git rm` command (see the paragraph below for more info)
+        # Default: ''
+        # remove: './dir/old_file.js'
+
+        # Arguments for the git tag command (the tag name always needs to be the first word not preceded by an hyphen)
+        # Default: ''
+        # tag: 'v1.0.0 --force'
+
+        # Arguments for the git push --tags command (any additional argument will be added after --tags)
+        # Default: ''
+        # tag_push: '--force'
