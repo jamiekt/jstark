@@ -192,9 +192,6 @@ def luke_and_leia_purchases_0y0_first(
     """
     If we only collect once, the tests should run quicker
     """
-    df = luke_and_leia_purchases.where(
-        (f.col("Customer") == "Leia") | (f.col("Customer") == "Luke")
-    )
     df = luke_and_leia_purchases.groupBy().agg(
         *PurchasingFeatureGenerator(
             as_at=as_at_timestamp.date(),
