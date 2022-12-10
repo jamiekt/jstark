@@ -186,26 +186,6 @@ def luke_and_leia_purchases(dataframe_of_purchases: DataFrame) -> DataFrame:
 
 
 @pytest.fixture(scope="session")
-def luke_and_leia_purchases_0y0_first(
-    as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame
-) -> Row:
-    """
-    If we only collect once, the tests should run quicker
-    """
-    df = luke_and_leia_purchases.groupBy().agg(
-        *PurchasingFeatureGenerator(
-            as_at=as_at_timestamp.date(),
-            feature_periods=[
-                FeaturePeriod(PeriodUnitOfMeasure.YEAR, 0, 0),
-            ],
-        ).features
-    )
-    first = df.first()
-    assert first is not None
-    return first
-
-
-@pytest.fixture(scope="session")
 def purchasing_feature_generator(
     as_at_timestamp: datetime,
 ) -> PurchasingFeatureGenerator:
@@ -224,8 +204,23 @@ def purchasing_feature_generator(
             FeaturePeriod(PeriodUnitOfMeasure.QUARTER, 0, 0),
             FeaturePeriod(PeriodUnitOfMeasure.QUARTER, 1, 1),
             FeaturePeriod(PeriodUnitOfMeasure.QUARTER, 1, 0),
+            FeaturePeriod(PeriodUnitOfMeasure.YEAR, 0, 0),
             FeaturePeriod(PeriodUnitOfMeasure.YEAR, 1, 1),
             FeaturePeriod(PeriodUnitOfMeasure.YEAR, 1, 0),
             FeaturePeriod(PeriodUnitOfMeasure.YEAR, 2, 0),
         ],
     )
+
+
+@pytest.fixture(scope="session")
+def luke_and_leia_purchases_first(
+    luke_and_leia_purchases: DataFrame,
+    purchasing_feature_generator: PurchasingFeatureGenerator,
+) -> Row:
+    """
+    If we only collect once, the tests should run quicker
+    """
+    df = luke_and_leia_purchases.groupBy().agg(*purchasing_feature_generator.features)
+    first = df.first()
+    assert first is not None
+    return first
