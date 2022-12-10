@@ -23,6 +23,7 @@ from jstark.features import (
     AverageGrossSpendPerBasket,
     Quantity,
     AvgQuantityPerBasket,
+    MostRecentPurchaseDate,
 )
 
 
@@ -60,6 +61,7 @@ class PurchasingFeatureGenerator(object):
         AverageGrossSpendPerBasket,
         Quantity,
         AvgQuantityPerBasket,
+        MostRecentPurchaseDate,
     ]
 
     @property

@@ -16,4 +16,4 @@ class Max(BaseFeature, metaclass=ABCMeta):
         return self.max_aggregator
 
     def default_value(self) -> Column:
-        return f.lit(0.0)
+        return f.lit(None)

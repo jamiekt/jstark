@@ -30,4 +30,8 @@ class RecencyDays(BaseFeature):
             "This could be particularly useful (for example) in a grocery retailer "
             + "for determining when a customer most recently bought a product or "
             + " when a product was most recently bought in a store"
+            + "Also note that this is very similar to "
+            + f"MostRecentPurchaseDate_{self.feature_period.code} "
+            + "so consider which of these "
+            + "features is most useful to you."
         )

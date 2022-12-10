@@ -188,7 +188,7 @@ def test_grossspend_metadata_description(
     ] == "Sum of GrossSpend between 2022-11-28 and 2022-11-30 (inclusive)"
 
 
-def test_recencydays(
+def test_recencydays_and_mostrecentpurchasedate(
     dataframe_of_purchases: DataFrame,
     purchasing_feature_generator: PurchasingFeatureGenerator,
 ):
@@ -196,9 +196,10 @@ def test_recencydays(
         f.col("Timestamp") < f.lit(date(2022, 1, 1))
     )
     df = dataframe_of_purchases.agg(*purchasing_feature_generator.features)
-    first = df.first()
+    first = df.select("RecencyDays_2y0", "MostRecentPurchaseDate_2y0").first()
     assert first is not None
     assert first["RecencyDays_2y0"] == 365
+    assert first["MostRecentPurchaseDate_2y0"] == date(2021, 11, 30)
 
 
 def test_basket_count_luke_and_leia_0y0(luke_and_leia_purchases_first: Row):
