@@ -27,7 +27,8 @@ dependencies = [
   "pyspark",
   "hatchling>=1.11.0",
   "python-dateutil",
-  "pytest-cov"
+  "pytest-cov",
+  "coverage-badge"
 ]
 dynamic = ["version"]
 
