@@ -57,7 +57,7 @@ jobs:
       with:
         # The arguments for the `git add` command (see the paragraph below for more info)
         # Default: '.'
-        add: coverage.svg
+        add: coverage-badges/coverage-${{ matrix.python-version }}-${{ startsWith(matrix.os, 'macos-') && 'macOS' || startsWith(matrix.os, 'windows-') && 'Windows' || 'Linux' }}.svg
 
         # Arguments for the git fetch command. If set to false, the action won't fetch the repo.
         # For more info as to why fetching is usually recommended, please see the "Performance on large repos" FAQ.
