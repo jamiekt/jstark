@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 from datetime import date, timedelta, datetime
 from dateutil.relativedelta import relativedelta
-from typing import Callable
+from typing import Callable, Dict
 
 from pyspark.sql import Column
 import pyspark.sql.functions as f
@@ -15,28 +15,6 @@ class Feature(metaclass=ABCMeta):
     def __init__(self, as_at: date, feature_period: FeaturePeriod) -> None:
         self.feature_period = feature_period
         self.as_at = as_at
-
-    def sum_aggregator(self, column: Column) -> Column:
-        return f.sum(column)
-
-    def count_aggregator(self, column: Column) -> Column:
-        return f.count(column)
-
-    def count_distinct_aggregator(self, column: Column) -> Column:
-        return f.countDistinct(column)
-
-    def approx_count_distinct_aggregator(self, column: Column) -> Column:
-        return f.approx_count_distinct(column)
-
-    def max_aggregator(self, column: Column) -> Column:
-        return f.max(column)
-
-    def min_aggregator(self, column: Column) -> Column:
-        return f.min(column)
-
-    @abstractmethod
-    def aggregator(self) -> Callable[[Column], Column]:
-        pass
 
     @property
     def feature_period(self) -> FeaturePeriod:
@@ -56,20 +34,14 @@ class Feature(metaclass=ABCMeta):
             raise AsAtIsNotADate
         self.__as_at = value
 
-    @abstractmethod
-    def column_expression(self) -> Column:
-        pass
-
-    @abstractmethod
-    def default_value(self) -> Column:
-        """Default value of the feature, typically used when zero rows match
-        the feature's feature_period
-        """
-        pass
-
     @property
     def feature_name(self) -> str:
         return f"{type(self).__name__}_{self.feature_period.code}"
+
+    @property
+    @abstractmethod
+    def column(self) -> Column:
+        pass
 
     @property
     @abstractmethod
@@ -80,30 +52,16 @@ class Feature(metaclass=ABCMeta):
     def commentary(self) -> str:
         return "No commentary supplied"
 
-    @property
-    def column(self) -> Column:
-        metadata = {
-            "created-with-love-by": "https://github.com/jamiekt/jstark",
-            "start-date": self.start_date.strftime("%Y-%m-%d"),
-            "end-date": self.end_date.strftime("%Y-%m-%d"),
-            "description": (
-                f"{self.description_subject} between "
-                + f'{self.start_date.strftime("%Y-%m-%d")} and '
-                + f'{self.end_date.strftime("%Y-%m-%d")} (inclusive)'
-            ),
-            "generated-at": datetime.now().strftime("%Y-%m-%d"),
-            "commentary": self.commentary,
-        }
-        return f.coalesce(
-            self.aggregator()(
-                f.when(
-                    (f.to_date(f.col("Timestamp")) >= f.lit(self.start_date))
-                    & (f.to_date(f.col("Timestamp")) <= f.lit(self.end_date)),
-                    self.column_expression(),
-                )
-            ),
-            self.default_value(),
-        ).alias(self.feature_name, metadata=metadata)
+    @abstractmethod
+    def default_value(self) -> Column:
+        """Default value of the feature, typically used when zero rows match
+        the feature's feature_period
+        """
+        pass
+
+    @abstractmethod
+    def column_expression(self) -> Column:
+        pass
 
     @property
     def start_date(self) -> date:
@@ -146,3 +104,84 @@ class Feature(metaclass=ABCMeta):
         )
         # min() is used to ensure we don't return a date later than self.as_at
         return min(last_day_of_period, self.as_at)
+
+    @property
+    def column_metadata(self) -> Dict[str, str]:
+        return {
+            "created-with-love-by": "https://github.com/jamiekt/jstark",
+            "start-date": self.start_date.strftime("%Y-%m-%d"),
+            "end-date": self.end_date.strftime("%Y-%m-%d"),
+            "description": (
+                f"{self.description_subject} between "
+                + f'{self.start_date.strftime("%Y-%m-%d")} and '
+                + f'{self.end_date.strftime("%Y-%m-%d")} (inclusive)'
+            ),
+            "generated-at": datetime.now().strftime("%Y-%m-%d"),
+            "commentary": self.commentary,
+        }
+
+
+class DerivedFeature(Feature, metaclass=ABCMeta):
+    """A DerivedFeature is a feature that is calculated by combining
+    data that has already been aggregated. For example, a derived
+    feature called 'Average Gross Spend Per Basket' would be calculated
+    by dividing the total GrossSpend by number of baskets (BasketCount)
+    """
+
+    def __init__(self, as_at: date, feature_period: FeaturePeriod) -> None:
+        self.feature_period = feature_period
+        self.as_at = as_at
+
+    @property
+    def column(self) -> Column:
+        return f.coalesce(self.column_expression(), self.default_value()).alias(
+            self.feature_name, metadata=self.column_metadata
+        )
+
+
+class BaseFeature(Feature, metaclass=ABCMeta):
+    """A BaseFeature is a feature that is calculated by aggregating
+    raw source data. That data may have been cleaned and transformed in
+    some way, but typically the grain of that data is real occurrences
+    of some activity. Examples of such data are lists of grocery
+    transactions, phone calls or journeys.
+    """
+
+    def __init__(self, as_at: date, feature_period: FeaturePeriod) -> None:
+        self.feature_period = feature_period
+        self.as_at = as_at
+
+    def sum_aggregator(self, column: Column) -> Column:
+        return f.sum(column)
+
+    def count_aggregator(self, column: Column) -> Column:
+        return f.count(column)
+
+    def count_distinct_aggregator(self, column: Column) -> Column:
+        return f.countDistinct(column)
+
+    def approx_count_distinct_aggregator(self, column: Column) -> Column:
+        return f.approx_count_distinct(column)
+
+    def max_aggregator(self, column: Column) -> Column:
+        return f.max(column)
+
+    def min_aggregator(self, column: Column) -> Column:
+        return f.min(column)
+
+    @abstractmethod
+    def aggregator(self) -> Callable[[Column], Column]:
+        pass
+
+    @property
+    def column(self) -> Column:
+        return f.coalesce(
+            self.aggregator()(
+                f.when(
+                    (f.to_date(f.col("Timestamp")) >= f.lit(self.start_date))
+                    & (f.to_date(f.col("Timestamp")) <= f.lit(self.end_date)),
+                    self.column_expression(),
+                )
+            ),
+            self.default_value(),
+        ).alias(self.feature_name, metadata=self.column_metadata)

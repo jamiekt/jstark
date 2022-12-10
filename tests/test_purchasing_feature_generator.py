@@ -436,3 +436,12 @@ def test_max_gross_spend_luke_and_leia_0y0(luke_and_leia_purchases_0y0_first: Ro
 
 def test_min_gross_spend_luke_and_leia_0y0(luke_and_leia_purchases_0y0_first: Row):
     assert float(luke_and_leia_purchases_0y0_first["MinGrossSpend_0y0"]) == 2.5
+
+
+def test_avg_gross_spend_per_basket_luke_and_leia_0y0(
+    luke_and_leia_purchases_0y0_first: Row,
+):
+    assert (
+        float(luke_and_leia_purchases_0y0_first["AverageGrossSpendPerBasket_0y0"])
+        == 5.15
+    )
