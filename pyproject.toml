@@ -26,7 +26,8 @@ classifiers = [
 dependencies = [
   "pyspark",
   "hatchling>=1.11.0",
-  "python-dateutil"
+  "python-dateutil",
+  "pytest-cov"
 ]
 dynamic = ["version"]
 
