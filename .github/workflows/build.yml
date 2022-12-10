@@ -48,3 +48,6 @@ jobs:
 
     - name: Run tests
       run: hatch run pytest -vvv --durations=1 --cov=jstark
+
+    - name: generate coverage badge
+      run: hatch run coverage-badge -p coverage.svg
