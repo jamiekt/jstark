@@ -50,9 +50,10 @@ jobs:
       run: hatch run pytest -vvv --durations=1 --cov=jstark
 
     - name: generate coverage badge
-      run: hatch run coverage-badge -o coverage.svg -f
+      run: hatch run coverage-badge -o coverage-badges/coverage-${{ matrix.python-version }}-${{ startsWith(matrix.os, 'macos-') && 'macOS' || startsWith(matrix.os, 'windows-') && 'Windows' || 'Linux' }}.svg -f
 
-    - uses: EndBug/add-and-commit@v9 # You can change this to use a specific version.
+    - name: commit coverage badge
+      uses: EndBug/add-and-commit@v9 # You can change this to use a specific version.
       with:
         # The arguments for the `git add` command (see the paragraph below for more info)
         # Default: '.'
