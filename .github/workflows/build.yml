@@ -50,13 +50,4 @@ jobs:
       run: hatch run pytest -vvv --durations=1 --cov=jstark
 
     - name: generate coverage badge
-      run: hatch run coverage-badge -o coverage-badges/coverage-${{ matrix.python-version }}-${{ startsWith(matrix.os, 'macos-') && 'macOS' || startsWith(matrix.os, 'windows-') && 'Windows' || 'Linux' }}.svg -f
-
-    - name: commit coverage badge
-      run: |
-        git config --global user.name 'Jamie Thomson'
-        git config --global user.email 'jamiekt@users.noreply.github.com'
-        git pull
-        git add coverage-badges/coverage-${{ matrix.python-version }}-${{ startsWith(matrix.os, 'macos-') && 'macOS' || startsWith(matrix.os, 'windows-') && 'Windows' || 'Linux' }}.svg
-        git diff-index --quiet HEAD || git commit -am "coverage-badges/coverage-${{ matrix.python-version }}-${{ startsWith(matrix.os, 'macos-') && 'macOS' || startsWith(matrix.os, 'windows-') && 'Windows' || 'Linux' }}.svg updated"
-        git push
+      run: hatch run coverage-badge -o coverage.svg -f
