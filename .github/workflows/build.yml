@@ -51,3 +51,11 @@ jobs:
 
     - name: generate coverage badge
       run: hatch run coverage-badge -o coverage.svg -f
+
+
+    - name: coverae badge artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: coverage-badge
+        path: |
+          coverage.svg
