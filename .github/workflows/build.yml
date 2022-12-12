@@ -24,7 +24,7 @@ jobs:
       run: pip install hatch
 
     - run: |
-        hatch run pylint --rcfile .github/linters/pylintrc jstark
+        hatch run pylint --rcfile .github/linters/pylintrc jstark tests
 
   lint:
     runs-on: ubuntu-latest
