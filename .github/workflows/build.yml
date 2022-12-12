@@ -89,6 +89,14 @@ jobs:
       run: ls -R
       working-directory: artifacts-for-pages
 
+    - name: create tar.gz
+      run: |
+        mkdir _site
+        tar -czvf _site/github-pages.tar.gz artifacts-for-pages
+
+    - name: Upload GitHub Pages artifact
+      uses: actions/upload-pages-artifact@v1.0.6
+
     - name: Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v1
