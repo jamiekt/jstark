@@ -25,7 +25,7 @@ jobs:
 
     - run: |
         hatch run pylint --rcfile .github/linters/pylintrc jstark tests >> pylint.out || true
-        cat pylint.out
+        < pylint.out
         PYLINT_SCORE=$(cat pylint.out | sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p')
         echo PYLINT_SCORE="${PYLINT_SCORE}"
 
