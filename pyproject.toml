@@ -28,7 +28,8 @@ dependencies = [
   "hatchling>=1.11.0",
   "python-dateutil",
   "pytest-cov",
-  "coverage-badge"
+  "coverage-badge",
+  "pylint"
 ]
 dynamic = ["version"]
 
