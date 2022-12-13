@@ -29,7 +29,8 @@ dependencies = [
   "python-dateutil",
   "pytest-cov",
   "coverage-badge",
-  "pylint"
+  "pylint",
+  "anybadge"
 ]
 dynamic = ["version"]
 

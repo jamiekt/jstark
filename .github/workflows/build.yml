@@ -25,8 +25,9 @@ jobs:
         echo "$(<pylint.out)"
         PYLINT_SCORE=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' < pylint.out)
         echo PYLINT_SCORE="${PYLINT_SCORE}"
+        hatch run anybadge -l pylint -v ${PYLINT_SCORE} -f pylint.svg 2=red 4=orange 8=yellow 10=green
 
-    - run: mkdir _site && cp pylint.out _site/.
+    - run: mkdir _site && cp pylint.out _site/. && cp pylint.svg _site/.
     - name: Upload GitHub Pages artifact
       uses: actions/upload-pages-artifact@v1
 
