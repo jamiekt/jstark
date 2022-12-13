@@ -94,6 +94,10 @@ jobs:
         mkdir _site
         tar -czvf _site/github-pages.tar.gz artifacts-for-pages
 
+    - name: Display structure of _site
+      run: ls -R
+      working-directory: _site
+
     - name: Upload GitHub Pages artifact
       uses: actions/upload-pages-artifact@v1.0.6
 
