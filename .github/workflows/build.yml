@@ -98,6 +98,9 @@ jobs:
       run: ls -R
       working-directory: _site
 
+    - name: Display contents of tar.gz
+      run: tar -ztvf _site/github-pages.tar.gz
+
     - name: Upload GitHub Pages artifact
       uses: actions/upload-pages-artifact@v1.0.6
 
