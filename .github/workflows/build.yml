@@ -86,6 +86,7 @@ jobs:
 
   # Deploy job
   deploy-to-github-pages:
+    if: github.ref == 'refs/heads/main'
     # Add a dependency to the build job
     needs: [run, pylint, lint]
 
