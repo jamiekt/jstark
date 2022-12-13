@@ -3,7 +3,7 @@
 [![PyPI - Version](https://img.shields.io/pypi/v/jstark.svg)](https://pypi.org/project/jstark)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/jstark.svg)](https://pypi.org/project/jstark)
 ![build](https://github.com/jamiekt/jstark/actions/workflows/build.yml/badge.svg)
-![coverage](./coverage-badges/coverage-3.10-Linux.svg)
+![coverage](https://jamiekt.github.io/jstark/coverage.svg)
 
 -----
 
