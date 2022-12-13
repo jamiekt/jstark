@@ -53,12 +53,9 @@ jobs:
       run: hatch run coverage-badge -o coverage.svg -f
 
 
-    - name: coverage badge artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: coverage-badge
-        path: |
-          coverage.svg
+    - run: mkdir _site && cp coverage.svg _site/.
+    - name: Upload GitHub Pages artifact
+      uses: actions/upload-pages-artifact@v1
 
   # Deploy job
   deploy-to-github-pages:
@@ -78,23 +75,6 @@ jobs:
     # Specify runner + deployment step
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-
-    - name: mkdir _site
-      run: mkdir _site
-
-    - uses: actions/download-artifact@v3
-      with:
-        name: coverage-badge
-        path: _site
-
-    - name: Display structure of _site
-      run: ls -R
-      working-directory: _site
-
-    - name: Upload GitHub Pages artifact
-      uses: actions/upload-pages-artifact@v1
-
     - name: Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v1
