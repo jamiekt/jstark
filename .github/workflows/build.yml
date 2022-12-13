@@ -87,7 +87,7 @@ jobs:
   # Deploy job
   deploy-to-github-pages:
     # Add a dependency to the build job
-    needs: [run, pylint]
+    needs: [run, pylint, lint]
 
     # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
     permissions:
