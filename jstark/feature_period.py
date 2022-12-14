@@ -14,7 +14,7 @@ class PeriodUnitOfMeasure(Enum):
     YEAR = "y"
 
 
-class FeaturePeriod(object):
+class FeaturePeriod:
     """
     Encapsulate the period of a feature, defined by a unit of time
     measure, a start and an end
