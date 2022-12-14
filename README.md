@@ -105,7 +105,10 @@ purchasing_feature_generator = PurchasingFeatureGenerator(
 df = df.groupBy().agg(*purchasing_feature_generator.features)
 df.select("StoreCount_1w0", "ProductCount_1w0", "BasketCount_1w0").collect()
 ```
-
+which should return
+```shell
+> [Row(StoreCount_1w0=2, ProductCount_1w0=3, BasketCount_1w0=2)]
+```
 
 ## License
 
