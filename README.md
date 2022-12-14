@@ -130,7 +130,7 @@ purchasing_feature_generator = PurchasingFeatureGenerator(
     ],
 )
 df = df.groupBy().agg(*purchasing_feature_generator.features)
-df.collect()
+df.select("StoreCount_1w0", "ProductCount_1w0", "BasketCount_1w0").collect()
 ```
 
 
