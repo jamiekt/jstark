@@ -32,7 +32,7 @@ python -m pip install pyspark
 python -m pip install -i https://test.pypi.org/simple/ jstark
 ```
 
-Run python and enter:
+Run python and ~type~ paste the following code:
 ```python
 from pyspark.sql import SparkSession
 from pyspark.sql.types import DecimalType, IntegerType, StringType, StructField, StructType, TimestampType
