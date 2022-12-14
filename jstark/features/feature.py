@@ -42,12 +42,16 @@ class Feature(metaclass=ABCMeta):
     @property
     @abstractmethod
     def column(self) -> Column:
-        pass
+        """Complete definition of the column returned by this feature,
+        replete with feature period filtering, metadata, default value
+        and alias"""
 
     @property
     @abstractmethod
     def description_subject(self) -> str:
-        pass
+        """Desciption of the feature that will be concatenated
+        with an explanation of the feature period.
+        """
 
     @property
     def commentary(self) -> str:
@@ -61,7 +65,7 @@ class Feature(metaclass=ABCMeta):
 
     @abstractmethod
     def column_expression(self) -> Column:
-        pass
+        """The expression that defines the feature"""
 
     @property
     def start_date(self) -> date:
