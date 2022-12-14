@@ -1,7 +1,8 @@
 from abc import ABCMeta, abstractmethod
 from datetime import date, timedelta, datetime
-from dateutil.relativedelta import relativedelta
 from typing import Callable, Dict
+from dateutil.relativedelta import relativedelta
+
 
 from pyspark.sql import Column
 import pyspark.sql.functions as f
@@ -142,10 +143,6 @@ class BaseFeature(Feature, metaclass=ABCMeta):
     of some activity. Examples of such data are lists of grocery
     transactions, phone calls or journeys.
     """
-
-    def __init__(self, as_at: date, feature_period: FeaturePeriod) -> None:
-        self.feature_period = feature_period
-        self.as_at = as_at
 
     def sum_aggregator(self, column: Column) -> Column:
         return f.sum(column)

@@ -1,5 +1,6 @@
-import pytest
 from datetime import date, timedelta
+import pytest
+
 
 from jstark.exceptions import AsAtIsNotADate
 from jstark.features.gross_spend import GrossSpend

@@ -1,8 +1,9 @@
 from abc import ABCMeta
+from typing import Callable
 
 import pyspark.sql.functions as f
 from pyspark.sql import Column
-from typing import Callable
+
 
 from .feature import BaseFeature
 
