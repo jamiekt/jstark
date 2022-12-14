@@ -30,7 +30,8 @@ dependencies = [
   "pytest-cov",
   "coverage-badge",
   "pylint",
-  "anybadge"
+  "anybadge",
+  "pylint-json2html"
 ]
 dynamic = ["version"]
 
