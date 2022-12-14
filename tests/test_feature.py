@@ -8,11 +8,12 @@ from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
 
 
 def test_errors_if_as_at_is_not_a_date():
-    with pytest.raises(AsAtIsNotADate):
+    with pytest.raises(AsAtIsNotADate) as exc_info:
         GrossSpend(
             as_at="2000-01-01",  # type: ignore
             feature_period=FeaturePeriod(PeriodUnitOfMeasure.DAY, 2, 1),
         )
+    assert str(exc_info.value) == "as_at value must be of type date"
 
 
 def test_start_date_days():

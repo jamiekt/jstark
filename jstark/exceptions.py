@@ -27,4 +27,4 @@ class AsAtIsNotADate(Exception):
     """Exception indicating a value must be of type date"""
 
     def __str__(self) -> str:
-        return "as_at value must be of type Date"
+        return "as_at value must be of type date"
