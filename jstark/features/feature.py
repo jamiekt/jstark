@@ -58,7 +58,6 @@ class Feature(metaclass=ABCMeta):
         """Default value of the feature, typically used when zero rows match
         the feature's feature_period
         """
-        pass
 
     @abstractmethod
     def column_expression(self) -> Column:
