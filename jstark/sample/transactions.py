@@ -71,15 +71,19 @@ class FakeTransactions:
 
         transactions = []
 
-        for _ in range(number_of_baskets):
+        possible_quantities = [1, 2, 3, 4, 5]
+        random.seed(seed)
+        quantities = random.choices(
+            possible_quantities,
+            weights=[100, 40, 20, 10, 8],
+            k=number_of_baskets * len(products_provider.elements),
+        )
+        for basket in range(number_of_baskets - 1):
             items = []
             random.seed(seed)
-            for _ in range(random.randint(1, len(products_provider.elements))):
+            for item in range(random.randint(1, len(products_provider.elements))):
                 p = products_fake.unique.product()
-                random.seed(seed)
-                quantity = random.choices(
-                    [1, 2, 3, 4, 5], weights=[100, 40, 20, 10, 3]
-                )[0]
+                quantity = quantities[(basket * len(possible_quantities)) + item]
                 gross_spend: float = round(p[2] * quantity, 2)
                 net_spend = round((gross_spend * random.random()), 2)
                 discount = round((gross_spend - net_spend) * random.random(), 2)

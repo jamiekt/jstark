@@ -17,4 +17,4 @@ def test_sample():
     df = FakeTransactions().get_df(number_of_baskets=10)
     df = df.agg(*pfg.features)
     collected = df.collect()
-    assert collected[0]["GrossSpend_1q1"] == 3151.52
+    assert collected[0]["GrossSpend_1q1"] == 2263.58
