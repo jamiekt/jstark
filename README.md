@@ -27,8 +27,9 @@ Create yourself a virtual environment and install pyspark followed by jstark
 > won't be necessary.
 
 ```shell
-python3 -m venv venv && source venv/bin/activate
-python -m pip install pyspark
+python3 -m venv venv && source venv/bin/activate && \
+python -m pip install pyspark && \
+python -m pip install python-dateutil && \
 python -m pip install -i https://test.pypi.org/simple/ jstark
 ```
 
