@@ -110,6 +110,7 @@ class PurchasingFeatureGenerator:
         SparkSession.builder.getOrCreate()
         return {
             expr.name(): self.parse_references(expr.references().toList().toString())
+            # pylint: disable=protected-access
             for expr in [c._jc.expr() for c in self.features]  # type: ignore
         }
 
