@@ -40,7 +40,7 @@ from datetime import datetime, timedelta
 from decimal import Decimal
 from typing import Dict, Any, Iterable
 from pyspark.sql import SparkSession
-from pyspark.sql.types import DecimalType, IntegerType, StringType, StructField, StructType, TimestampType,
+from pyspark.sql.types import DecimalType, IntegerType, StringType, StructField, StructType, TimestampType
 from jstark.purchasing_feature_generator import PurchasingFeatureGenerator
 from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
 
