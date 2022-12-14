@@ -27,6 +27,8 @@ class DataFrameDoesNotIncludeTimestampColumn(Exception):
 
 
 class AsAtIsNotADate(Exception):
+    """Exception indicating a value must be of type date"""
+
     def __init__(self, *args: object) -> None:
         super().__init__(*args)
 
