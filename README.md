@@ -22,8 +22,8 @@ pip install jstark
 Create yourself a virtual environment and install pyspark followed by jstark
 
 > **Note**
-> As jstark is not yet properly released it is being hosted at https://test.pypi.org/ therefore
-> it is required to install pyspark separately. When jstark is hosted at https://pypi.org/ this
+> As jstark is not yet properly released it is being hosted at [https://test.pypi.org/](https://test.pypi.org/) therefore
+> it is required to install pyspark separately. When jstark is hosted at [https://pypi.org/](https://pypi.org/) this
 > won't be necessary.
 
 ```shell
