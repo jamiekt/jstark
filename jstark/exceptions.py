@@ -7,11 +7,15 @@ class FeaturePeriodEndGreaterThanStartError(Exception):
         self.end = end
 
     def __str__(self) -> str:
-        return f"End of the feature period ({self.end}) cannot be before the start of the feature period ({self.start})"
+        return (
+            f"End of the feature period ({self.end}) cannot be "
+            + f"before the start of the feature period ({self.start})"
+        )
 
 
 class DataFrameDoesNotIncludeTimestampColumn(Exception):
-    "Exception indicating DataFrame does not include a column called Timestamp of type Timestamp"
+    """Exception indicating DataFrame does not include a
+    column called Timestamp of type Timestamp"""
 
     def __init__(self, *args: object) -> None:
         super().__init__(*args)
