@@ -22,8 +22,7 @@ jobs:
 
     - run: |
         # run twice, once to get the score, once to gt the json output
-        hatch run pylint --rcfile .github/linters/pylintrc jstark tests >> pylint.out || true
-        echo "$(<pylint.out)"
+        hatch run pylint-out
         PYLINT_SCORE=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' < pylint.out)
         echo PYLINT_SCORE="${PYLINT_SCORE}"
         hatch run anybadge -l pylint -v "${PYLINT_SCORE}" -f pylint.svg 2=red 4=orange 8=yellow 10=green

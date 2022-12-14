@@ -53,6 +53,10 @@ dependencies = [
 [tool.hatch.envs.default.scripts]
 cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=jstark --cov=tests {args}"
 no-cov = "cov --no-cov {args}"
+pylint-out = [
+    "pylint --rcfile .github/linters/pylintrc jstark tests >> pylint.out || true",
+    'echo "$(<pylint.out)"'
+    ]
 pylint-html = "pylint --rcfile .github/linters/pylintrc jstark tests --output-format=json  | pylint-json2html -o pylint.html"
 
 [[tool.hatch.envs.test.matrix]]
