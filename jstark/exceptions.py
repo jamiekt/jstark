@@ -13,16 +13,6 @@ class FeaturePeriodEndGreaterThanStartError(Exception):
         )
 
 
-class DataFrameDoesNotIncludeTimestampColumn(Exception):
-    """Exception indicating DataFrame does not include a
-    column called Timestamp of type Timestamp"""
-
-    def __str__(self) -> str:
-        return (
-            "DataFrame does not include column called Timestamp of type TimestampType"
-        )
-
-
 class AsAtIsNotADate(Exception):
     """Exception indicating a value must be of type date"""
 
