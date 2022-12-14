@@ -27,7 +27,7 @@ jobs:
         PYLINT_SCORE=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' < pylint.out)
         echo PYLINT_SCORE="${PYLINT_SCORE}"
         hatch run anybadge -l pylint -v "${PYLINT_SCORE}" -f pylint.svg 2=red 4=orange 8=yellow 10=green
-        hatch run pylint --rcfile .github/linters/pylintrc jstark tests --output-format=json  | pylint-json2html -o pylint.html
+        hatch run pylint-html
 
     - run: mkdir _site && cp pylint.html _site/. && cp pylint.svg _site/.
     - name: Upload artifact
