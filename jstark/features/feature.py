@@ -167,7 +167,7 @@ class BaseFeature(Feature, metaclass=ABCMeta):
 
     @abstractmethod
     def aggregator(self) -> Callable[[Column], Column]:
-        pass
+        """Aggregator function"""
 
     @property
     def column(self) -> Column:
