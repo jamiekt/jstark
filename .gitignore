@@ -131,6 +131,7 @@ dmypy.json
 .vscode
 
 pylint.html
+pylint.out
 pylint.svg
 coverage.svg
 htmlcov
