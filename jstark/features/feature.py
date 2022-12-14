@@ -128,9 +128,6 @@ class DerivedFeature(Feature, metaclass=ABCMeta):
     by dividing the total GrossSpend by number of baskets (BasketCount)
     """
 
-    def __init__(self, as_at: date, feature_period: FeaturePeriod) -> None:
-        super().__init__(as_at, feature_period)
-
     @property
     def column(self) -> Column:
         return f.coalesce(self.column_expression(), self.default_value()).alias(

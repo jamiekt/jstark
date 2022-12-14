@@ -31,7 +31,7 @@ from jstark.features import (
 )
 
 
-class PurchasingFeatureGenerator(object):
+class PurchasingFeatureGenerator:
     def __init__(
         self,
         as_at: date,
