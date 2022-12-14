@@ -15,48 +15,48 @@ def test_feature_period_description():
 
 def test_feature_period_start_is_immutable():
     fp = FeaturePeriod(PeriodUnitOfMeasure.DAY, 3, 2)
-    with pytest.raises(AttributeError) as excInfo:
+    with pytest.raises(AttributeError) as exc_info:
         fp.start = 10  # type: ignore
     if version.parse(python_version()) < version.parse("3.11"):
-        assert "can't set attribute" in str(excInfo.value)
+        assert "can't set attribute" in str(exc_info.value)
     else:
         assert (
-            str(excInfo.value)
+            str(exc_info.value)
             == "property 'start' of 'FeaturePeriod' object has no setter"
         )
 
 
 def test_feature_period_end_is_immutable():
     fp = FeaturePeriod(PeriodUnitOfMeasure.DAY, 3, 2)
-    with pytest.raises(AttributeError) as excInfo:
+    with pytest.raises(AttributeError) as exc_info:
         fp.end = 10  # type: ignore
     if version.parse(python_version()) < version.parse("3.11"):
-        assert "can't set attribute" in str(excInfo.value)
+        assert "can't set attribute" in str(exc_info.value)
     else:
         assert (
-            str(excInfo.value)
+            str(exc_info.value)
             == "property 'end' of 'FeaturePeriod' object has no setter"
         )
 
 
 def test_feature_period_periodunitofmeasure_is_immutable():
     fp = FeaturePeriod(PeriodUnitOfMeasure.DAY, 3, 2)
-    with pytest.raises(AttributeError) as excInfo:
+    with pytest.raises(AttributeError) as exc_info:
         fp.period_unit_of_measure = PeriodUnitOfMeasure.YEAR  # type: ignore
     if version.parse(python_version()) < version.parse("3.11"):
-        assert "can't set attribute" in str(excInfo.value)
+        assert "can't set attribute" in str(exc_info.value)
     else:
-        assert str(excInfo.value) == (
+        assert str(exc_info.value) == (
             "property 'period_unit_of_measure' of "
             + "'FeaturePeriod' object has no setter"
         )
 
 
 def test_feature_period_end_greater_than_start_raises_exception():
-    with pytest.raises(FeaturePeriodEndGreaterThanStartError) as excInfo:
+    with pytest.raises(FeaturePeriodEndGreaterThanStartError) as exc_info:
         FeaturePeriod(PeriodUnitOfMeasure.DAY, 2, 3)
     assert (
-        str(excInfo.value)
+        str(exc_info.value)
         == "End of the feature period (3) cannot be "
         + "before the start of the feature period (2)"
     )
