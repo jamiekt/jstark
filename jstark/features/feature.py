@@ -129,8 +129,7 @@ class DerivedFeature(Feature, metaclass=ABCMeta):
     """
 
     def __init__(self, as_at: date, feature_period: FeaturePeriod) -> None:
-        self.feature_period = feature_period
-        self.as_at = as_at
+        super().__init__(as_at, feature_period)
 
     @property
     def column(self) -> Column:
