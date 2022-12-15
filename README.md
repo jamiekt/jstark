@@ -53,7 +53,8 @@ pfg = PurchasingFeatureGenerator(
         ],
     )
 output_df = input_df.groupBy().agg(*pfg.features)
-basket_counts_df = output_df.select("BasketCount_4q4", "BasketCount_3q3", "BasketCount_2q2", "BasketCount_1q1")
+basket_counts_df = (output_df.
+    select("BasketCount_4q4", "BasketCount_3q3", "BasketCount_2q2", "BasketCount_1q1"))
 basket_counts_df.collect()
 ```
 
