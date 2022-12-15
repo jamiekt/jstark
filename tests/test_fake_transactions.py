@@ -1,9 +1,17 @@
 """Test FakeTransactions
 """
 from datetime import date
+from pyspark.sql import DataFrame
 from jstark.sample.transactions import FakeTransactions
 from jstark.purchasing_feature_generator import PurchasingFeatureGenerator
 from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
+
+
+def test_fake_transactions_returns_a_dataframe():
+    """In order to get 100% code coverage we need to call
+    FakeTransactions().get_df() without a seed
+    """
+    assert isinstance(FakeTransactions().get_df(), DataFrame)
 
 
 def test_fake_transactions_returns_same_data_with_same_seed():
