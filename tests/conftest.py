@@ -15,6 +15,7 @@ from jstark.sample.transactions import FakeTransactions
 
 @pytest.fixture(scope="session")
 def spark_session() -> SparkSession:
+    """Need a sparksession for most of the tests, so create it once"""
     return SparkSession.builder.getOrCreate()
 
 

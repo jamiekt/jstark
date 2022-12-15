@@ -1,3 +1,4 @@
+"""Count feature"""
 from typing import Callable
 import pyspark.sql.functions as f
 from pyspark.sql import Column

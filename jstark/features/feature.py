@@ -1,3 +1,7 @@
+"""Feature abstract base class
+
+All feature classes are derived from here
+"""
 from abc import ABCMeta, abstractmethod
 from datetime import date, timedelta, datetime
 from typing import Callable, Dict

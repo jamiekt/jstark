@@ -1,3 +1,7 @@
+"""FirstAndLastDateOfPeriod class
+
+Helper class for figuring out dates relative to a given date
+"""
 from datetime import date, timedelta
 from dateutil.relativedelta import relativedelta
 

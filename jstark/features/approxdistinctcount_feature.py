@@ -1,3 +1,4 @@
+"""ApproxDistinctCount feature"""
 from abc import ABCMeta
 from typing import Callable
 
