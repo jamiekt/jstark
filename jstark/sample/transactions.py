@@ -1,7 +1,7 @@
 import random
 import uuid
 from datetime import date
-from typing import Dict, Any, Iterable
+from typing import Dict, Any, Iterable, Union
 from decimal import Decimal
 
 from pyspark.sql import SparkSession, DataFrame
@@ -18,7 +18,9 @@ from faker.providers import DynamicProvider
 
 
 class FakeTransactions:
-    def get_df(self, seed: int = 42, number_of_baskets: int = 1000) -> DataFrame:
+    def get_df(
+        self, seed: Union[int, None] = None, number_of_baskets: int = 1000
+    ) -> DataFrame:
         purchases_schema = StructType(
             [
                 StructField("Timestamp", TimestampType(), True),
@@ -62,7 +64,8 @@ class FakeTransactions:
         )
 
         fake = Faker()
-        Faker.seed(seed)
+        if seed:
+            Faker.seed(seed)
         fake.add_provider(stores_provider)
         fake.add_provider(channels_provider)
 
@@ -72,7 +75,8 @@ class FakeTransactions:
         transactions = []
 
         possible_quantities = [1, 2, 3, 4, 5]
-        random.seed(seed)
+        if seed:
+            random.seed(seed)
         quantities = random.choices(
             possible_quantities,
             weights=[100, 40, 20, 10, 8],
@@ -80,7 +84,8 @@ class FakeTransactions:
         )
         for basket in range(number_of_baskets - 1):
             items = []
-            random.seed(seed)
+            if seed:
+                random.seed(seed)
             for item in range(random.randint(1, len(products_provider.elements))):
                 p = products_fake.unique.product()
                 quantity = quantities[(basket * len(possible_quantities)) + item]
