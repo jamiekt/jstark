@@ -8,16 +8,10 @@ from dateutil.relativedelta import relativedelta
 import pytest
 from pyspark.sql import DataFrame, SparkSession, Row
 import pyspark.sql.functions as f
-from pyspark.sql.types import (
-    DecimalType,
-    IntegerType,
-    StringType,
-    StructField,
-    StructType,
-    TimestampType,
-)
+from pyspark.sql.types import StructType
 from jstark.purchasing_feature_generator import PurchasingFeatureGenerator
 from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
+from jstark.sample.transactions import FakeTransactions
 
 
 @pytest.fixture(scope="session")
@@ -37,20 +31,7 @@ def as_at_timestamp() -> datetime:
 
 @pytest.fixture(scope="session")
 def purchases_schema() -> StructType:
-    return StructType(
-        [
-            StructField("Timestamp", TimestampType(), True),
-            StructField("Customer", StringType(), True),
-            StructField("Store", StringType(), True),
-            StructField("Channel", StringType(), True),
-            StructField("Product", StringType(), True),
-            StructField("Quantity", IntegerType(), True),
-            StructField("Basket", StringType(), True),
-            StructField("GrossSpend", DecimalType(10, 2), True),
-            StructField("NetSpend", DecimalType(10, 2), True),
-            StructField("Discount", DecimalType(10, 2), True),
-        ]
-    )
+    return FakeTransactions().transactions_schema
 
 
 @pytest.fixture(scope="session")

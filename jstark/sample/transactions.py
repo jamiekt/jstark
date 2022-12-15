@@ -18,10 +18,9 @@ from faker.providers import DynamicProvider
 
 
 class FakeTransactions:
-    def get_df(
-        self, seed: Union[int, None] = None, number_of_baskets: int = 1000
-    ) -> DataFrame:
-        purchases_schema = StructType(
+    @property
+    def transactions_schema(self) -> StructType:
+        return StructType(
             [
                 StructField("Timestamp", TimestampType(), True),
                 StructField("Customer", StringType(), True),
@@ -35,6 +34,10 @@ class FakeTransactions:
                 StructField("Discount", DecimalType(10, 2), True),
             ]
         )
+
+    def get_df(
+        self, seed: Union[int, None] = None, number_of_baskets: int = 1000
+    ) -> DataFrame:
 
         stores_provider = DynamicProvider(
             provider_name="store",
@@ -131,5 +134,5 @@ class FakeTransactions:
         ]
         spark = SparkSession.builder.getOrCreate()
         return spark.createDataFrame(
-            flattened_transactions, schema=purchases_schema  # type: ignore
+            flattened_transactions, schema=self.transactions_schema  # type: ignore
         )
