@@ -188,7 +188,7 @@ def test_grossspend_metadata_description(
     df = dataframe_of_purchases.agg(*purchasing_feature_generator.features)
     assert [c.metadata["description"] for c in df.schema if c.name == "GrossSpend_2d0"][
         0
-    ] == "Sum of GrossSpend between 2022-11-28 and 2022-11-30 (inclusive)"
+    ] == "Sum of GrossSpend between 2022-11-28 and 2022-11-30"
 
 
 def test_recencydays_and_mostrecentpurchasedate(

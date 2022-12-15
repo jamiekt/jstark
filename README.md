@@ -29,86 +29,67 @@ Create yourself a virtual environment and install pyspark followed by jstark
 ```shell
 python3 -m venv venv && source venv/bin/activate && \
 python -m pip install pyspark && \
+python -m pip install faker && \
 python -m pip install python-dateutil && \
 python -m pip install -i https://test.pypi.org/simple/ jstark
 ```
 
-Run python and ~type~ paste the following code:
+Run python and ~type~ paste the following code
+
 ```python
-import uuid
-from datetime import datetime, timedelta
-from decimal import Decimal
-from typing import Dict, Any, Iterable
-from pyspark.sql import SparkSession
-from pyspark.sql.types import DecimalType, IntegerType, StringType, StructField, StructType, TimestampType
+from datetime import date
+from jstark.sample.transactions import FakeTransactions
 from jstark.purchasing_feature_generator import PurchasingFeatureGenerator
 from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
 
-spark = SparkSession.builder.getOrCreate()
-as_at_timestamp = datetime(2022, 11, 30, 10, 12, 13)
-purchases_schema = StructType(
-    [
-        StructField("Timestamp", TimestampType(), True), StructField("Customer", StringType(), True),
-        StructField("Store", StringType(), True), StructField("Channel", StringType(), True),
-        StructField("Product", StringType(), True), StructField("Quantity", IntegerType(), True),
-        StructField("Basket", StringType(), True), StructField("GrossSpend", DecimalType(10, 2), True),
-        StructField("NetSpend", DecimalType(10, 2), True), StructField("Discount", DecimalType(10, 2), True),
-    ]
-)
-transactions = [
-    {
-        "Timestamp": as_at_timestamp - timedelta(days=1),
-        "Customer": "Luke",
-        "Store": "Ealing",
-        "Channel": "Instore",
-        "Basket": uuid.uuid4(),
-        "items": [
-            {
-                "Product": "Custard Creams", "Quantity": 1, "GrossSpend": Decimal(4.00), "NetSpend": Decimal(3.75), "Discount": Decimal(0.0),
-            }
+df = FakeTransactions().get_df(seed=42, number_of_baskets=100)
+pfg = PurchasingFeatureGenerator(
+        date(2022, 1, 1),
+        [
+            FeaturePeriod(PeriodUnitOfMeasure.QUARTER, 4, 4),
+            FeaturePeriod(PeriodUnitOfMeasure.QUARTER, 3, 3),
+            FeaturePeriod(PeriodUnitOfMeasure.QUARTER, 2, 2),
+            FeaturePeriod(PeriodUnitOfMeasure.QUARTER, 1, 1),
         ],
-    },
-    {
-        "Timestamp": as_at_timestamp,
-        "Customer": "Leia",
-        "Store": "Hammersmith",
-        "Channel": "Instore",
-        "Basket": uuid.uuid4(),
-        "items": [
-            {"Product": "Cheddar", "Quantity": 2, "GrossSpend": Decimal(2.50), "NetSpend": Decimal(2.25), "Discount": Decimal(0.1),},
-            {"Product": "Grapes", "Quantity": 1, "GrossSpend": Decimal(3.00), "NetSpend": Decimal(2.75), "Discount": Decimal(0.1),},
-        ],
-    },
-]
-flattened_transactions: Iterable[Dict[str, Any]] = [
-    {
-        "Customer": d["Customer"], "Store": d["Store"], "Basket": d["Basket"],
-        "Channel": d["Channel"], "Timestamp": d["Timestamp"], **d2,
-    }
-    for d in transactions
-    for d2 in d["items"]
-]
-df = spark.createDataFrame(flattened_transactions, schema=purchases_schema)
-purchasing_feature_generator = PurchasingFeatureGenerator(
-    as_at=as_at_timestamp.date(),
-    feature_periods=[
-        FeaturePeriod(PeriodUnitOfMeasure.WEEK, 1, 0),
-    ],
-)
-df = df.groupBy().agg(*purchasing_feature_generator.features)
-df.select("StoreCount_1w0", "ProductCount_1w0", "BasketCount_1w0").collect()
+    )
+df = df.groupBy().agg(*pfg.features)
+df = df.select("BasketCount_4q4", "BasketCount_3q3", "BasketCount_2q2", "BasketCount_1q1")
+df.collect()
 ```
-which should return
+
+which returns
 ```shell
-> [Row(StoreCount_1w0=2, ProductCount_1w0=3, BasketCount_1w0=2)]
+> [Row(BasketCount_4q4=285, BasketCount_3q3=259, BasketCount_2q2=277, BasketCount_1q1=268)]
 ```
+
+All of the features have descriptions in their metadata
+
+```python
+from pprint import pprint
+pprint([(c.name, c.metadata["description"]) for c in df.schema])
+```
+
+which returns
+
+```shell
+[('BasketCount_4q4',
+  'Distinct count of Baskets between 2021-01-01 and 2021-03-31 (inclusive)'),
+ ('BasketCount_3q3',
+  'Distinct count of Baskets between 2021-04-01 and 2021-06-30 (inclusive)'),
+ ('BasketCount_2q2',
+  'Distinct count of Baskets between 2021-07-01 and 2021-09-30 (inclusive)'),
+ ('BasketCount_1q1',
+  'Distinct count of Baskets between 2021-10-01 and 2021-12-31 (inclusive)')]
+```
+
+This demonstrates a benefit of jstark, each feature carries a description in its metadata
+to explain how the value is derived.
 
 ## License
 
 `jstark` is distributed under the terms of the [MIT](https://spdx.org/licenses/MIT.html) license.
 
 ## Frequently Asked Questions
-
 
 ### Why is it called jstark?
 
