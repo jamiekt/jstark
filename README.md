@@ -42,7 +42,7 @@ from jstark.sample.transactions import FakeTransactions
 from jstark.purchasing_feature_generator import PurchasingFeatureGenerator
 from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
 
-df = FakeTransactions().get_df(seed=42, number_of_baskets=100)
+input_df = FakeTransactions().get_df(seed=42, number_of_baskets=100)
 pfg = PurchasingFeatureGenerator(
         date(2022, 1, 1),
         [
@@ -52,9 +52,9 @@ pfg = PurchasingFeatureGenerator(
             FeaturePeriod(PeriodUnitOfMeasure.QUARTER, 1, 1),
         ],
     )
-df = df.groupBy().agg(*pfg.features)
-df = df.select("BasketCount_4q4", "BasketCount_3q3", "BasketCount_2q2", "BasketCount_1q1")
-df.collect()
+output_df = input_df.groupBy().agg(*pfg.features)
+basket_counts_df = output_df.select("BasketCount_4q4", "BasketCount_3q3", "BasketCount_2q2", "BasketCount_1q1")
+basket_counts_df.collect()
 ```
 
 which returns
@@ -62,14 +62,14 @@ which returns
 > [Row(BasketCount_4q4=285, BasketCount_3q3=259, BasketCount_2q2=277, BasketCount_1q1=268)]
 ```
 
-All of the features have descriptions in their metadata
+One of the benefits of jstark is all the features have descriptions in their metadata.
 
 ```python
 from pprint import pprint
-pprint([(c.name, c.metadata["description"]) for c in df.schema])
+pprint([(c.name, c.metadata["description"]) for c in basket_counts_df.schema])
 ```
 
-which returns
+returns
 
 ```shell
 [('BasketCount_4q4',
@@ -81,9 +81,6 @@ which returns
  ('BasketCount_1q1',
   'Distinct count of Baskets between 2021-10-01 and 2021-12-31 (inclusive)')]
 ```
-
-This demonstrates a benefit of jstark, each feature carries a description in its metadata
-to explain how the value is derived.
 
 ## License
 
