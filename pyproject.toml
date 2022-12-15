@@ -24,7 +24,7 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = [
-  "pyspark>=3.3.1, <4",
+  "pyspark>=2.2",
   "faker"
 ]
 dynamic = ["version"]
