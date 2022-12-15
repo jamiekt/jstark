@@ -1,7 +1,7 @@
 import random
 import uuid
 from datetime import date
-from typing import Dict, Any, Iterable, Union
+from typing import Dict, Any, Iterable, Union, List
 from decimal import Decimal
 
 from pyspark.sql import SparkSession, DataFrame
@@ -34,6 +34,21 @@ class FakeTransactions:
                 StructField("Discount", DecimalType(10, 2), True),
             ]
         )
+
+    @staticmethod
+    def flatten_transactions(transactions: List[Any]) -> Iterable[Dict[str, Any]]:
+        return [
+            {
+                "Customer": d["Customer"],
+                "Store": d["Store"],
+                "Basket": d["Basket"],
+                "Channel": d["Channel"],
+                "Timestamp": d["Timestamp"],
+                **d2,
+            }
+            for d in transactions
+            for d2 in d["items"]
+        ]
 
     def get_df(
         self, seed: Union[int, None] = None, number_of_baskets: int = 1000
@@ -120,18 +135,7 @@ class FakeTransactions:
                 )
             products_fake.unique.clear()
 
-        flattened_transactions: Iterable[Dict[str, Any]] = [
-            {
-                "Customer": d["Customer"],
-                "Store": d["Store"],
-                "Basket": d["Basket"],
-                "Channel": d["Channel"],
-                "Timestamp": d["Timestamp"],
-                **d2,
-            }
-            for d in transactions
-            for d2 in d["items"]
-        ]
+        flattened_transactions = self.flatten_transactions(transactions)
         spark = SparkSession.builder.getOrCreate()
         return spark.createDataFrame(
             flattened_transactions, schema=self.transactions_schema  # type: ignore

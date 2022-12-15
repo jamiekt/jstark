@@ -1,7 +1,6 @@
 import uuid
 from decimal import Decimal
 from datetime import datetime, timedelta
-from typing import Dict, Any, Iterable
 from dateutil.relativedelta import relativedelta
 
 
@@ -143,18 +142,7 @@ def dataframe_of_purchases(
             ],
         },
     ]
-    flattened_transactions: Iterable[Dict[str, Any]] = [
-        {
-            "Customer": d["Customer"],
-            "Store": d["Store"],
-            "Basket": d["Basket"],
-            "Channel": d["Channel"],
-            "Timestamp": d["Timestamp"],
-            **d2,
-        }
-        for d in transactions
-        for d2 in d["items"]  # type: ignore
-    ]
+    flattened_transactions = FakeTransactions.flatten_transactions(transactions)
     return spark_session.createDataFrame(
         flattened_transactions, schema=purchases_schema  # type: ignore
     )
