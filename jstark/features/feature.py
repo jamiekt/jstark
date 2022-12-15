@@ -37,7 +37,7 @@ class Feature(metaclass=ABCMeta):
 
     @property
     def feature_name(self) -> str:
-        return f"{type(self).__name__}_{self.feature_period.code}"
+        return f"{type(self).__name__}_{self.feature_period.mnemonic}"
 
     @property
     @abstractmethod

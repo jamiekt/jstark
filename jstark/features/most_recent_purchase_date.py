@@ -20,6 +20,6 @@ class MostRecentPurchaseDate(Max):
             + "MostRecentPurchaseDate is more than 2 days ago could be a useful "
             + "indicator of things which might not be available for purchase."
             + "Also note that this is very similar to "
-            + f"RecencyDays_{self.feature_period.code} so consider which of these "
+            + f"RecencyDays_{self.feature_period.mnemonic} so consider which of these "
             + "features is most useful to you."
         )

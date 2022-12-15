@@ -16,9 +16,9 @@ class ApproxCustomerCount(ApproxDistinctCount):
     def commentary(self) -> str:
         return (
             "The approximate number of customers. Similar to "
-            + f"CustomerCount_{self.feature_period.code} "
+            + f"CustomerCount_{self.feature_period.mnemonic} "
             + "except that it uses an approximation algorithm which "
             + "will not be as accurate as "
-            + f"CustomerCount_{self.feature_period.code} but will be a lot "
+            + f"CustomerCount_{self.feature_period.mnemonic} but will be a lot "
             + 'quicker to compute and in many cases will be "close enough".'
         )

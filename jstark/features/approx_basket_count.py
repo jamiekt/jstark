@@ -16,9 +16,9 @@ class ApproxBasketCount(ApproxDistinctCount):
     def commentary(self) -> str:
         return (
             "The approximate number of baskets. Similar to "
-            + f"BasketCount_{self.feature_period.code} "
+            + f"BasketCount_{self.feature_period.mnemonic} "
             + "except that it uses an approximation algorithm which "
             + "will not be as accurate as "
-            + f"BasketCount_{self.feature_period.code} but will be a lot "
+            + f"BasketCount_{self.feature_period.mnemonic} but will be a lot "
             + 'quicker to compute and in many cases will be "close enough".'
         )

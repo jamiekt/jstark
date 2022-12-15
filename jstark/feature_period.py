@@ -47,7 +47,7 @@ class FeaturePeriod:
         return self.__period_unit_of_measure
 
     @property
-    def code(self) -> str:
+    def mnemonic(self) -> str:
         "Mnemonic for the feature period"
         return f"{self.start}{self.period_unit_of_measure.value}{self.end}"
 

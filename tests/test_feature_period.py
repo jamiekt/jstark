@@ -63,20 +63,20 @@ def test_feature_period_end_greater_than_start_raises_exception():
 
 
 def test_feature_period_code_for_day():
-    assert FeaturePeriod(PeriodUnitOfMeasure.DAY, 3, 2).code == "3d2"
+    assert FeaturePeriod(PeriodUnitOfMeasure.DAY, 3, 2).mnemonic == "3d2"
 
 
 def test_feature_period_code_for_week():
-    assert FeaturePeriod(PeriodUnitOfMeasure.WEEK, 3, 2).code == "3w2"
+    assert FeaturePeriod(PeriodUnitOfMeasure.WEEK, 3, 2).mnemonic == "3w2"
 
 
 def test_feature_period_code_for_month():
-    assert FeaturePeriod(PeriodUnitOfMeasure.MONTH, 3, 2).code == "3m2"
+    assert FeaturePeriod(PeriodUnitOfMeasure.MONTH, 3, 2).mnemonic == "3m2"
 
 
 def test_feature_period_code_for_quarter():
-    assert FeaturePeriod(PeriodUnitOfMeasure.QUARTER, 3, 2).code == "3q2"
+    assert FeaturePeriod(PeriodUnitOfMeasure.QUARTER, 3, 2).mnemonic == "3q2"
 
 
 def test_feature_period_code_for_year():
-    assert FeaturePeriod(PeriodUnitOfMeasure.YEAR, 3, 2).code == "3y2"
+    assert FeaturePeriod(PeriodUnitOfMeasure.YEAR, 3, 2).mnemonic == "3y2"
