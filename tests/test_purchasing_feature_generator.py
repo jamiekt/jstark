@@ -180,19 +180,6 @@ def test_gross_spend_this_year_and_last_year(luke_and_leia_purchases_first: Row)
     assert float(luke_and_leia_purchases_first["GrossSpend_1y0"]) == 33.75
 
 
-def test_count(as_at_timestamp: datetime, dataframe_of_purchases: DataFrame):
-    """Test Count_2d0"""
-    dataframe_of_purchases = dataframe_of_purchases.where(
-        f.col("Store") == "Hammersmith"
-    )
-    df = dataframe_of_purchases.groupBy("Store").agg(
-        *PurchasingFeatureGenerator(as_at=as_at_timestamp.date()).features
-    )
-    first = df.first()
-    assert first is not None
-    assert first["Count_2d0"] == 2
-
-
 def test_grossspend_metadata_description(
     dataframe_of_purchases: DataFrame,
     purchasing_feature_generator: PurchasingFeatureGenerator,
