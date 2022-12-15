@@ -7,6 +7,8 @@ from .exceptions import FeaturePeriodEndGreaterThanStartError
 
 
 class PeriodUnitOfMeasure(Enum):
+    """Units in which periods can be measured"""
+
     DAY = "d"
     WEEK = "w"
     MONTH = "m"
@@ -31,18 +33,22 @@ class FeaturePeriod:
 
     @property
     def start(self) -> int:
+        "Number of periods ago that the FeaturePeriod begins at"
         return self.__start
 
     @property
     def end(self) -> int:
+        "Number of periods ago that the FeaturePeriod ends at"
         return self.__end
 
     @property
     def period_unit_of_measure(self) -> PeriodUnitOfMeasure:
+        "Period unit of measure"
         return self.__period_unit_of_measure
 
     @property
     def code(self) -> str:
+        "Mnemonic for the feature period"
         return f"{self.start}{self.period_unit_of_measure.value}{self.end}"
 
     @property
