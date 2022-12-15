@@ -1,3 +1,7 @@
+"""jstark exceptions
+"""
+
+
 class FeaturePeriodEndGreaterThanStartError(Exception):
     """Exception indicating end of a feature period cannot be before the start"""
 
