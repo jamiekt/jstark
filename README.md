@@ -203,7 +203,9 @@ pprint({k:v for (k,v) in pfg.references.items() if k.endswith("1q1")})
 
 ### Why is it called jstark?
 
-jstark is phonetically similar to PySpark (which jstark requires), is a homage to
+jstark:
+* is phonetically similar to PySpark (which jstark requires)
+* is a homage to
 [comic book character Jon Stark](https://www.worthpoint.com/worthopedia/football-picture-story-monthly-stark-423630034)
-whom the original contributor was a fan of many many years ago and also contains all the initials of the original
-contributor (j, k & t).
+whom the original contributor was a fan of many many years ago
+* contains all the initials of the original contributor (j, k & t).
