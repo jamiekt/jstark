@@ -10,13 +10,13 @@
 Built with [![Hatch project](https://img.shields.io/badge/%F0%9F%A5%9A-Hatch-4051b5.svg)](https://github.com/pypa/hatch)
 
 -----
-
+<!---
 ## Installation
 
 ```console
 pip install jstark
 ```
-
+-->
 ## Introduction
 
 Data science relies on summarising data so it can be used in machine learning models, those summarised data values
