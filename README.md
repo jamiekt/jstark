@@ -70,6 +70,8 @@ One of the benefits of jstark is all the features have descriptions in their met
 ```python
 from pprint import pprint
 pprint([(c.name, c.metadata["description"]) for c in basket_counts_df.schema])
+```
+```shell
 >>> [('BasketCount_4q4',
 >>>   'Distinct count of Baskets between 2021-01-01 and 2021-03-31'),
 >>>  ('BasketCount_3q3',
