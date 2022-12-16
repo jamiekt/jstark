@@ -90,8 +90,7 @@ output_stores_df = input_df.groupBy("Store").agg(*pfg.features)
     select(
         "Store", "BasketCount_4q4", "BasketCount_3q3", "BasketCount_2q2", "BasketCount_1q1"
     )
-    .orderBy("BasketCount_1q1")
-).show()
+    .orderBy("BasketCount_1q1")).show()
 ```
 ```shell
 +-----------+---------------+---------------+---------------+---------------+
@@ -103,6 +102,34 @@ output_stores_df = input_df.groupBy("Store").agg(*pfg.features)
 |     Ealing|             58|             61|             45|             53|
 | Twickenham|             62|             58|             64|             68|
 +-----------+---------------+---------------+---------------+---------------+
+```
+
+And then perhaps examine different features, number of baskets and number of customers in the first half of 2021 versus the second half:
+
+```python
+pfg2 = PurchasingFeatureGenerator(
+        date(2022, 1, 1),
+        [
+            FeaturePeriod(PeriodUnitOfMeasure.MONTH, 12, 7),
+            FeaturePeriod(PeriodUnitOfMeasure.MONTH, 6, 1)
+        ]
+    )
+output_stores_h1h2_df = input_df.groupBy("Store").agg(*pfg2.features)
+(output_stores_h1h2_df.
+    select(
+        "Store", "BasketCount_12m7", "CustomerCount_12m7", "BasketCount_6m1", "CustomerCount_6m1"
+    )).show()
+```
+```shell
++-----------+----------------+------------------+---------------+-----------------+
+|      Store|BasketCount_12m7|CustomerCount_12m7|BasketCount_6m1|CustomerCount_6m1|
++-----------+----------------+------------------+---------------+-----------------+
+|    Staines|              97|                97|            113|              113|
+| Twickenham|             120|               120|            132|              131|
+|     Ealing|             119|               119|             98|               97|
+|Hammersmith|             104|               104|             96|               96|
+|   Richmond|             104|               104|            106|              106|
++-----------+----------------+------------------+---------------+-----------------+
 ```
 
 At this point you may wonder what other features are available other than BasketCount
