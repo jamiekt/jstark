@@ -42,7 +42,7 @@ from jstark.sample.transactions import FakeTransactions
 from jstark.purchasing_feature_generator import PurchasingFeatureGenerator
 from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
 
-input_df = FakeTransactions().get_df(seed=42, number_of_baskets=100)
+input_df = FakeTransactions().get_df(seed=42, number_of_baskets=10000)
 pfg = PurchasingFeatureGenerator(
         date(2022, 1, 1),
         [
@@ -61,7 +61,7 @@ basket_counts_df.show()
 +---------------+---------------+---------------+---------------+
 |BasketCount_4q4|BasketCount_3q3|BasketCount_2q2|BasketCount_1q1|
 +---------------+---------------+---------------+---------------+
-|            285|            259|            277|            268|
+|           2458|           2501|           2498|           2543|
 +---------------+---------------+---------------+---------------+
 ```
 
@@ -96,11 +96,11 @@ output_stores_df = input_df.groupBy("Store").agg(*pfg.features)
 +-----------+---------------+---------------+---------------+---------------+
 |      Store|BasketCount_4q4|BasketCount_3q3|BasketCount_2q2|BasketCount_1q1|
 +-----------+---------------+---------------+---------------+---------------+
-|Hammersmith|             60|             44|             51|             45|
-|   Richmond|             54|             50|             55|             51|
-|    Staines|             51|             46|             62|             51|
-|     Ealing|             58|             61|             45|             53|
-| Twickenham|             62|             58|             64|             68|
+|Hammersmith|            523|            529|            503|            492|
+|    Staines|            461|            520|            493|            504|
+|   Richmond|            500|            483|            503|            512|
+|     Ealing|            490|            460|            485|            515|
+| Twickenham|            484|            509|            514|            520|
 +-----------+---------------+---------------+---------------+---------------+
 ```
 
@@ -124,15 +124,16 @@ output_stores_h1h2_df = input_df.groupBy("Store").agg(*pfg2.features)
 +-----------+----------------+------------------+---------------+-----------------+
 |      Store|BasketCount_12m7|CustomerCount_12m7|BasketCount_6m1|CustomerCount_6m1|
 +-----------+----------------+------------------+---------------+-----------------+
-|    Staines|              97|                97|            113|              113|
-| Twickenham|             120|               120|            132|              131|
-|     Ealing|             119|               119|             98|               97|
-|Hammersmith|             104|               104|             96|               96|
-|   Richmond|             104|               104|            106|              106|
+|    Staines|             981|               974|            997|              986|
+| Twickenham|             993|               986|           1034|             1023|
+|     Ealing|             950|               937|           1000|              993|
+|Hammersmith|            1052|              1043|            995|              990|
+|   Richmond|             983|               976|           1015|             1006|
 +-----------+----------------+------------------+---------------+-----------------+
 ```
+Some customers shop more than once hence CustomerCount is lower than BasketCount.
 
-At this point you may wonder what other features are available other than BasketCount
+At this point you may wonder what other features are available other than BasketCount & CustomerCount
 
 ```python
 pprint([c.name for c in output_df.schema if c.name.endswith("1q1")])
@@ -157,6 +158,42 @@ Again, descriptions are available for all:
 ```python
 pprint([(c.name,c.metadata["description"]) for c in output_df.schema if c.name.endswith("1q1")])
 ```
+
+All of these features expect certain columns to be in the input dataframe. All of them require column called Timestamp (of type Timestamp) to indicate when the activity occurred and most expect additional columns too. BasketCount for example expects a column called Basket.
+
+jstark can tell you this information
+
+```python
+pfg.references["BasketCount_1q1"]
+pfg.references["CustomerCount_1q1"]
+pfg.references["AverageGrossSpendPerBasket_1q1"]
+```
+```shell
+['Basket', 'Timestamp']
+['Customer', 'Timestamp']
+['Basket', 'GrossSpend', 'Timestamp']
+```
+
+To find out what all columns are required by all features
+
+```python
+pprint({k:v for (k,v) in pfg.references.items() if k.endswith("1q1")})
+```
+```shell
+{'ApproxBasketCount_1q1': ['Basket', 'Timestamp'],
+ 'ApproxCustomerCount_1q1': ['Customer', 'Timestamp'],
+ 'AverageGrossSpendPerBasket_1q1': ['Basket', 'GrossSpend', 'Timestamp'],
+ 'AvgQuantityPerBasket_1q1': ['Basket', 'Quantity', 'Timestamp'],
+ 'BasketCount_1q1': ['Basket', 'Timestamp'],
+ 'ChannelCount_1q1': ['Channel', 'Timestamp'],
+ 'Count_1q1': ['Timestamp'],
+ 'CustomerCount_1q1': ['Customer', 'Timestamp'],
+ 'Discount_1q1': ['Discount', 'Timestamp'],
+ <snip>
+ ...
+ ...
+```
+
 
 ## License
 
