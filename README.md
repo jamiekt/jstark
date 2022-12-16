@@ -55,12 +55,14 @@ pfg = PurchasingFeatureGenerator(
 output_df = input_df.groupBy().agg(*pfg.features)
 basket_counts_df = (output_df.
     select("BasketCount_4q4", "BasketCount_3q3", "BasketCount_2q2", "BasketCount_1q1"))
-basket_counts_df.collect()
-```
-
-which returns
-```shell
-> [Row(BasketCount_4q4=285, BasketCount_3q3=259, BasketCount_2q2=277, BasketCount_1q1=268)]
+basket_counts_df.show()
+/*
+>>> +---------------+---------------+---------------+---------------+
+>>> |BasketCount_4q4|BasketCount_3q3|BasketCount_2q2|BasketCount_1q1|
+>>> +---------------+---------------+---------------+---------------+
+>>> |            285|            259|            277|            268|
+>>> +---------------+---------------+---------------+---------------+
+*/
 ```
 
 One of the benefits of jstark is all the features have descriptions in their metadata.
