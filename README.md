@@ -24,6 +24,7 @@ are referred to as *features*. Some common requirements when summarising data as
 
 * ability to create features as they were at a certain point in time
 * ability to create features that summarise different time periods (for example, each month of a year)
+without having to run the feature creation multiple times
 * a consistent naming convention
 * feature descriptions that accurately describe how a feature is derived
 
