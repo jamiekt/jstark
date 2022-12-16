@@ -34,6 +34,8 @@ python -m pip install python-dateutil && \
 python -m pip install -i https://test.pypi.org/simple/ jstark
 ```
 
+### Your first jstark features
+
 Run python and ~type~ paste the following code
 
 ```python
@@ -65,6 +67,8 @@ basket_counts_df.show()
 +---------------+---------------+---------------+---------------+
 ```
 
+### Descriptions
+
 One of the benefits of jstark is all the features have descriptions in their metadata.
 
 ```python
@@ -82,7 +86,9 @@ pprint([(c.name, c.metadata["description"]) for c in basket_counts_df.schema])
   'Distinct count of Baskets between 2021-10-01 and 2021-12-31')]
 ```
 
-Typically you'll want to aggregate the data over some dimension, stores perhaps
+### groupBy examples
+
+Typically you'll want to aggregate the data over a dimension, stores perhaps
 
 ```python
 output_stores_df = input_df.groupBy("Store").agg(*pfg.features)
@@ -158,6 +164,8 @@ Again, descriptions are available for all:
 ```python
 pprint([(c.name,c.metadata["description"]) for c in output_df.schema if c.name.endswith("1q1")])
 ```
+
+### References
 
 All of these features expect certain columns to be in the input dataframe. All of them require a column called Timestamp (of type [TimestampType()](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.types.TimestampType.html)) to indicate when the activity occurred and most expect additional columns too. BasketCount for example expects a column called Basket.
 
