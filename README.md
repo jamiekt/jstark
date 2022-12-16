@@ -36,7 +36,7 @@ python -m pip install -i https://test.pypi.org/simple/ jstark
 
 ### Your first jstark features
 
-Run python and ~type~ paste the following code
+Run the following code that summarises the number of baskets per quarter in 2021 for a mythical grocery retailer
 
 ```python
 from datetime import date
