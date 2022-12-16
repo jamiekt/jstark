@@ -152,7 +152,7 @@ output_stores_h1h2_df = input_df.groupBy("Store").agg(*pfg2.features)
 |   Richmond|             983|               976|           1015|             1006|
 +-----------+----------------+------------------+---------------+-----------------+
 ```
-Some customers shop more than once hence CustomerCount is lower than BasketCount.
+*Some customers shop more than once hence CustomerCount is lower than BasketCount.*
 
 At this point you may wonder what other features are available other than BasketCount & CustomerCount
 
