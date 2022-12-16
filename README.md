@@ -164,14 +164,9 @@ All of these features expect certain columns to be in the input dataframe. All o
 jstark can tell you this information
 
 ```python
-pfg.references["BasketCount_1q1"]
-pfg.references["CustomerCount_1q1"]
-pfg.references["AverageGrossSpendPerBasket_1q1"]
-```
-```shell
-['Basket', 'Timestamp']
-['Customer', 'Timestamp']
-['Basket', 'GrossSpend', 'Timestamp']
+pfg.references["BasketCount_1q1"]                  # ['Basket', 'Timestamp']
+pfg.references["CustomerCount_1q1"]                # ['Customer', 'Timestamp']
+pfg.references["AverageGrossSpendPerBasket_1q1"]   # ['Basket', 'GrossSpend', 'Timestamp']
 ```
 
 To find out what all columns are required by all features
