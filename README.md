@@ -159,9 +159,6 @@ At this point you may wonder what other features are available other than Basket
 ```python
 pprint([c.name for c in output_df.schema if c.name.endswith("1q1")])
 ```
-
-returns:
-
 ```shell
 ['Count_1q1',
  'NetSpend_1q1',
