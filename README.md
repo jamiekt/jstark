@@ -159,7 +159,7 @@ Again, descriptions are available for all:
 pprint([(c.name,c.metadata["description"]) for c in output_df.schema if c.name.endswith("1q1")])
 ```
 
-All of these features expect certain columns to be in the input dataframe. All of them require column called Timestamp (of type Timestamp) to indicate when the activity occurred and most expect additional columns too. BasketCount for example expects a column called Basket.
+All of these features expect certain columns to be in the input dataframe. All of them require column called Timestamp (of type [TimestampType()](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.types.TimestampType.html)) to indicate when the activity occurred and most expect additional columns too. BasketCount for example expects a column called Basket.
 
 jstark can tell you this information
 
