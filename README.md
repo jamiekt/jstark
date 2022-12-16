@@ -56,13 +56,13 @@ output_df = input_df.groupBy().agg(*pfg.features)
 basket_counts_df = (output_df.
     select("BasketCount_4q4", "BasketCount_3q3", "BasketCount_2q2", "BasketCount_1q1"))
 basket_counts_df.show()
-/*
+```
+```shell
 >>> +---------------+---------------+---------------+---------------+
 >>> |BasketCount_4q4|BasketCount_3q3|BasketCount_2q2|BasketCount_1q1|
 >>> +---------------+---------------+---------------+---------------+
 >>> |            285|            259|            277|            268|
 >>> +---------------+---------------+---------------+---------------+
-*/
 ```
 
 One of the benefits of jstark is all the features have descriptions in their metadata.
@@ -70,19 +70,37 @@ One of the benefits of jstark is all the features have descriptions in their met
 ```python
 from pprint import pprint
 pprint([(c.name, c.metadata["description"]) for c in basket_counts_df.schema])
+>>> [('BasketCount_4q4',
+>>>   'Distinct count of Baskets between 2021-01-01 and 2021-03-31'),
+>>>  ('BasketCount_3q3',
+>>>   'Distinct count of Baskets between 2021-04-01 and 2021-06-30'),
+>>>  ('BasketCount_2q2',
+>>>   'Distinct count of Baskets between 2021-07-01 and 2021-09-30'),
+>>>  ('BasketCount_1q1',
+>>>   'Distinct count of Baskets between 2021-10-01 and 2021-12-31')]
 ```
 
-returns
+Typically you'll want to aggregate the data over some dimension, stores perhaps
 
+```python
+output_stores_df = input_df.groupBy("Store").agg(*pfg.features)
+(output_stores_df.
+    select(
+        "Store", "BasketCount_4q4", "BasketCount_3q3", "BasketCount_2q2", "BasketCount_1q1"
+    )
+    .orderBy("BasketCount_1q1")
+).show()
+```
 ```shell
-[('BasketCount_4q4',
-  'Distinct count of Baskets between 2021-01-01 and 2021-03-31 (inclusive)'),
- ('BasketCount_3q3',
-  'Distinct count of Baskets between 2021-04-01 and 2021-06-30 (inclusive)'),
- ('BasketCount_2q2',
-  'Distinct count of Baskets between 2021-07-01 and 2021-09-30 (inclusive)'),
- ('BasketCount_1q1',
-  'Distinct count of Baskets between 2021-10-01 and 2021-12-31 (inclusive)')]
+>>> +-----------+---------------+---------------+---------------+---------------+
+>>> |      Store|BasketCount_4q4|BasketCount_3q3|BasketCount_2q2|BasketCount_1q1|
+>>> +-----------+---------------+---------------+---------------+---------------+
+>>> |Hammersmith|             60|             44|             51|             45|
+>>> |   Richmond|             54|             50|             55|             51|
+>>> |    Staines|             51|             46|             62|             51|
+>>> |     Ealing|             58|             61|             45|             53|
+>>> | Twickenham|             62|             58|             64|             68|
+>>> +-----------+---------------+---------------+---------------+---------------+
 ```
 
 At this point you may wonder what other features are available other than BasketCount
