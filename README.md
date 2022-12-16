@@ -17,6 +17,20 @@ Built with [![Hatch project](https://img.shields.io/badge/%F0%9F%A5%9A-Hatch-405
 pip install jstark
 ```
 
+## Introduction
+
+Data science relies on summarising data so it can be used in machine learning models, those summarised data values
+are referred to as *features*. Some common requirements when summarising data as features are:
+
+* ability to create features as they were at a certain point in time
+* ability to create features that summarise different time periods (for example, each month of a year)
+* a consistent naming convention
+* feature descriptions that accurately describe how a feature is derived
+
+A popular technology producing features is [Apache Spark](https://spark.apache.org/), specifically Spark's
+python-based implementation, [PySpark](https://spark.apache.org/docs/latest/api/python/). jstark uses PySpark
+to address the requirements listed above.
+
 ## Getting started
 
 Create yourself a virtual environment and install pyspark followed by jstark
