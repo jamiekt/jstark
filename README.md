@@ -37,9 +37,9 @@ to address the requirements listed above.
 Create yourself a virtual environment and install pyspark followed by jstark
 
 > **Note**
-> As jstark is not yet properly released it is being hosted at [https://test.pypi.org/](https://test.pypi.org/) therefore
-> it is required to install pyspark separately. When jstark is hosted at [https://pypi.org/](https://pypi.org/) this
-> won't be necessary.
+> As jstark is still a work-in-progress ("alpha" stage) it is being made available at
+> [https://test.pypi.org/](https://test.pypi.org/) therefore it is required to install pyspark
+> separately. When jstark is hosted at [https://pypi.org/](https://pypi.org/) this won't be necessary.
 
 ```shell
 python3 -m venv venv && source venv/bin/activate && \
