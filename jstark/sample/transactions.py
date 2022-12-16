@@ -100,7 +100,7 @@ class FakeTransactions:
             weights=[100, 40, 20, 10, 8],
             k=number_of_baskets * len(products_provider.elements),
         )
-        for basket in range(number_of_baskets - 1):
+        for basket in range(number_of_baskets):
             items = []
             if seed:
                 random.seed(seed)
@@ -120,19 +120,19 @@ class FakeTransactions:
                         "Discount": Decimal(discount),
                     }
                 )
-                transactions.append(
-                    {
-                        "Customer": fake.name(),
-                        "Homecity": fake.city(),
-                        "Store": fake.store(),
-                        "Timestamp": fake.date_time_between(
-                            start_date=date(2021, 1, 1), end_date=date(2021, 12, 31)
-                        ),
-                        "Basket": str(uuid.uuid4()),
-                        "Channel": fake.channel(),
-                        "items": items,
-                    }
-                )
+            transactions.append(
+                {
+                    "Customer": fake.name(),
+                    "Homecity": fake.city(),
+                    "Store": fake.store(),
+                    "Timestamp": fake.date_time_between(
+                        start_date=date(2021, 1, 1), end_date=date(2021, 12, 31)
+                    ),
+                    "Basket": str(uuid.uuid4()),
+                    "Channel": fake.channel(),
+                    "items": items,
+                }
+            )
             products_fake.unique.clear()
 
         flattened_transactions = self.flatten_transactions(transactions)
