@@ -28,7 +28,7 @@ without having to run the feature creation multiple times
 * a consistent naming convention
 * feature descriptions that accurately describe how a feature is derived
 
-A popular technology producing features is [Apache Spark](https://spark.apache.org/), specifically Spark's
+A popular technology for producing features is [Apache Spark](https://spark.apache.org/), specifically Spark's
 python-based implementation, [PySpark](https://spark.apache.org/docs/latest/api/python/). jstark uses PySpark
 to address the requirements listed above.
 
