@@ -43,7 +43,7 @@ class PurchasingFeatureGenerator:
         ],
     ) -> None:
         self.as_at = as_at
-        regex = r"^(\d*)([dwmqy])(\d*)$"
+        regex = r"^(\d*)([dwmqy])(\d*)$"  # https://regex101.com/r/Xvf3ey/1
         _feature_periods = []
         for fp in feature_periods:
             if isinstance(fp, FeaturePeriod):
