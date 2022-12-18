@@ -25,6 +25,13 @@ class FeaturePeriod:
     def __init__(
         self, period_unit_of_measure: PeriodUnitOfMeasure, start: int, end: int
     ) -> None:
+        if not isinstance(period_unit_of_measure, PeriodUnitOfMeasure):
+            raise RuntimeError(
+                (
+                    "period_unit_of_measure needs to be of type "
+                    + f"PeriodUnitOfMeasure, not {type(period_unit_of_measure)}"
+                )
+            )
         if end > start:
             raise FeaturePeriodEndGreaterThanStartError(start=start, end=end)
         self.__period_unit_of_measure = period_unit_of_measure

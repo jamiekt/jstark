@@ -1,5 +1,16 @@
 """jstark exceptions
 """
+from jstark.feature_period import PeriodUnitOfMeasure
+
+
+class FeaturePeriodMnemonicIsInvalid(Exception):
+    """FeaturePeriod mnemonic doesn't match X[dqmqy]Y"""
+
+    def __str__(self) -> str:
+        return (
+            "FeaturePeriod mnemonic must be an integer followed by a letter "
+            + f"from {[e.value for e in PeriodUnitOfMeasure]} followed by an integer"
+        )
 
 
 class FeaturePeriodEndGreaterThanStartError(Exception):

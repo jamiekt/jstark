@@ -6,6 +6,19 @@ from jstark.purchasing_feature_generator import PurchasingFeatureGenerator
 from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
 
 
+def test_feature_period_str():
+    pfg1 = PurchasingFeatureGenerator(
+        date.today(), [FeaturePeriod(PeriodUnitOfMeasure.DAY, 0, 0)]
+    )
+    pfg2 = PurchasingFeatureGenerator(date.today(), ["0d0"])
+    assert (
+        pfg1.feature_periods[0].period_unit_of_measure.value
+        == pfg2.feature_periods[0].period_unit_of_measure.value
+    )
+    assert pfg1.feature_periods[0].start == pfg2.feature_periods[0].start
+    assert pfg1.feature_periods[0].end == pfg2.feature_periods[0].end
+
+
 def test_parse_references_grossspend():
     """
     PurchasingFeatureGenerator.parse_references() is only an internal helper function
