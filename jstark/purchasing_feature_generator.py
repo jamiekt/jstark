@@ -1,5 +1,6 @@
 from datetime import date
-from typing import List, Dict
+from typing import List, Dict, Union
+import re
 
 from pyspark.sql import Column, SparkSession
 from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
@@ -29,19 +30,48 @@ from jstark.features import (
     MinGrossPrice,
     MaxGrossPrice,
 )
+from jstark.exceptions import FeaturePeriodMnemonicIsInvalid
 
 
 class PurchasingFeatureGenerator:
     def __init__(
         self,
         as_at: date,
-        feature_periods: List[FeaturePeriod] = [
+        feature_periods: List[Union[FeaturePeriod, str]] = [
             FeaturePeriod(PeriodUnitOfMeasure.DAY, 2, 0),
             FeaturePeriod(PeriodUnitOfMeasure.DAY, 4, 3),
         ],
     ) -> None:
         self.as_at = as_at
-        self.feature_periods = feature_periods
+        regex = r"^(\d*)([dwmqy])(\d*)$"
+        _feature_periods = []
+        for fp in feature_periods:
+            if isinstance(fp, FeaturePeriod):
+                _feature_periods.append(fp)
+            elif matches := re.match(regex, fp):
+                period_unit_of_measure_values = [e.value for e in PeriodUnitOfMeasure]
+                if matches[2] not in period_unit_of_measure_values:
+                    raise RuntimeError(
+                        f"{matches[2]} is not a valid PeriodUnitOfMeasure "
+                        + f"value ({period_unit_of_measure_values})"
+                    )
+                puom = (
+                    PeriodUnitOfMeasure.DAY
+                    if matches[2] == "d"
+                    else PeriodUnitOfMeasure.WEEK
+                    if matches[2] == "w"
+                    else PeriodUnitOfMeasure.MONTH
+                    if matches[2] == "m"
+                    else PeriodUnitOfMeasure.QUARTER
+                    if matches[2] == "q"
+                    else PeriodUnitOfMeasure.YEAR
+                )
+                _feature_periods.append(
+                    FeaturePeriod(puom, int(matches[1]), int(matches[3]))
+                )
+            else:
+                raise FeaturePeriodMnemonicIsInvalid
+        self.feature_periods = _feature_periods
 
     # would prefer list[Type[Feature]] as type hint but
     # this only works on py3.10 and above
