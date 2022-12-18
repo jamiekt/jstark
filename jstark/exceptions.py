@@ -1,6 +1,6 @@
 """jstark exceptions
 """
-from jstark.feature_period import PeriodUnitOfMeasure
+from jstark.period_unit_of_measure import PeriodUnitOfMeasure
 
 
 class FeaturePeriodMnemonicIsInvalid(Exception):

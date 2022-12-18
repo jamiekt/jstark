@@ -2,18 +2,8 @@
 Encapsulate the period of a feature, defined by a unit of time
 measure, a start and an end
 """
-from enum import Enum
 from .exceptions import FeaturePeriodEndGreaterThanStartError
-
-
-class PeriodUnitOfMeasure(Enum):
-    """Units in which periods can be measured"""
-
-    DAY = "d"
-    WEEK = "w"
-    MONTH = "m"
-    QUARTER = "q"
-    YEAR = "y"
+from jstark.period_unit_of_measure import PeriodUnitOfMeasure
 
 
 class FeaturePeriod:
