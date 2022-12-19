@@ -51,26 +51,20 @@ class PurchasingFeatureGenerator:
             else:
                 matches = re.match(regex, fp)
                 if matches:
-                    period_unit_of_measure_values = [
-                        e.value for e in PeriodUnitOfMeasure
-                    ]
-                    if matches[2] not in period_unit_of_measure_values:
-                        raise FeaturePeriodMnemonicIsInvalid
-                    else:
-                        puom = (
-                            PeriodUnitOfMeasure.DAY
-                            if matches[2] == "d"
-                            else PeriodUnitOfMeasure.WEEK
-                            if matches[2] == "w"
-                            else PeriodUnitOfMeasure.MONTH
-                            if matches[2] == "m"
-                            else PeriodUnitOfMeasure.QUARTER
-                            if matches[2] == "q"
-                            else PeriodUnitOfMeasure.YEAR
-                        )
-                        _feature_periods.append(
-                            FeaturePeriod(puom, int(matches[1]), int(matches[3]))
-                        )
+                    puom = (
+                        PeriodUnitOfMeasure.DAY
+                        if matches[2] == "d"
+                        else PeriodUnitOfMeasure.WEEK
+                        if matches[2] == "w"
+                        else PeriodUnitOfMeasure.MONTH
+                        if matches[2] == "m"
+                        else PeriodUnitOfMeasure.QUARTER
+                        if matches[2] == "q"
+                        else PeriodUnitOfMeasure.YEAR
+                    )
+                    _feature_periods.append(
+                        FeaturePeriod(puom, int(matches[1]), int(matches[3]))
+                    )
                 else:
                     raise FeaturePeriodMnemonicIsInvalid
         self.feature_periods = _feature_periods
