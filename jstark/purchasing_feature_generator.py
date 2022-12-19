@@ -45,31 +45,33 @@ class PurchasingFeatureGenerator:
         self.as_at = as_at
         period_unit_of_measure_values = "".join([e.value for e in PeriodUnitOfMeasure])
         regex = (
-            r"^(\d*)([" + period_unit_of_measure_values + r"])(\d*)$"
-        )  # https://regex101.com/r/Xvf3ey/1
+            # https://regex101.com/r/Xvf3ey/1
+            r"^(\d*)(["
+            + period_unit_of_measure_values
+            + r"])(\d*)$"
+        )
         _feature_periods = []
         for fp in feature_periods:
             if isinstance(fp, FeaturePeriod):
                 _feature_periods.append(fp)
             else:
                 matches = re.match(regex, fp)
-                if matches:
-                    puom = (
-                        PeriodUnitOfMeasure.DAY
-                        if matches[2] == "d"
-                        else PeriodUnitOfMeasure.WEEK
-                        if matches[2] == "w"
-                        else PeriodUnitOfMeasure.MONTH
-                        if matches[2] == "m"
-                        else PeriodUnitOfMeasure.QUARTER
-                        if matches[2] == "q"
-                        else PeriodUnitOfMeasure.YEAR
-                    )
-                    _feature_periods.append(
-                        FeaturePeriod(puom, int(matches[1]), int(matches[3]))
-                    )
-                else:
+                if not matches:
                     raise FeaturePeriodMnemonicIsInvalid
+                puom = (
+                    PeriodUnitOfMeasure.DAY
+                    if matches[2] == "d"
+                    else PeriodUnitOfMeasure.WEEK
+                    if matches[2] == "w"
+                    else PeriodUnitOfMeasure.MONTH
+                    if matches[2] == "m"
+                    else PeriodUnitOfMeasure.QUARTER
+                    if matches[2] == "q"
+                    else PeriodUnitOfMeasure.YEAR
+                )
+                _feature_periods.append(
+                    FeaturePeriod(puom, int(matches[1]), int(matches[3]))
+                )
         self.feature_periods = _feature_periods
 
     # would prefer list[Type[Feature]] as type hint but
