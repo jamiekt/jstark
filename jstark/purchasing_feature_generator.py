@@ -43,7 +43,10 @@ class PurchasingFeatureGenerator:
         ],
     ) -> None:
         self.as_at = as_at
-        regex = r"^(\d*)([dwmqy])(\d*)$"  # https://regex101.com/r/Xvf3ey/1
+        period_unit_of_measure_values = "".join([e.value for e in PeriodUnitOfMeasure])
+        regex = (
+            r"^(\d*)([" + period_unit_of_measure_values + r"])(\d*)$"
+        )  # https://regex101.com/r/Xvf3ey/1
         _feature_periods = []
         for fp in feature_periods:
             if isinstance(fp, FeaturePeriod):
