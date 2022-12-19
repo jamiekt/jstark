@@ -2,8 +2,8 @@
 Encapsulate the period of a feature, defined by a unit of time
 measure, a start and an end
 """
-from .exceptions import FeaturePeriodEndGreaterThanStartError
 from jstark.period_unit_of_measure import PeriodUnitOfMeasure
+from .exceptions import FeaturePeriodEndGreaterThanStartError
 
 
 class FeaturePeriod:
