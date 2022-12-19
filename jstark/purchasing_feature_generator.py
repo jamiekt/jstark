@@ -42,6 +42,8 @@ class PurchasingFeatureGenerator:
             FeaturePeriod(PeriodUnitOfMeasure.DAY, 4, 3),
         ],
     ) -> None:
+        # sourcery skip: use-named-expression
+        # walrus operator not supported until python3.8, we are still supporting 3.7
         self.as_at = as_at
         period_unit_of_measure_values = "".join([e.value for e in PeriodUnitOfMeasure])
         regex = (
