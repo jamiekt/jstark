@@ -16,7 +16,7 @@ class FeaturePeriod:
         self, period_unit_of_measure: PeriodUnitOfMeasure, start: int, end: int
     ) -> None:
         if not isinstance(period_unit_of_measure, PeriodUnitOfMeasure):
-            raise RuntimeError(
+            raise TypeError(
                 (
                     "period_unit_of_measure needs to be of type "
                     + f"PeriodUnitOfMeasure, not {type(period_unit_of_measure)}"

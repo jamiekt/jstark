@@ -80,3 +80,12 @@ def test_feature_period_code_for_quarter():
 
 def test_feature_period_code_for_year():
     assert FeaturePeriod(PeriodUnitOfMeasure.YEAR, 3, 2).mnemonic == "3y2"
+
+
+def test_argument_of_wrong_types_raises():
+    with pytest.raises(TypeError) as exc_info:
+        FeaturePeriod("YEAR", 3, 2)
+    assert str(exc_info.value) == (
+        "period_unit_of_measure needs to be of type "
+        + "PeriodUnitOfMeasure, not <class 'str'>"
+    )
