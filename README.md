@@ -57,18 +57,9 @@ Run the following code that summarises the number of baskets per quarter in 2021
 from datetime import date
 from jstark.sample.transactions import FakeTransactions
 from jstark.purchasing_feature_generator import PurchasingFeatureGenerator
-from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
 
 input_df = FakeTransactions().get_df(seed=42, number_of_baskets=10000)
-pfg = PurchasingFeatureGenerator(
-        date(2022, 1, 1),
-        [
-            FeaturePeriod(PeriodUnitOfMeasure.QUARTER, 4, 4),
-            FeaturePeriod(PeriodUnitOfMeasure.QUARTER, 3, 3),
-            FeaturePeriod(PeriodUnitOfMeasure.QUARTER, 2, 2),
-            FeaturePeriod(PeriodUnitOfMeasure.QUARTER, 1, 1),
-        ],
-    )
+pfg = PurchasingFeatureGenerator(date(2022, 1, 1), ["4q4", "3q3", "2q2", "1q1"])
 output_df = input_df.groupBy().agg(*pfg.features)
 basket_counts_df = (output_df.
     select("BasketCount_4q4", "BasketCount_3q3", "BasketCount_2q2", "BasketCount_1q1"))
@@ -128,13 +119,7 @@ output_stores_df = input_df.groupBy("Store").agg(*pfg.features)
 And then perhaps examine different features, number of baskets and number of customers in the first half of 2021 versus the second half:
 
 ```python
-pfg2 = PurchasingFeatureGenerator(
-        date(2022, 1, 1),
-        [
-            FeaturePeriod(PeriodUnitOfMeasure.MONTH, 12, 7),
-            FeaturePeriod(PeriodUnitOfMeasure.MONTH, 6, 1)
-        ]
-    )
+pfg2 = PurchasingFeatureGenerator(date(2022, 1, 1),["12m7","6m1"])
 output_stores_h1h2_df = input_df.groupBy("Store").agg(*pfg2.features)
 (output_stores_h1h2_df.
     select(

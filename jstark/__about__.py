@@ -3,4 +3,4 @@
 # SPDX-License-Identifier: MIT
 """__about__.py
 """
-__version__ = "0.0.7"
+__version__ = "0.0.8"
