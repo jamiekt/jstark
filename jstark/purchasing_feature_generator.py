@@ -55,10 +55,7 @@ class PurchasingFeatureGenerator:
                         e.value for e in PeriodUnitOfMeasure
                     ]
                     if matches[2] not in period_unit_of_measure_values:
-                        raise RuntimeError(
-                            f"{matches[2]} is not a valid PeriodUnitOfMeasure "
-                            + f"value ({period_unit_of_measure_values})"
-                        )
+                        raise FeaturePeriodMnemonicIsInvalid
                     else:
                         puom = (
                             PeriodUnitOfMeasure.DAY

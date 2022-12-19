@@ -1,12 +1,14 @@
 from datetime import date, datetime, timedelta
+import pytest
 from pyspark.sql import DataFrame, Row
 import pyspark.sql.functions as f
 
 from jstark.purchasing_feature_generator import PurchasingFeatureGenerator
 from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
+from jstark.exceptions import FeaturePeriodMnemonicIsInvalid
 
 
-def test_feature_period_str():
+def test_feature_period_mnemonic():
     pfg1 = PurchasingFeatureGenerator(
         date.today(), [FeaturePeriod(PeriodUnitOfMeasure.DAY, 0, 0)]
     )
@@ -17,6 +19,33 @@ def test_feature_period_str():
     )
     assert pfg1.feature_periods[0].start == pfg2.feature_periods[0].start
     assert pfg1.feature_periods[0].end == pfg2.feature_periods[0].end
+
+
+def test_feature_period_invalid_mnemonic():
+    with pytest.raises(FeaturePeriodMnemonicIsInvalid) as exc_info:
+        PurchasingFeatureGenerator(date.today(), ["qwerty"])
+    assert str(exc_info.value) == (
+        "FeaturePeriod mnemonic must be an integer followed by a letter "
+        + "from ['d', 'w', 'm', 'q', 'y'] followed by an integer"
+    )
+
+
+def test_feature_period_invalid_mnemonic_empty_string():
+    with pytest.raises(FeaturePeriodMnemonicIsInvalid) as exc_info:
+        PurchasingFeatureGenerator(date.today(), [""])
+    assert str(exc_info.value) == (
+        "FeaturePeriod mnemonic must be an integer followed by a letter "
+        + "from ['d', 'w', 'm', 'q', 'y'] followed by an integer"
+    )
+
+
+def test_feature_period_invalid_mnemonic_unit_of_measure():
+    with pytest.raises(FeaturePeriodMnemonicIsInvalid) as exc_info:
+        PurchasingFeatureGenerator(date.today(), ["0z0"])
+    assert str(exc_info.value) == (
+        "FeaturePeriod mnemonic must be an integer followed by a letter "
+        + "from ['d', 'w', 'm', 'q', 'y'] followed by an integer"
+    )
 
 
 def test_parse_references_grossspend():
