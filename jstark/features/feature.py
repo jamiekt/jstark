@@ -126,6 +126,7 @@ class Feature(metaclass=ABCMeta):
             ),
             "generated-at": datetime.now().strftime("%Y-%m-%d"),
             "commentary": self.commentary,
+            "name-stem": str(type(self).__name__),
         }
 
 

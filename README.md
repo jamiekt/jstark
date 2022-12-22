@@ -142,15 +142,18 @@ output_stores_h1h2_df = input_df.groupBy("Store").agg(*pfg2.features)
 At this point you may wonder what other features are available other than BasketCount & CustomerCount
 
 ```python
-pprint([c.name for c in output_df.schema if c.name.endswith("1q1")])
+pprint({c.metadata["name-stem"] for c in df.schema})
 ```
 ```shell
-['Count_1q1',
- 'NetSpend_1q1',
- 'GrossSpend_1q1',
- 'RecencyDays_1q1',
- 'BasketCount_1q1',
- 'StoreCount_1q1',
+{'ApproxBasketCount',
+ 'ApproxCustomerCount',
+ 'AverageGrossSpendPerBasket',
+ 'AvgQuantityPerBasket',
+ 'BasketCount',
+ 'ChannelCount',
+ 'Count',
+ 'CustomerCount',
+ 'Discount',
  <snip>
  ...
  ...
