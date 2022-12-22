@@ -180,18 +180,18 @@ pfg.references["AverageGrossSpendPerBasket_1q1"]   # ['Basket', 'GrossSpend', 'T
 To find out what all columns are required by all features
 
 ```python
-pprint({k:v for (k,v) in pfg.references.items() if k.endswith("1q1")})
+pprint({k.split("_")[0]:v for (k,v) in pfg.references.items()})
 ```
 ```shell
-{'ApproxBasketCount_1q1': ['Basket', 'Timestamp'],
- 'ApproxCustomerCount_1q1': ['Customer', 'Timestamp'],
- 'AverageGrossSpendPerBasket_1q1': ['Basket', 'GrossSpend', 'Timestamp'],
- 'AvgQuantityPerBasket_1q1': ['Basket', 'Quantity', 'Timestamp'],
- 'BasketCount_1q1': ['Basket', 'Timestamp'],
- 'ChannelCount_1q1': ['Channel', 'Timestamp'],
- 'Count_1q1': ['Timestamp'],
- 'CustomerCount_1q1': ['Customer', 'Timestamp'],
- 'Discount_1q1': ['Discount', 'Timestamp'],
+{'ApproxBasketCount': ['Basket', 'Timestamp'],
+ 'ApproxCustomerCount': ['Customer', 'Timestamp'],
+ 'AverageGrossSpendPerBasket': ['Basket', 'GrossSpend', 'Timestamp'],
+ 'AvgQuantityPerBasket': ['Basket', 'Quantity', 'Timestamp'],
+ 'BasketCount': ['Basket', 'Timestamp'],
+ 'ChannelCount': ['Channel', 'Timestamp'],
+ 'Count': ['Timestamp'],
+ 'CustomerCount': ['Customer', 'Timestamp'],
+ 'Discount': ['Discount', 'Timestamp'],
  <snip>
  ...
  ...
