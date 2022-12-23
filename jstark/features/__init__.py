@@ -25,6 +25,7 @@ from .min_gross_price import MinGrossPrice
 from .max_gross_price import MaxGrossPrice
 from .earliest_purchase_date import EarliestPurchaseDate
 from .average_discount_per_basket import AvgDiscountPerBasket
+from .average_purchase_cycle import AvgPurchaseCycle
 
 __all__ = [
     "BaseFeature",
@@ -54,4 +55,5 @@ __all__ = [
     "MaxGrossPrice",
     "EarliestPurchaseDate",
     "AvgDiscountPerBasket",
+    "AvgPurchaseCycle",
 ]
