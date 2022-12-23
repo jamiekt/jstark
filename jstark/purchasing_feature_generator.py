@@ -30,6 +30,7 @@ from jstark.features import (
     MinGrossPrice,
     MaxGrossPrice,
     EarliestPurchaseDate,
+    AvgDiscountPerBasket,
 )
 from jstark.exceptions import FeaturePeriodMnemonicIsInvalid
 
@@ -98,6 +99,7 @@ class PurchasingFeatureGenerator:
         MinGrossPrice,
         MaxGrossPrice,
         EarliestPurchaseDate,
+        AvgDiscountPerBasket,
     ]
 
     @property
