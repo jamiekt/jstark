@@ -26,7 +26,7 @@ class CyclesSinceLastPurchase(DerivedFeature):
         return (
             "Days since last purchase divided by average purchase cycle. "
             + "This may be a very good predictor of when a customer is "
-            + "likely to buy a next buy a particular product."
+            + "likely to next buy a particular product."
         )
 
     def default_value(self) -> Column:
