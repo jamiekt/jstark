@@ -23,6 +23,7 @@ from .min_net_price import MinNetPrice
 from .max_net_price import MaxNetPrice
 from .min_gross_price import MinGrossPrice
 from .max_gross_price import MaxGrossPrice
+from .earliest_purchase_date import EarliestPurchaseDate
 
 __all__ = [
     "BaseFeature",
@@ -50,4 +51,5 @@ __all__ = [
     "MaxNetPrice",
     "MinGrossPrice",
     "MaxGrossPrice",
+    "EarliestPurchaseDate",
 ]

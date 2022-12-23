@@ -13,6 +13,9 @@ class MostRecentPurchaseDate(Max):
     def description_subject(self) -> str:
         return "Most recent purchase date"
 
+    def default_value(self) -> Column:
+        return f.lit(None)
+
     @property
     def commentary(self) -> str:
         return (

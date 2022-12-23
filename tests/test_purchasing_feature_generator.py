@@ -340,3 +340,10 @@ def test_min_gross_price_luke_and_leia_0y0(luke_and_leia_purchases_first: Row):
 def test_max_gross_price_luke_and_leia_0y0(luke_and_leia_purchases_first: Row):
     """Test MaxGrossPrice_0y0"""
     assert float(luke_and_leia_purchases_first["MaxGrossPrice_0y0"]) == 4.0
+
+
+def test_earliest_purchase_date_luke_and_leia_0y0(luke_and_leia_purchases_first: Row):
+    """Test EarliestPurchaseDate_2y0"""
+    assert luke_and_leia_purchases_first["EarliestPurchaseDate_2y0"] == date(
+        2021, 11, 30
+    )
