@@ -27,6 +27,7 @@ from .earliest_purchase_date import EarliestPurchaseDate
 from .average_discount_per_basket import AvgDiscountPerBasket
 from .average_purchase_cycle import AvgPurchaseCycle
 from .cycles_since_last_purchase import CyclesSinceLastPurchase
+from .basket_periods import BasketPeriods
 
 __all__ = [
     "BaseFeature",
@@ -58,4 +59,5 @@ __all__ = [
     "AvgDiscountPerBasket",
     "AvgPurchaseCycle",
     "CyclesSinceLastPurchase",
+    "BasketPeriods",
 ]
