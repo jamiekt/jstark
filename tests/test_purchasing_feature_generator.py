@@ -347,3 +347,68 @@ def test_earliest_purchase_date_luke_and_leia_0y0(luke_and_leia_purchases_first:
     assert luke_and_leia_purchases_first["EarliestPurchaseDate_2y0"] == date(
         2021, 11, 30
     )
+
+
+def test_basketweeks(
+    as_at_timestamp: datetime, dataframe_of_faker_purchases: DataFrame
+):
+    """Test BasketWeeks
+
+    BasketWeeks is the number of weeks in which at least one basket was purchased
+
+    The result here is 5 because the input dataset includes data from 2021 whereas the
+    specified as_at date is 2022-11-30, so there are only 5 weeks in the 52 weeks
+    leading up to 2022-11-30 in which any baskets were purchased
+    """
+    pfg = PurchasingFeatureGenerator(as_at=as_at_timestamp, feature_periods=["52w0"])
+    output_df = (
+        dataframe_of_faker_purchases.groupBy()
+        .agg(*pfg.features)
+        .select("BasketWeeks_52w0")
+    )
+    first = output_df.first()
+    assert first is not None
+    assert first["BasketWeeks_52w0"] == 5
+
+
+def test_basketweeks_by_product_and_customer(
+    as_at_timestamp: datetime, dataframe_of_faker_purchases: DataFrame
+):
+    """Test BasketWeeks by product and customer
+
+    Filtering on a specific Customer and Product whose activity
+    we happen to know about.
+    as_at set at the date immediately after the period for which sample transactions
+    are being supplied.
+    """
+    pfg = PurchasingFeatureGenerator(as_at=date(2022, 1, 1), feature_periods=["52w0"])
+    output_df = (
+        dataframe_of_faker_purchases.where("Customer = 'John Williams'")
+        .where("Product = 'Ice Cream'")
+        .groupBy(["Product", "Customer"])
+        .agg(*pfg.features)
+        .select("BasketWeeks_52w0")
+    )
+    first = output_df.first()
+    assert first is not None
+    assert first["BasketWeeks_52w0"] == 6
+
+
+def test_basketweeks_commentary(
+    as_at_timestamp: datetime, dataframe_of_faker_purchases: DataFrame
+):
+    """Test BasketWeeks commentary"""
+    pfg = PurchasingFeatureGenerator(as_at=as_at_timestamp, feature_periods=["52w1"])
+    output_df = (
+        dataframe_of_faker_purchases.groupBy()
+        .agg(*pfg.features)
+        .select("BasketWeeks_52w1")
+    )
+    assert [(c.metadata["commentary"]) for c in output_df.schema][0] == (
+        "The number of weeks in which at least one basket was purchased. "
+        + "The value will be in the range 0 to 52"
+        + " because 52 is the number of weeks between 2021-11-28 and 2022-11-26."
+        + " When grouped by Customer and Product"
+        + " this feature is a useful indicator of the frequency of which a"
+        + " Customer purchases a Product."
+    )

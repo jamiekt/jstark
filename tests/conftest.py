@@ -35,6 +35,13 @@ def purchases_schema() -> StructType:
 
 
 @pytest.fixture(scope="session")
+def dataframe_of_faker_purchases(
+    spark_session: SparkSession, as_at_timestamp: datetime, purchases_schema: StructType
+) -> DataFrame:
+    return FakeTransactions().get_df(seed=42, number_of_baskets=10000)
+
+
+@pytest.fixture(scope="session")
 def dataframe_of_purchases(
     spark_session: SparkSession, as_at_timestamp: datetime, purchases_schema: StructType
 ) -> DataFrame:
