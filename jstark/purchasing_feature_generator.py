@@ -32,6 +32,9 @@ from jstark.features import (
     AvgPurchaseCycle,
     CyclesSinceLastPurchase,
     BasketPeriods,
+    RecencyWeightedBasket99,
+    RecencyWeightedBasket90,
+    RecencyWeightedBasket95,
 )
 from jstark.feature_generator import FeatureGenerator
 
@@ -79,4 +82,7 @@ class PurchasingFeatureGenerator(FeatureGenerator):
         AvgPurchaseCycle,
         CyclesSinceLastPurchase,
         BasketPeriods,
+        RecencyWeightedBasket95,
+        RecencyWeightedBasket90,
+        RecencyWeightedBasket99,
     ]

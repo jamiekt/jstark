@@ -28,6 +28,11 @@ from .average_discount_per_basket import AvgDiscountPerBasket
 from .average_purchase_cycle import AvgPurchaseCycle
 from .cycles_since_last_purchase import CyclesSinceLastPurchase
 from .basket_periods import BasketPeriods
+from .recency_weighted_basket import (
+    RecencyWeightedBasket90,
+    RecencyWeightedBasket95,
+    RecencyWeightedBasket99,
+)
 
 __all__ = [
     "BaseFeature",
@@ -60,4 +65,7 @@ __all__ = [
     "AvgPurchaseCycle",
     "CyclesSinceLastPurchase",
     "BasketPeriods",
+    "RecencyWeightedBasket90",
+    "RecencyWeightedBasket95",
+    "RecencyWeightedBasket99",
 ]
