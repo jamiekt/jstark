@@ -1,5 +1,6 @@
 from datetime import date, datetime, timedelta
 import pytest
+from math import pow
 from pyspark.sql import DataFrame, Row
 import pyspark.sql.functions as f
 
@@ -371,9 +372,7 @@ def test_basketweeks(
     assert first["BasketWeeks_52w0"] == 5
 
 
-def test_basketweeks_by_product_and_customer(
-    as_at_timestamp: datetime, dataframe_of_faker_purchases: DataFrame
-):
+def test_basketweeks_by_product_and_customer(dataframe_of_faker_purchases: DataFrame):
     """Test BasketWeeks by product and customer
 
     Filtering on a specific Customer and Product whose activity
@@ -411,4 +410,84 @@ def test_basketweeks_commentary(
         + " When grouped by Customer and Product"
         + " this feature is a useful indicator of the frequency of which a"
         + " Customer purchases a Product."
+    )
+
+
+def test_recencyweightedbasketweeks_luke_and_leia(
+    as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame
+):
+    """Test RecencyWeightedBasketWeeks
+
+    This test verifies the correct value of RecencyWeightedBasketsWeeksXX by calculating
+    the BasketCount for each individual week, calculating the smoothed value for that ,
+    week then summing all those values. This is exactly the same calculation that is
+    performed by the feature generator so it might be argued that this test doesn't add
+    any value. I don't agree that that is the case however, it helps to demonstrate
+    exactly what this feature provides and given that its not an easy one to explain, I
+    think that has some value.
+    """
+    fg = PurchasingFeatureGenerator(
+        as_at=as_at_timestamp.date(),
+        feature_periods=[
+            FeaturePeriod(PeriodUnitOfMeasure.WEEK, 13, 0),
+            FeaturePeriod(PeriodUnitOfMeasure.WEEK, 0, 0),
+            FeaturePeriod(PeriodUnitOfMeasure.WEEK, 1, 1),
+            FeaturePeriod(PeriodUnitOfMeasure.WEEK, 2, 2),
+            FeaturePeriod(PeriodUnitOfMeasure.WEEK, 3, 3),
+            FeaturePeriod(PeriodUnitOfMeasure.WEEK, 4, 4),
+            FeaturePeriod(PeriodUnitOfMeasure.WEEK, 5, 5),
+            FeaturePeriod(PeriodUnitOfMeasure.WEEK, 6, 6),
+            FeaturePeriod(PeriodUnitOfMeasure.WEEK, 7, 7),
+            FeaturePeriod(PeriodUnitOfMeasure.WEEK, 8, 8),
+            FeaturePeriod(PeriodUnitOfMeasure.WEEK, 9, 9),
+            FeaturePeriod(PeriodUnitOfMeasure.WEEK, 10, 10),
+            FeaturePeriod(PeriodUnitOfMeasure.WEEK, 11, 11),
+            FeaturePeriod(PeriodUnitOfMeasure.WEEK, 12, 12),
+            FeaturePeriod(PeriodUnitOfMeasure.WEEK, 13, 13),
+        ],
+    )
+    df = luke_and_leia_purchases.groupBy().agg(*fg.features)
+    df2 = df.select(
+        "BasketCount_0w0",
+        "BasketCount_1w1",
+        "BasketCount_2w2",
+        "BasketCount_3w3",
+        "BasketCount_4w4",
+        "BasketCount_5w5",
+        "BasketCount_6w6",
+        "BasketCount_7w7",
+        "BasketCount_8w8",
+        "BasketCount_9w9",
+        "BasketCount_10w10",
+        "BasketCount_11w11",
+        "BasketCount_12w12",
+        "BasketCount_13w13",
+    )
+    df_first = df.first()
+    df2_first = df2.first()
+    assert df_first is not None
+    assert df2_first is not None
+    recency_weighted_basket_count_weeks_90 = 0.0
+    recency_weighted_basket_count_weeks_95 = 0.0
+    recency_weighted_basket_count_weeks_99 = 0.0
+    for i in range(14):
+        # Loop over all the weeks, calculate the smoothed value for each,
+        # then sum them all up
+        recency_weighted_basket_count_weeks_90 += float(
+            df2_first[f"BasketCount_{i}w{i}"]
+        ) * pow(0.9, i)
+        recency_weighted_basket_count_weeks_95 += float(
+            df2_first[f"BasketCount_{i}w{i}"]
+        ) * pow(0.95, i)
+        recency_weighted_basket_count_weeks_99 += float(
+            df2_first[f"BasketCount_{i}w{i}"]
+        ) * pow(0.99, i)
+    assert recency_weighted_basket_count_weeks_90 == float(
+        df_first["RecencyWeightedBasketWeeks90_13w0"]
+    )
+    assert recency_weighted_basket_count_weeks_95 == float(
+        df_first["RecencyWeightedBasketWeeks95_13w0"]
+    )
+    assert recency_weighted_basket_count_weeks_99 == float(
+        df_first["RecencyWeightedBasketWeeks99_13w0"]
     )

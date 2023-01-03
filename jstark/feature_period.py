@@ -62,3 +62,8 @@ class FeaturePeriod:
             f"Between {self.start} and {self.end} "
             + f"{self.period_unit_of_measure.name.lower()}s ago"
         )
+
+    @property
+    def number_of_periods(self) -> int:
+        "Number of periods between start and end (inclusive)"
+        return self.start - self.end + 1
