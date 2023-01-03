@@ -371,9 +371,7 @@ def test_basketweeks(
     assert first["BasketWeeks_52w0"] == 5
 
 
-def test_basketweeks_by_product_and_customer(
-    as_at_timestamp: datetime, dataframe_of_faker_purchases: DataFrame
-):
+def test_basketweeks_by_product_and_customer(dataframe_of_faker_purchases: DataFrame):
     """Test BasketWeeks by product and customer
 
     Filtering on a specific Customer and Product whose activity
@@ -412,3 +410,52 @@ def test_basketweeks_commentary(
         + " this feature is a useful indicator of the frequency of which a"
         + " Customer purchases a Product."
     )
+
+
+def test_recencyweightedbasketweeks_luke_and_leia(
+    as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame
+):
+    """Test RecencyWeightedBasketWeeks95"""
+    fg = PurchasingFeatureGenerator(
+        as_at=as_at_timestamp.date(),
+        feature_periods=[
+            FeaturePeriod(PeriodUnitOfMeasure.WEEK, 13, 0),
+            # FeaturePeriod(PeriodUnitOfMeasure.WEEK, 0, 0),
+            # FeaturePeriod(PeriodUnitOfMeasure.WEEK, 1, 1),
+            # FeaturePeriod(PeriodUnitOfMeasure.WEEK, 2, 2),
+            # FeaturePeriod(PeriodUnitOfMeasure.WEEK, 3, 3),
+            # FeaturePeriod(PeriodUnitOfMeasure.WEEK, 4, 4),
+            # FeaturePeriod(PeriodUnitOfMeasure.WEEK, 5, 5),
+            # FeaturePeriod(PeriodUnitOfMeasure.WEEK, 6, 6),
+            # FeaturePeriod(PeriodUnitOfMeasure.WEEK, 7, 7),
+            # FeaturePeriod(PeriodUnitOfMeasure.WEEK, 8, 8),
+            # FeaturePeriod(PeriodUnitOfMeasure.WEEK, 9, 9),
+            # FeaturePeriod(PeriodUnitOfMeasure.WEEK, 10, 10),
+            # FeaturePeriod(PeriodUnitOfMeasure.WEEK, 11, 11),
+            # FeaturePeriod(PeriodUnitOfMeasure.WEEK, 12, 12),
+            # FeaturePeriod(PeriodUnitOfMeasure.WEEK, 13, 13)
+        ],
+    )
+    df = luke_and_leia_purchases.groupBy().agg(*fg.features)
+    # df2 = df.select(
+    #     "BasketCount_0w0",
+    #     "BasketCount_1w1",
+    #     "BasketCount_2w2",
+    #     "BasketCount_3w3",
+    #     "BasketCount_4w4",
+    #     "BasketCount_5w5",
+    #     "BasketCount_6w6",
+    #     "BasketCount_7w7",
+    #     "BasketCount_8w8",
+    #     "BasketCount_9w9",
+    #     "BasketCount_10w10",
+    #     "BasketCount_11w11",
+    #     "BasketCount_12w12",
+    #     "BasketCount_13w13")
+    # breakpoint()
+    first = df.first()
+    assert first is not None
+    assert float(first["BasketCount_13w0"]) == 5
+    assert float(first["RecencyWeightedBasketWeeks90_13w0"]) == 3.5491684401000003
+    assert float(first["RecencyWeightedBasketWeeks95_13w0"]) == 4.175017876738378
+    assert float(first["RecencyWeightedBasketWeeks99_13w0"]) == 4.815472124908804
