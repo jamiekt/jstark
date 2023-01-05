@@ -35,6 +35,8 @@ Your workspace settings (**./.vscode/settings.json**) should look something like
 
 ## Troubleshooting
 
+### libffi-dev on wsl
+
 Hatch is used to maintain the development environment. I started out using wsl and ran into a lot
 of problems because I installed a version of python, using pyenv, without having **libffi-dev** installed.
 
@@ -44,3 +46,18 @@ The symptom of this was that when trying to install pyspark I got error
 
 Solved it by installing **libffi-dev** as per [https://www.pythonpool.com/modulenotfounderror-no-module-named-_ctypes-solved/](https://www.pythonpool.com/modulenotfounderror-no-module-named-_ctypes-solved/)
 and *then* installing my chosen python version (which happened to be python 3.10).
+
+### Java runtime
+
+pyspark requires a Java runtime in order to work. Hence if you get error:
+
+> The operation couldn’t be completed. Unable to locate a Java Runtime. 
+> Please visit http://www.java.com for information on installing Java.
+
+when trying to run pyspark you will need to install a Java runtime. On my mac I did
+this by issuing:
+
+```shell
+brew install openjdk@11
+export JAVA_HOME=/opt/homebrew/opt/openjdk@11/libexec/openjdk.jdk/Contents/Home
+```
