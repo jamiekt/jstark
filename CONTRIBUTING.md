@@ -51,8 +51,7 @@ and *then* installing my chosen python version (which happened to be python 3.10
 
 pyspark requires a Java runtime in order to work. Hence if you get error:
 
-> The operation couldn’t be completed. Unable to locate a Java Runtime. 
-> Please visit http://www.java.com for information on installing Java.
+> The operation couldn’t be completed. Unable to locate a Java Runtime.
 
 when trying to run pyspark you will need to install a Java runtime. On my mac I did
 this by issuing:
