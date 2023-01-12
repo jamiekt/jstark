@@ -17,7 +17,7 @@ class FeatureGenerator(metaclass=ABCMeta):
     def __init__(
         self,
         as_at: date,
-        feature_periods: List[Union[FeaturePeriod, str]] = [
+        feature_periods: Union[List[FeaturePeriod], List[str]] = [
             FeaturePeriod(PeriodUnitOfMeasure.WEEK, 52, 0),
         ],
     ) -> None:

@@ -35,6 +35,7 @@ from jstark.features import (
     RecencyWeightedBasket99,
     RecencyWeightedBasket90,
     RecencyWeightedBasket95,
+    AverageBasket,
 )
 from jstark.feature_generator import FeatureGenerator
 
@@ -43,7 +44,7 @@ class PurchasingFeatureGenerator(FeatureGenerator):
     def __init__(
         self,
         as_at: date,
-        feature_periods: List[Union[FeaturePeriod, str]] = [
+        feature_periods: Union[List[FeaturePeriod], List[str]] = [
             FeaturePeriod(PeriodUnitOfMeasure.DAY, 2, 0),
             FeaturePeriod(PeriodUnitOfMeasure.DAY, 4, 3),
         ],
@@ -85,4 +86,5 @@ class PurchasingFeatureGenerator(FeatureGenerator):
         RecencyWeightedBasket95,
         RecencyWeightedBasket90,
         RecencyWeightedBasket99,
+        AverageBasket,
     ]
