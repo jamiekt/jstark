@@ -435,7 +435,7 @@ def get_dataframes_for_perweek_feature_tests(as_at_timestamp, luke_and_leia_purc
         ],
     )
     df = luke_and_leia_purchases.groupBy().agg(*fg.features)
-    df2 = df.select(
+    weeks_df = df.select(
         "BasketCount_0w0",
         "BasketCount_1w1",
         "BasketCount_2w2",
@@ -452,10 +452,10 @@ def get_dataframes_for_perweek_feature_tests(as_at_timestamp, luke_and_leia_purc
         "BasketCount_13w13",
     )
     df_first = df.first()
-    df2_first = df2.first()
+    weeks_df_first = weeks_df.first()
     assert df_first is not None
-    assert df2_first is not None
-    return df_first, df2_first
+    assert weeks_df_first is not None
+    return df_first, weeks_df_first
 
 
 def test_recencyweightedbasketweeks_luke_and_leia(
@@ -463,15 +463,17 @@ def test_recencyweightedbasketweeks_luke_and_leia(
 ):
     """Test RecencyWeightedBasketWeeks
 
-    This test verifies the correct value of RecencyWeightedBasketsWeeksXX by calculating
+    This test verifies the correct value of RecencyWeightedBasketWeeksXX by calculating
     the BasketCount for each individual week, calculating the smoothed value for that ,
     week then summing all those values. This is exactly the same calculation that is
     performed by the feature generator so it might be argued that this test doesn't add
     any value. I don't agree that that is the case however, it helps to demonstrate
     exactly what this feature provides and given that its not an easy one to explain, I
     think that has some value.
+
+    A later addition to this test also verifies RecencyWeightedApproxBasketWeeksXX
     """
-    df_first, df2_first = get_dataframes_for_perweek_feature_tests(
+    df_first, df_weeks_first = get_dataframes_for_perweek_feature_tests(
         as_at_timestamp, luke_and_leia_purchases
     )
     recency_weighted_basket_count_weeks_90 = 0.0
@@ -481,13 +483,13 @@ def test_recencyweightedbasketweeks_luke_and_leia(
         # Loop over all the weeks, calculate the smoothed value for each,
         # then sum them all up
         recency_weighted_basket_count_weeks_90 += float(
-            df2_first[f"BasketCount_{i}w{i}"]
+            df_weeks_first[f"BasketCount_{i}w{i}"]
         ) * pow(0.9, i)
         recency_weighted_basket_count_weeks_95 += float(
-            df2_first[f"BasketCount_{i}w{i}"]
+            df_weeks_first[f"BasketCount_{i}w{i}"]
         ) * pow(0.95, i)
         recency_weighted_basket_count_weeks_99 += float(
-            df2_first[f"BasketCount_{i}w{i}"]
+            df_weeks_first[f"BasketCount_{i}w{i}"]
         ) * pow(0.99, i)
     assert recency_weighted_basket_count_weeks_90 == float(
         df_first["RecencyWeightedBasketWeeks90_13w0"]
@@ -498,16 +500,19 @@ def test_recencyweightedbasketweeks_luke_and_leia(
     assert recency_weighted_basket_count_weeks_99 == float(
         df_first["RecencyWeightedBasketWeeks99_13w0"]
     )
+    assert df_first["RecencyWeightedApproxBasketWeeks90_13w0"] == 3.943520489
+    assert df_first["RecencyWeightedApproxBasketWeeks95_13w0"] == 4.394755659724609
+    assert df_first["RecencyWeightedApproxBasketWeeks99_13w0"] == 4.864113257483641
 
 
 def test_averagebasketsperweek_luke_and_leia(
     as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame
 ):
     """Test AverageBasketsPerWeek"""
-    df_first, df2_first = get_dataframes_for_perweek_feature_tests(
+    df_first, df_weeks_first = get_dataframes_for_perweek_feature_tests(
         as_at_timestamp, luke_and_leia_purchases
     )
     n = 14
-    total_baskets = sum(df2_first[f"BasketCount_{i}w{i}"] for i in range(n))
+    total_baskets = sum(df_weeks_first[f"BasketCount_{i}w{i}"] for i in range(n))
     average_baskets_per_week = total_baskets / n
     assert average_baskets_per_week == df_first["AverageBasketsPerWeek_13w0"]

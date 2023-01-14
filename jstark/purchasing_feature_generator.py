@@ -35,6 +35,9 @@ from jstark.features import (
     RecencyWeightedBasket99,
     RecencyWeightedBasket90,
     RecencyWeightedBasket95,
+    RecencyWeightedApproxBasket90,
+    RecencyWeightedApproxBasket95,
+    RecencyWeightedApproxBasket99,
     AverageBasket,
 )
 from jstark.feature_generator import FeatureGenerator
@@ -86,5 +89,8 @@ class PurchasingFeatureGenerator(FeatureGenerator):
         RecencyWeightedBasket95,
         RecencyWeightedBasket90,
         RecencyWeightedBasket99,
+        RecencyWeightedApproxBasket95,
+        RecencyWeightedApproxBasket90,
+        RecencyWeightedApproxBasket99,
         AverageBasket,
     ]
