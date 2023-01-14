@@ -32,6 +32,9 @@ from .recency_weighted_basket import (
     RecencyWeightedBasket90,
     RecencyWeightedBasket95,
     RecencyWeightedBasket99,
+    RecencyWeightedApproxBasket90,
+    RecencyWeightedApproxBasket95,
+    RecencyWeightedApproxBasket99,
 )
 from .average_basket import AverageBasket
 
@@ -69,5 +72,8 @@ __all__ = [
     "RecencyWeightedBasket90",
     "RecencyWeightedBasket95",
     "RecencyWeightedBasket99",
+    "RecencyWeightedApproxBasket90",
+    "RecencyWeightedApproxBasket95",
+    "RecencyWeightedApproxBasket99",
     "AverageBasket",
 ]
