@@ -20,7 +20,7 @@ pip install jstark
 ## Introduction
 
 Data science relies on summarising data so it can be used in machine learning models, those summarised data values
-are referred to as *features*. Some common requirements when summarising data as features are:
+are referred to as *features*. Some common needs when summarising data as features are:
 
 * ability to create features as they were at a certain point in time
 * ability to create features that summarise different time periods (for example, each month of a year)
@@ -32,11 +32,49 @@ A popular technology for producing features is [Apache Spark](https://spark.apac
 python-based implementation, [PySpark](https://spark.apache.org/docs/latest/api/python/). jstark uses PySpark
 to address the requirements listed above.
 
+## jstark features
+
+jstark requires a date as at which all features will be calculated. This is referred to as the *as at* date
+and is a mandatory argument when calling a jstark feature generator.
+
+```python
+# example instantiation of a jstark feature generator
+PurchasingFeatureGenerator(as_at=date.today())
+```
+
+The use of `as_at` means that features can be calculated *as they would have been at* any date in
+the past (assuming you have all the historical data available).
+
+The names of all jstark features follow a consistent pattern with a mnemonic at the end explaining
+the periodicity of the feature. This is best explained with an example:
+
+* BasketCount_3m1
+
+is the distinct count of baskets between 3 months ago and 1 month ago relative to `as_at`
+(this is a frequently used feature in grocery retailing). jstark is capable of calculating
+features over different periodicities in a single spark job. For example, one might want to know
+the number of baskets purchased for the previous 3 months and the 3 months immediately prior
+to that. This could be accomplished like so:
+
+```shell
+PurchasingFeatureGenerator(as_at=date.today(), ["3m1", "6m4"])
+```
+
+which would return features:
+
+* BasketCount_3m1
+* BasketCount_6m4
+
+from a single spark job. In this example the periodicities are measured in months. jstark also
+supports days, weeks, quarters & years.
+
 ## Getting started
 
-Create yourself a virtual environment and install pyspark followed by jstark
+Its very easy to start using jstark duewith the provided fake sample data. Create yourself a virtual
+environment and install pyspark followed by jstark
 
 > **Note**
+>
 > As jstark is still a work-in-progress ("alpha" stage) it is being made available at
 > [https://test.pypi.org/](https://test.pypi.org/) therefore it is required to install pyspark
 > separately. When jstark is hosted at [https://pypi.org/](https://pypi.org/) this won't be necessary.
@@ -60,11 +98,16 @@ from jstark.purchasing_feature_generator import PurchasingFeatureGenerator
 
 input_df = FakeTransactions().get_df(seed=42, number_of_baskets=10000)
 pfg = PurchasingFeatureGenerator(date(2022, 1, 1), ["4q4", "3q3", "2q2", "1q1"])
+
+# pass a feature generator's `features` member to
+# pyspark's `agg()` function using the unpacking operator (*).
 output_df = input_df.groupBy().agg(*pfg.features)
+
 basket_counts_df = (output_df.
     select("BasketCount_4q4", "BasketCount_3q3", "BasketCount_2q2", "BasketCount_1q1"))
 basket_counts_df.show()
 ```
+
 ```shell
 +---------------+---------------+---------------+---------------+
 |BasketCount_4q4|BasketCount_3q3|BasketCount_2q2|BasketCount_1q1|
@@ -75,12 +118,13 @@ basket_counts_df.show()
 
 ### Descriptions
 
-One of the benefits of jstark is all the features have descriptions in their metadata.
+jstark features all have descriptions in their metadata.
 
 ```python
 from pprint import pprint
 pprint([(c.name, c.metadata["description"]) for c in basket_counts_df.schema])
 ```
+
 ```shell
 [('BasketCount_4q4',
   'Distinct count of Baskets between 2021-01-01 and 2021-03-31'),
@@ -104,6 +148,7 @@ output_stores_df = input_df.groupBy("Store").agg(*pfg.features)
     )
     .orderBy("BasketCount_1q1")).show()
 ```
+
 ```shell
 +-----------+---------------+---------------+---------------+---------------+
 |      Store|BasketCount_4q4|BasketCount_3q3|BasketCount_2q2|BasketCount_1q1|
@@ -126,6 +171,7 @@ output_stores_h1h2_df = input_df.groupBy("Store").agg(*pfg2.features)
         "Store", "BasketCount_12m7", "CustomerCount_12m7", "BasketCount_6m1", "CustomerCount_6m1"
     )).show()
 ```
+
 ```shell
 +-----------+----------------+------------------+---------------+-----------------+
 |      Store|BasketCount_12m7|CustomerCount_12m7|BasketCount_6m1|CustomerCount_6m1|
@@ -137,13 +183,16 @@ output_stores_h1h2_df = input_df.groupBy("Store").agg(*pfg2.features)
 |   Richmond|             983|               976|           1015|             1006|
 +-----------+----------------+------------------+---------------+-----------------+
 ```
+
 *Some customers shop more than once hence CustomerCount is lower than BasketCount.*
 
-At this point you may wonder what other features are available other than BasketCount & CustomerCount
+So far we have encountered BasketCount & CustomerCount. Many other features are available
+and it is easy to get a list of them:
 
 ```python
 pprint({c.metadata["name-stem"] for c in df.schema})
 ```
+
 ```shell
 {'ApproxBasketCount',
  'ApproxCustomerCount',
@@ -182,6 +231,7 @@ To find out what all columns are required by all features
 ```python
 pprint({k.split("_")[0]:v for (k,v) in pfg.references.items()})
 ```
+
 ```shell
 {'ApproxBasketCount': ['Basket', 'Timestamp'],
  'ApproxCustomerCount': ['Customer', 'Timestamp'],
@@ -197,7 +247,6 @@ pprint({k.split("_")[0]:v for (k,v) in pfg.references.items()})
  ...
 ```
 
-
 ## License
 
 `jstark` is distributed under the terms of the [MIT](https://spdx.org/licenses/MIT.html) license.
@@ -207,6 +256,7 @@ pprint({k.split("_")[0]:v for (k,v) in pfg.references.items()})
 ### Why is it called jstark?
 
 jstark:
+
 * is phonetically similar to PySpark (which jstark requires)
 * is a homage to
 [comic book character Jon Stark](https://www.worthpoint.com/worthopedia/football-picture-story-monthly-stark-423630034)
