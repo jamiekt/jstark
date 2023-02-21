@@ -43,7 +43,7 @@ from jstark.features import (
 from jstark.feature_generator import FeatureGenerator
 
 
-class PurchasingFeatureGenerator(FeatureGenerator):
+class GroceryRetailerFeatureGenerator(FeatureGenerator):
     def __init__(
         self,
         as_at: date,
