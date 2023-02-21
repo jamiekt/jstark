@@ -70,7 +70,7 @@ supports days, weeks, quarters & years.
 
 ## Getting started
 
-Its very easy to start using jstark duewith the provided fake sample data. Create yourself a virtual
+Its very easy to start using jstark with the provided fake sample data. Create yourself a virtual
 environment and install pyspark followed by jstark
 
 > **Note**
