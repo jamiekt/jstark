@@ -4,7 +4,7 @@ from datetime import date
 from pyspark.sql import DataFrame
 import pyspark.sql.functions as f
 from jstark.sample.transactions import FakeTransactions
-from jstark.purchasing_feature_generator import PurchasingFeatureGenerator
+from jstark.grocery_retailer_feature_generator import GroceryRetailerFeatureGenerator
 from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
 
 
@@ -37,7 +37,7 @@ def test_fake_transactions_returns_same_data_with_same_seed():
     """FakeTransactions has a seed which is used to make sure it returns
     the same data every time.
     """
-    pfg = PurchasingFeatureGenerator(
+    pfg = GroceryRetailerFeatureGenerator(
         date(2022, 1, 1),
         [
             FeaturePeriod(PeriodUnitOfMeasure.QUARTER, 1, 1),

@@ -39,7 +39,7 @@ and is a mandatory argument when calling a jstark feature generator.
 
 ```python
 # example instantiation of a jstark feature generator
-PurchasingFeatureGenerator(as_at=date.today())
+GroceryRetailerFeatureGenerator(as_at=date.today())
 ```
 
 The use of `as_at` means that features can be calculated *as they would have been at* any date in
@@ -57,7 +57,7 @@ the number of baskets purchased for the previous 3 months and the 3 months immed
 to that. This could be accomplished like so:
 
 ```shell
-PurchasingFeatureGenerator(as_at=date.today(), ["3m1", "6m4"])
+GroceryRetailerFeatureGenerator(as_at=date.today(), ["3m1", "6m4"])
 ```
 
 which would return features:
@@ -94,10 +94,10 @@ Run the following code that summarises the number of baskets per quarter in 2021
 ```python
 from datetime import date
 from jstark.sample.transactions import FakeTransactions
-from jstark.purchasing_feature_generator import PurchasingFeatureGenerator
+from jstark.purchasing_feature_generator import GroceryRetailerFeatureGenerator
 
 input_df = FakeTransactions().get_df(seed=42, number_of_baskets=10000)
-pfg = PurchasingFeatureGenerator(date(2022, 1, 1), ["4q4", "3q3", "2q2", "1q1"])
+pfg = GroceryRetailerFeatureGenerator(date(2022, 1, 1), ["4q4", "3q3", "2q2", "1q1"])
 
 # pass a feature generator's `features` member to
 # pyspark's `agg()` function using the unpacking operator (*).
@@ -164,7 +164,7 @@ output_stores_df = input_df.groupBy("Store").agg(*pfg.features)
 And then perhaps examine different features, number of baskets and number of customers in the first half of 2021 versus the second half:
 
 ```python
-pfg2 = PurchasingFeatureGenerator(date(2022, 1, 1),["12m7","6m1"])
+pfg2 = GroceryRetailerFeatureGenerator(date(2022, 1, 1),["12m7","6m1"])
 output_stores_h1h2_df = input_df.groupBy("Store").agg(*pfg2.features)
 (output_stores_h1h2_df.
     select(
