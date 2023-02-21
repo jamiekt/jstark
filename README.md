@@ -94,14 +94,14 @@ Run the following code that summarises the number of baskets per quarter in 2021
 ```python
 from datetime import date
 from jstark.sample.transactions import FakeTransactions
-from jstark.purchasing_feature_generator import GroceryRetailerFeatureGenerator
+from jstark.grocery_retailer_feature_generator import GroceryRetailerFeatureGenerator
 
 input_df = FakeTransactions().get_df(seed=42, number_of_baskets=10000)
-pfg = GroceryRetailerFeatureGenerator(date(2022, 1, 1), ["4q4", "3q3", "2q2", "1q1"])
+grfg = GroceryRetailerFeatureGenerator(date(2022, 1, 1), ["4q4", "3q3", "2q2", "1q1"])
 
 # pass a feature generator's `features` member to
 # pyspark's `agg()` function using the unpacking operator (*).
-output_df = input_df.groupBy().agg(*pfg.features)
+output_df = input_df.groupBy().agg(*grfg.features)
 
 basket_counts_df = (output_df.
     select("BasketCount_4q4", "BasketCount_3q3", "BasketCount_2q2", "BasketCount_1q1"))
@@ -141,7 +141,7 @@ pprint([(c.name, c.metadata["description"]) for c in basket_counts_df.schema])
 Typically you'll want to aggregate the data over a dimension, stores perhaps
 
 ```python
-output_stores_df = input_df.groupBy("Store").agg(*pfg.features)
+output_stores_df = input_df.groupBy("Store").agg(*grfg.features)
 (output_stores_df.
     select(
         "Store", "BasketCount_4q4", "BasketCount_3q3", "BasketCount_2q2", "BasketCount_1q1"
@@ -164,8 +164,8 @@ output_stores_df = input_df.groupBy("Store").agg(*pfg.features)
 And then perhaps examine different features, number of baskets and number of customers in the first half of 2021 versus the second half:
 
 ```python
-pfg2 = GroceryRetailerFeatureGenerator(date(2022, 1, 1),["12m7","6m1"])
-output_stores_h1h2_df = input_df.groupBy("Store").agg(*pfg2.features)
+grfg2 = GroceryRetailerFeatureGenerator(date(2022, 1, 1),["12m7","6m1"])
+output_stores_h1h2_df = input_df.groupBy("Store").agg(*grfg2.features)
 (output_stores_h1h2_df.
     select(
         "Store", "BasketCount_12m7", "CustomerCount_12m7", "BasketCount_6m1", "CustomerCount_6m1"
@@ -190,7 +190,7 @@ So far we have encountered BasketCount & CustomerCount. Many other features are 
 and it is easy to get a list of them:
 
 ```python
-pprint({c.metadata["name-stem"] for c in df.schema})
+pprint({c.metadata["name-stem"] for c in output_df.schema})
 ```
 
 ```shell
@@ -221,15 +221,15 @@ All of these features expect certain columns to be in the input dataframe. All o
 jstark can provide this information
 
 ```python
-pfg.references["BasketCount_1q1"]                  # ['Basket', 'Timestamp']
-pfg.references["CustomerCount_1q1"]                # ['Customer', 'Timestamp']
-pfg.references["AverageGrossSpendPerBasket_1q1"]   # ['Basket', 'GrossSpend', 'Timestamp']
+grfg.references["BasketCount_1q1"]                  # ['Basket', 'Timestamp']
+grfg.references["CustomerCount_1q1"]                # ['Customer', 'Timestamp']
+grfg.references["AverageGrossSpendPerBasket_1q1"]   # ['Basket', 'GrossSpend', 'Timestamp']
 ```
 
 To find out what all columns are required by all features
 
 ```python
-pprint({k.split("_")[0]:v for (k,v) in pfg.references.items()})
+pprint({k.split("_")[0]:v for (k,v) in grfg.references.items()})
 ```
 
 ```shell
