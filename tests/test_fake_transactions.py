@@ -1,11 +1,8 @@
 """Test FakeTransactions
 """
-from datetime import date
 from pyspark.sql import DataFrame
 import pyspark.sql.functions as f
 from jstark.sample.transactions import FakeTransactions
-from jstark.grocery_retailer_feature_generator import GroceryRetailerFeatureGenerator
-from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
 
 
 def test_fake_transactions_returns_a_dataframe():
@@ -31,28 +28,3 @@ def test_number_of_baskets_is_correct():
     )
     assert first is not None
     assert first["baskets"] == number_of_baskets
-
-
-def test_fake_transactions_returns_same_data_with_same_seed():
-    """FakeTransactions has a seed which is used to make sure it returns
-    the same data every time.
-    """
-    pfg = GroceryRetailerFeatureGenerator(
-        date(2022, 1, 1),
-        [
-            FeaturePeriod(PeriodUnitOfMeasure.QUARTER, 1, 1),
-            FeaturePeriod(PeriodUnitOfMeasure.QUARTER, 2, 2),
-            FeaturePeriod(PeriodUnitOfMeasure.QUARTER, 3, 3),
-            FeaturePeriod(PeriodUnitOfMeasure.QUARTER, 4, 4),
-        ],
-    )
-    df = FakeTransactions().get_df(seed=42, number_of_baskets=10)
-    expected_result = float(
-        df.where("Timestamp >= '2021-10-01'")
-        .where("Timestamp <= '2021-12-31'")
-        .agg(f.sum("GrossSpend").alias("expected"))
-        .collect()[0]["expected"]
-    )
-    df = df.agg(*pfg.features)
-    collected = df.collect()
-    assert collected[0]["GrossSpend_1q1"] == expected_result

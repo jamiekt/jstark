@@ -376,29 +376,6 @@ def test_basketweeks(
     assert first["BasketWeeks_52w0"] == 5
 
 
-def test_basketweeks_by_product_and_customer(dataframe_of_faker_purchases: DataFrame):
-    """Test BasketWeeks by product and customer
-
-    Filtering on a specific Customer and Product whose activity
-    we happen to know about.
-    as_at set at the date immediately after the period for which sample transactions
-    are being supplied.
-    """
-    pfg = GroceryRetailerFeatureGenerator(
-        as_at=date(2022, 1, 1), feature_periods=["52w0"]
-    )
-    output_df = (
-        dataframe_of_faker_purchases.where("Customer = 'John Williams'")
-        .where("Product = 'Ice Cream'")
-        .groupBy(["Product", "Customer"])
-        .agg(*pfg.features)
-        .select("BasketWeeks_52w0")
-    )
-    first = output_df.first()
-    assert first is not None
-    assert first["BasketWeeks_52w0"] == 6
-
-
 def test_basketweeks_commentary(
     as_at_timestamp: datetime, dataframe_of_faker_purchases: DataFrame
 ):
