@@ -12,19 +12,21 @@ class BasketPeriods(DerivedFeature):
     """BasketPeriods feature"""
 
     def column_expression(self) -> Column:
-        expr = f.lit(0)
+        exprs = []
         for period in range(self.feature_period.end, self.feature_period.start + 1):
-            expr = expr + f.when(
-                BasketCount(
-                    as_at=self.as_at,
-                    feature_period=FeaturePeriod(
-                        self.feature_period.period_unit_of_measure, period, period
-                    ),
-                ).column
-                > 0,
-                1,
-            ).otherwise(0)
-        return expr
+            exprs.append(
+                f.when(
+                    BasketCount(
+                        as_at=self.as_at,
+                        feature_period=FeaturePeriod(
+                            self.feature_period.period_unit_of_measure, period, period
+                        ),
+                    ).column
+                    > 0,
+                    1,
+                ).otherwise(0)
+            )
+        return sum(exprs)
 
     def default_value(self) -> Column:
         return f.lit(None)
