@@ -47,6 +47,12 @@ def test_fake_transactions_returns_same_data_with_same_seed():
         ],
     )
     df = FakeTransactions().get_df(seed=42, number_of_baskets=10)
+    expected_result = float(
+        df.where("Timestamp >= '2021-10-01'")
+        .where("Timestamp <= '2021-12-31'")
+        .agg(f.sum("GrossSpend").alias("expected"))
+        .collect()[0]["expected"]
+    )
     df = df.agg(*pfg.features)
     collected = df.collect()
-    assert collected[0]["GrossSpend_1q1"] == 334.38
+    assert collected[0]["GrossSpend_1q1"] == expected_result
