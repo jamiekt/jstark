@@ -4,7 +4,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What is jstark?
 
-jstark is a Python library for creating time-based features for machine learning using PySpark. It generates features calculated "as at" a specific date, enabling point-in-time feature engineering for grocery retail data (and similar transactional domains). Features are aggregated over configurable time periods (days, weeks, months, quarters, years) using a mnemonic syntax like `3m1` (3 months ago to 1 month ago).
+jstark is a Python library for creating time-based features for machine learning using PySpark. It generates features
+calculated "as at" a specific date, enabling point-in-time feature engineering for grocery retail data (and similar
+transactional domains). Features are aggregated over configurable time periods (days, weeks, months, quarters, years)
+using a mnemonic syntax like `3m1` (3 months ago to 1 month ago).
 
 ## Build and Development Commands
 
