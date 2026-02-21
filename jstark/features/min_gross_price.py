@@ -1,4 +1,5 @@
 """MinGrossPrice feature"""
+
 import pyspark.sql.functions as f
 from pyspark.sql import Column
 
@@ -7,7 +8,7 @@ from .min_feature import Min
 
 class MinGrossPrice(Min):
     def column_expression(self) -> Column:
-        return f.col("GrossSpend") / f.col("Quantity")
+        return f.try_divide(f.col("GrossSpend"), f.col("Quantity"))
 
     @property
     def description_subject(self) -> str:
