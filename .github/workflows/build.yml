@@ -3,39 +3,36 @@ name: build
 on:
   push:
   workflow_dispatch:
-  
+
 
 jobs:
   pylint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
+    - name: Set up uv
+      uses: astral-sh/setup-uv@v4
       with:
         python-version: '3.10'
 
-    - name: Ensure latest pip
-      run: python -m pip install --upgrade pip
-
-    - name: Install Hatch
-      run: pip install hatch
+    - name: Install dependencies
+      run: uv sync
 
     - name: pylint badge
       run: |
-        hatch run pylint-out
+        uv run pylint --rcfile .github/linters/pylintrc jstark tests >> pylint.out || true
         PYLINT_SCORE=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' < pylint.out)
         echo PYLINT_SCORE="${PYLINT_SCORE}"
-        hatch run anybadge -l pylint -v "${PYLINT_SCORE}" -f pylint.svg 2=red 4=orange 8=yellow 10=green
+        uv run anybadge -l pylint -v "${PYLINT_SCORE}" -f pylint.svg 2=red 4=orange 8=yellow 10=green
 
     - name: pylint html
       run: |
-        hatch run pylint-html
+        uv run pylint --rcfile .github/linters/pylintrc jstark tests --output-format=json | uv run pylint-json2html -o pylint.html
 
     - run: mkdir _site && cp pylint.html _site/. && cp pylint.svg _site/.
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: pylint
         path: _site
@@ -43,7 +40,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Super-Linter
       uses: github/super-linter/slim@v4
       env:
@@ -62,38 +59,30 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
+    - name: Set up uv
+      uses: astral-sh/setup-uv@v4
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Ensure latest pip
-      run: python -m pip install --upgrade pip
-
-    - name: Install Hatch
-      run: pip install hatch
-
-    - name: install ourself
-      run: |
-        pip install -e .
+    - name: Install dependencies
+      run: uv sync
 
     - name: Run tests
-      run: hatch run pytest -vvv --durations=1 --cov=jstark
+      run: uv run pytest -vvv --durations=1 --cov=jstark
 
     - name: generate coverage badge
-      run: hatch run coverage-badge -o coverage.svg -f
+      run: uv run coverage-badge -o coverage.svg -f
 
     - name: generate coverage html report
-      run: hatch run coverage html
-
+      run: uv run coverage html
 
     - run: mkdir _site && cp coverage.svg _site/. && cp -r htmlcov _site/.
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: coverage
+        name: coverage-${{ matrix.os }}-py${{ matrix.python-version }}
         path: _site
 
   upload-pages-artifacts:
@@ -103,17 +92,18 @@ jobs:
     - name: mkdir _site
       run: mkdir _site
     - name: download pylint
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: pylint
         path: _site
     - name: download coverage
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
-        name: coverage
+        pattern: coverage-*
         path: _site
+        merge-multiple: true
     - name: Upload GitHub Pages artifact
-      uses: actions/upload-pages-artifact@v1
+      uses: actions/upload-pages-artifact@v3
 
   # Deploy job
   deploy-to-github-pages:
@@ -136,4 +126,4 @@ jobs:
     steps:
     - name: Deploy to GitHub Pages
       id: deployment
-      uses: actions/deploy-pages@v1
+      uses: actions/deploy-pages@v4

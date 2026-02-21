@@ -1,30 +1,23 @@
 # Contribution Guide
 
-jstark has been built using [Hatch](https://hatch.pypa.io/) for environment management and for its build tool, hatchling.
-It is suggested that you do the same (though I suppose you don't have to) and this guide assumes that you are.
+jstark uses [uv](https://docs.astral.sh/uv/) for environment management and [hatchling](https://hatch.pypa.io/) as the build backend.
 
-Install Hatch using the instructions at [https://hatch.pypa.io/latest/install/](https://hatch.pypa.io/latest/install/).
+Install uv using the instructions at [https://docs.astral.sh/uv/getting-started/installation/](https://docs.astral.sh/uv/getting-started/installation/).
 
 ## Running tests
 
 ```shell
-hatch run pytest
+uv sync
+uv run pytest
 ```
 
 ### Developing in Visual Studio Code
 
-If you wish to develop in Visual Studio Code you should configure your environment to use the interpreter provided by Hatch
-which can be discovered by running:
-
-```shell
-hatch run python -c "import sys;print(sys.executable)"
-```
-
-Your workspace settings (**./.vscode/settings.json**) should look something like this:
+uv creates a standard `.venv/` directory in the project root. VS Code should detect this automatically. If it doesn't, set the interpreter path in your workspace settings (**./.vscode/settings.json**):
 
 ```json
 {
-    "python.defaultInterpreterPath": "/path/to/hatch/env/virtual/jstark/C9yWDEZH/jstark/bin/python"
+    "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python"
 }
 ```
 
@@ -37,7 +30,7 @@ Your workspace settings (**./.vscode/settings.json**) should look something like
 
 ### libffi-dev on wsl
 
-Hatch is used to maintain the development environment. I started out using wsl and ran into a lot
+I started out using wsl and ran into a lot
 of problems because I installed a version of python, using pyenv, without having **libffi-dev** installed.
 
 The symptom of this was that when trying to install pyspark I got error
@@ -51,7 +44,7 @@ and *then* installing my chosen python version (which happened to be python 3.10
 
 pyspark requires a Java runtime in order to work. Hence if you get error:
 
-> The operation couldn’t be completed. Unable to locate a Java Runtime.
+> The operation couldn't be completed. Unable to locate a Java Runtime.
 
 when trying to run pyspark you will need to install a Java runtime. On my mac I did
 this by issuing:

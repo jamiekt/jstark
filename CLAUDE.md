@@ -8,23 +8,23 @@ jstark is a Python library for creating time-based features for machine learning
 
 ## Build and Development Commands
 
-jstark uses [Hatch](https://hatch.pypa.io/) for environment management and building.
+jstark uses [uv](https://docs.astral.sh/uv/) for environment management and [hatchling](https://hatch.pypa.io/) as the build backend.
 
 ```bash
+# Install dependencies (creates .venv automatically)
+uv sync
+
 # Run all tests
-hatch run pytest
+uv run pytest
 
 # Run tests with coverage
-hatch run cov
+uv run pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=jstark --cov=tests
 
 # Run a single test
-hatch run pytest tests/test_feature.py::test_start_date_days -vvv
+uv run pytest tests/test_feature.py::test_start_date_days -vvv
 
 # Run pylint
-hatch run pylint-out
-
-# Find the Hatch-managed Python interpreter (for IDE configuration)
-hatch run python -c "import sys;print(sys.executable)"
+uv run pylint --rcfile .github/linters/pylintrc jstark tests
 ```
 
 **Prerequisites:** Java runtime required for PySpark. On macOS: `brew install openjdk@11`.
