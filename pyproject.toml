@@ -15,7 +15,6 @@ authors = [
 classifiers = [
   "Development Status :: 4 - Beta",
   "Programming Language :: Python",
-  "Programming Language :: Python :: 3.7",
   "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
@@ -37,31 +36,18 @@ Source = "https://github.com/unknown/jstark"
 [tool.hatch.version]
 path = "jstark/__about__.py"
 
-[tool.hatch.envs.default]
-dependencies = [
+[dependency-groups]
+dev = [
   "pytest",
   "pytest-cov",
   "black",
   "pre-commit",
-  "hatchling>=1.11.0",
   "python-dateutil",
-  "pytest-cov",
   "coverage-badge",
   "pylint",
   "anybadge",
-  "pylint-json2html"
+  "pylint-json2html",
 ]
-[tool.hatch.envs.default.scripts]
-cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=jstark --cov=tests {args}"
-no-cov = "cov --no-cov {args}"
-pylint-out = [
-    "pylint --rcfile .github/linters/pylintrc jstark tests >> pylint.out || true",
-    'echo "$(<pylint.out)"'
-    ]
-pylint-html = "pylint --rcfile .github/linters/pylintrc jstark tests --output-format=json  | pylint-json2html -o pylint.html"
-
-[[tool.hatch.envs.test.matrix]]
-python = ["37", "38", "39", "310", "311"]
 
 [tool.coverage.run]
 branch = true
@@ -76,6 +62,3 @@ exclude_lines = [
   "if __name__ == .__main__.:",
   "if TYPE_CHECKING:",
 ]
-
-[project.scripts]
-hatch = "hatch.cli:main"
