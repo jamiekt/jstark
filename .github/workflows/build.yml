@@ -73,7 +73,9 @@ jobs:
       run: uv run pytest -vvv --durations=1 --cov=jstark
 
     - name: generate coverage badge
-      run: uv run coverage-badge -o coverage.svg -f
+      run: |
+        uv run coverage xml
+        uv run genbadge coverage -i coverage.xml -o coverage.svg
 
     - name: generate coverage html report
       run: uv run coverage html
