@@ -1,4 +1,5 @@
 """AveragePurchaseCycle feature"""
+
 import pyspark.sql.functions as f
 from pyspark.sql import Column
 
@@ -10,12 +11,13 @@ from .basket_count import BasketCount
 
 class AvgPurchaseCycle(DerivedFeature):
     def column_expression(self) -> Column:
-        return (
+        return f.try_divide(
             f.datediff(
                 MostRecentPurchaseDate(self.as_at, self.feature_period).column,
                 EarliestPurchaseDate(self.as_at, self.feature_period).column,
-            )
-        ) / BasketCount(self.as_at, self.feature_period).column
+            ),
+            BasketCount(self.as_at, self.feature_period).column,
+        )
 
     @property
     def description_subject(self) -> str:

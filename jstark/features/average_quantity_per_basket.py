@@ -1,4 +1,5 @@
 """AverageQuantityPerBasket feature"""
+
 import pyspark.sql.functions as f
 from pyspark.sql import Column
 
@@ -9,9 +10,9 @@ from .basket_count import BasketCount
 
 class AvgQuantityPerBasket(DerivedFeature):
     def column_expression(self) -> Column:
-        return (
-            Quantity(self.as_at, self.feature_period).column
-            / BasketCount(self.as_at, self.feature_period).column
+        return f.try_divide(
+            Quantity(self.as_at, self.feature_period).column,
+            BasketCount(self.as_at, self.feature_period).column,
         )
 
     @property
