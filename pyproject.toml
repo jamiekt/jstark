@@ -10,7 +10,7 @@ requires-python = ">=3.8"
 license = "MIT"
 keywords = []
 authors = [
-  { name = "Jamie Thomson", email = "jamie@jamie-thomson.net" },
+  { name = "Jamie Thomson", email = "854953+jamiekt@users.noreply.github.com" },
 ]
 classifiers = [
   "Development Status :: 4 - Beta",
