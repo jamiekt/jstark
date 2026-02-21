@@ -1,5 +1,6 @@
 """Base class for all feature generators
 """
+
 from abc import ABCMeta
 import re
 from datetime import date
@@ -89,19 +90,13 @@ class FeatureGenerator(metaclass=ABCMeta):
         # but in unit tests that might not be the case, so getOrCreate one
         SparkSession.builder.getOrCreate()
         return {
-            expr.name(): self.parse_references(expr.references().toList().toString())
             # pylint: disable=protected-access
-            for expr in [c._jc.expr() for c in self.features]  # type: ignore
+            node.name().head(): self.parse_references(node.toString())
+            for node in [c._jc.node() for c in self.features]  # type: ignore
         }
 
     @staticmethod
     def parse_references(references: str) -> List[str]:
         return sorted(
-            "".join(
-                references.replace("'", "")
-                .replace("List(", "")
-                .replace(")", "")
-                .replace(")", "")
-                .split()
-            ).split(",")
+            set(re.findall(r"UnresolvedAttribute\(List\(([^)]+)\)", references))
         )

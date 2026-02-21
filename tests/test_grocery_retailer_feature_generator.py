@@ -56,15 +56,16 @@ def test_parse_references_grossspend():
     document its behaviour
     """
     assert GroceryRetailerFeatureGenerator.parse_references(
-        "List('Timestamp, 'GrossSpend)"
+        "Alias(UnresolvedAttribute(List(GrossSpend),None,false,Origin()),"
+        "UnresolvedAttribute(List(Timestamp),None,false,Origin()))"
     ) == ["GrossSpend", "Timestamp"]
 
 
 def test_parse_references_count():
     """Basic test that static method parse_references works"""
-    assert GroceryRetailerFeatureGenerator.parse_references("List('Timestamp)") == [
-        "Timestamp"
-    ]
+    assert GroceryRetailerFeatureGenerator.parse_references(
+        "Alias(UnresolvedAttribute(List(Timestamp),None,false,Origin()))"
+    ) == ["Timestamp"]
 
 
 def test_references_count(
