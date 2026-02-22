@@ -16,7 +16,13 @@ from jstark.sample.transactions import FakeTransactions
 @pytest.fixture(scope="session")
 def spark_session() -> SparkSession:
     """Need a sparksession for most of the tests, so create it once"""
-    return SparkSession.builder.getOrCreate()
+    return (
+        SparkSession.builder.config("spark.driver.host", "127.0.0.1")
+        .config("spark.driver.bindAddress", "127.0.0.1")
+        # Default is 200 partitions which adds unnecessary overhead for small test data
+        .config("spark.sql.shuffle.partitions", "1")
+        .getOrCreate()
+    )
 
 
 @pytest.fixture(scope="session")
