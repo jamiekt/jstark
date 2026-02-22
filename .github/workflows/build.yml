@@ -75,11 +75,6 @@ jobs:
 
     - name: Run tests
       run: uv run pytest -vvv --durations=1 --cov=jstark
-      env:
-        # Forces PySpark to use loopback for all socket communication.
-        # Without this, Windows CI runners resolve to a hostname that
-        # Windows Firewall blocks, causing "Connection reset" errors.
-        SPARK_LOCAL_IP: 127.0.0.1
 
     - name: generate coverage badge
       run: |
