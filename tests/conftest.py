@@ -15,20 +15,8 @@ from jstark.sample.transactions import FakeTransactions
 
 @pytest.fixture(scope="session")
 def spark_session() -> SparkSession:
-    """
-    Need a sparksession for most of the tests, so create it once
-
-    PySpark on Windows CI runners experiences java.net.SocketException
-    "Connection reset" errors because Py4J socket communication uses
-    hostname resolution that can return addresses blocked by Windows
-    Firewall. Explicitly setting spark.driver.host and
-    spark.driver.bindAddress to 127.0.0.1 forces use of the loopback
-    interface, avoiding the issue."""
-    return (
-        SparkSession.builder.config("spark.driver.host", "127.0.0.1")
-        .config("spark.driver.bindAddress", "127.0.0.1")
-        .getOrCreate()
-    )
+    """Need a sparksession for most of the tests, so create it once"""
+    return SparkSession.builder.getOrCreate()
 
 
 @pytest.fixture(scope="session")
