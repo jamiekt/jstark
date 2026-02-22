@@ -13,6 +13,68 @@ def test_feature_period_description():
     )
 
 
+def test_repr():
+    assert (
+        repr(FeaturePeriod(PeriodUnitOfMeasure.DAY, 3, 2))
+        == "FeaturePeriod(period_unit_of_measure=PeriodUnitOfMeasure.DAY, start=3, end=2)"  # noqa: E501
+    )
+
+
+def test_eq():
+    assert FeaturePeriod(PeriodUnitOfMeasure.DAY, 3, 2) == FeaturePeriod(
+        PeriodUnitOfMeasure.DAY, 3, 2
+    )
+    assert FeaturePeriod(PeriodUnitOfMeasure.DAY, 3, 2) != FeaturePeriod(
+        PeriodUnitOfMeasure.DAY, 3, 3
+    )
+    assert FeaturePeriod(PeriodUnitOfMeasure.DAY, 3, 2) != FeaturePeriod(
+        PeriodUnitOfMeasure.WEEK, 3, 2
+    )
+    assert FeaturePeriod(PeriodUnitOfMeasure.DAY, 3, 2) != FeaturePeriod(
+        PeriodUnitOfMeasure.DAY, 4, 2
+    )
+    assert FeaturePeriod(PeriodUnitOfMeasure.DAY, 3, 2) != FeaturePeriod(
+        PeriodUnitOfMeasure.DAY, 3, 3
+    )
+    assert FeaturePeriod(PeriodUnitOfMeasure.DAY, 3, 2) != FeaturePeriod(
+        PeriodUnitOfMeasure.DAY, 3, 1
+    )
+    assert FeaturePeriod(PeriodUnitOfMeasure.DAY, 3, 2) != FeaturePeriod(
+        PeriodUnitOfMeasure.DAY, 2, 2
+    )
+    assert FeaturePeriod(PeriodUnitOfMeasure.DAY, 3, 2) != "SomeOtherObject"
+
+
+def test_str():
+    assert (
+        str(FeaturePeriod(PeriodUnitOfMeasure.DAY, 3, 2)) == "Between 3 and 2 days ago"
+    )
+
+
+def test_hash():
+    assert hash(FeaturePeriod(PeriodUnitOfMeasure.DAY, 3, 2)) == hash(
+        FeaturePeriod(PeriodUnitOfMeasure.DAY, 3, 2)
+    )
+    assert hash(FeaturePeriod(PeriodUnitOfMeasure.DAY, 3, 2)) != hash(
+        FeaturePeriod(PeriodUnitOfMeasure.DAY, 3, 3)
+    )
+    assert hash(FeaturePeriod(PeriodUnitOfMeasure.DAY, 3, 2)) != hash(
+        FeaturePeriod(PeriodUnitOfMeasure.WEEK, 3, 2)
+    )
+    assert hash(FeaturePeriod(PeriodUnitOfMeasure.DAY, 3, 2)) != hash(
+        FeaturePeriod(PeriodUnitOfMeasure.DAY, 4, 2)
+    )
+    assert hash(FeaturePeriod(PeriodUnitOfMeasure.DAY, 3, 2)) != hash(
+        FeaturePeriod(PeriodUnitOfMeasure.DAY, 3, 3)
+    )
+    assert hash(FeaturePeriod(PeriodUnitOfMeasure.DAY, 3, 2)) != hash(
+        FeaturePeriod(PeriodUnitOfMeasure.DAY, 3, 1)
+    )
+    assert hash(FeaturePeriod(PeriodUnitOfMeasure.DAY, 3, 2)) != hash(
+        FeaturePeriod(PeriodUnitOfMeasure.DAY, 2, 2)
+    )
+
+
 def test_feature_period_start_is_immutable():
     fp = FeaturePeriod(PeriodUnitOfMeasure.DAY, 3, 2)
     with pytest.raises(AttributeError) as exc_info:
