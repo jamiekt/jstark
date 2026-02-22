@@ -1,16 +1,12 @@
 """RecencyDays feature"""
 
-from typing import Callable
 import pyspark.sql.functions as f
 from pyspark.sql import Column
 
-from .feature import BaseFeature
+from .min_feature import Min
 
 
-class RecencyDays(BaseFeature):
-    def aggregator(self) -> Callable[[Column], Column]:
-        return self.sum_aggregator
-
+class RecencyDays(Min):
     def column_expression(self) -> Column:
         return f.datediff(f.lit(self.as_at), f.col("Timestamp"))
 

@@ -19,7 +19,7 @@ from jstark.features import (
     MaxGrossSpend,
     MinNetSpend,
     MaxNetSpend,
-    AverageGrossSpendPerBasket,
+    AvgGrossSpendPerBasket,
     Quantity,
     AvgQuantityPerBasket,
     MostRecentPurchaseDate,
@@ -38,7 +38,7 @@ from jstark.features import (
     RecencyWeightedApproxBasket90,
     RecencyWeightedApproxBasket95,
     RecencyWeightedApproxBasket99,
-    AverageBasket,
+    AvgBasket,
 )
 from jstark.feature_generator import FeatureGenerator
 
@@ -73,7 +73,7 @@ class GroceryRetailerFeatureGenerator(FeatureGenerator):
         MaxGrossSpend,
         MinNetSpend,
         MaxNetSpend,
-        AverageGrossSpendPerBasket,
+        AvgGrossSpendPerBasket,
         Quantity,
         AvgQuantityPerBasket,
         MostRecentPurchaseDate,
@@ -92,5 +92,5 @@ class GroceryRetailerFeatureGenerator(FeatureGenerator):
         RecencyWeightedApproxBasket95,
         RecencyWeightedApproxBasket90,
         RecencyWeightedApproxBasket99,
-        AverageBasket,
+        AvgBasket,
     ]

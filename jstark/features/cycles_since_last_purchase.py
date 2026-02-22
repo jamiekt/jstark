@@ -4,19 +4,15 @@ import pyspark.sql.functions as f
 from pyspark.sql import Column
 
 from .feature import DerivedFeature
-from .earliest_purchase_date import EarliestPurchaseDate
-from .most_recent_purchase_date import MostRecentPurchaseDate
-from .basket_count import BasketCount
+from .average_purchase_cycle import AvgPurchaseCycle
+from .recency_days import RecencyDays
 
 
 class CyclesSinceLastPurchase(DerivedFeature):
     def column_expression(self) -> Column:
         return f.try_divide(
-            f.datediff(
-                MostRecentPurchaseDate(self.as_at, self.feature_period).column,
-                EarliestPurchaseDate(self.as_at, self.feature_period).column,
-            ),
-            BasketCount(self.as_at, self.feature_period).column,
+            RecencyDays(self.as_at, self.feature_period).column,
+            AvgPurchaseCycle(self.as_at, self.feature_period).column,
         )
 
     @property
@@ -27,7 +23,7 @@ class CyclesSinceLastPurchase(DerivedFeature):
     def commentary(self) -> str:
         return (
             "Days since last purchase divided by average purchase cycle. "
-            + "This may be a very good predictor of when a customer is "
+            + "This may be a predictor of when a customer is "
             + "likely to next buy a particular product."
         )
 

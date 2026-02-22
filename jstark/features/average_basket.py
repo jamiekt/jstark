@@ -1,4 +1,4 @@
-"Average baskets per given periodunitofmeasure feature"
+"AvgBasket feature"
 
 from .feature import DerivedFeature
 
@@ -9,7 +9,7 @@ from jstark.feature_period import FeaturePeriod
 from .basket_count import BasketCount
 
 
-class AverageBasket(DerivedFeature):
+class AvgBasket(DerivedFeature):
     "Average baskets per given periodunitofmeasure feature"
 
     def column_expression(self) -> Column:

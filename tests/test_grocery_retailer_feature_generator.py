@@ -310,10 +310,8 @@ def test_min_gross_spend_luke_and_leia_0y0(luke_and_leia_purchases_first: Row):
 def test_avg_gross_spend_per_basket_luke_and_leia_0y0(
     luke_and_leia_purchases_first: Row,
 ):
-    """Test AverageGrossSpendPerBasket_0y0"""
-    assert (
-        float(luke_and_leia_purchases_first["AverageGrossSpendPerBasket_0y0"]) == 5.15
-    )
+    """Test AvgGrossSpendPerBasket_0y0"""
+    assert float(luke_and_leia_purchases_first["AvgGrossSpendPerBasket_0y0"]) == 5.15
 
 
 def test_quantity_luke_and_leia_0y0(luke_and_leia_purchases_first: Row):
@@ -502,3 +500,39 @@ def test_averagebasketsperweek_luke_and_leia(
     total_baskets = sum(df_weeks_first[f"BasketCount_{i}w{i}"] for i in range(n))
     average_baskets_per_week = total_baskets / n
     assert average_baskets_per_week == df_first["AverageBasketsPerWeek_13w0"]
+
+
+def test_averagepurchasecycle_chewie_carrot(
+    dataframe_of_purchases: DataFrame,
+    purchasing_feature_generator: GroceryRetailerFeatureGenerator,
+):
+    """
+    Test AveragePurchaseCycle
+
+    The input df has lots of transactions of chewie buying a carrot on different days.
+    """
+    input_df = dataframe_of_purchases.where(f.col("Customer") == "Chewie").where(
+        f.col("Product") == "Carrot"
+    )
+    df = (
+        input_df.groupBy(["Customer", "Product"])
+        .agg(*purchasing_feature_generator.features)
+        .select(
+            [
+                "Customer",
+                "Product",
+                "AvgPurchaseCycle_2y0",
+                "CyclesSinceLastPurchase_2y0",
+                # The following are not required for the assertions but they all
+                # contribute to CyclesSinceLastPurchase so are useful for debugging.
+                "MostRecentPurchaseDate_2y0",
+                "EarliestPurchaseDate_2y0",
+                "BasketCount_2y0",
+                "RecencyDays_2y0",
+            ]
+        )
+    )
+    df_first = df.first()
+    assert df_first is not None
+    assert df_first["AvgPurchaseCycle_2y0"] == pytest.approx(45.5)
+    assert df_first["CyclesSinceLastPurchase_2y0"] == pytest.approx(2.065934065934066)

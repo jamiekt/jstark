@@ -1,4 +1,4 @@
-"""AverageGrossSpendPerBasket feature"""
+"""AvgGrossSpendPerBasket feature"""
 
 import pyspark.sql.functions as f
 from pyspark.sql import Column
@@ -8,7 +8,7 @@ from .gross_spend import GrossSpend
 from .basket_count import BasketCount
 
 
-class AverageGrossSpendPerBasket(DerivedFeature):
+class AvgGrossSpendPerBasket(DerivedFeature):
     def column_expression(self) -> Column:
         return f.try_divide(
             GrossSpend(self.as_at, self.feature_period).column,
