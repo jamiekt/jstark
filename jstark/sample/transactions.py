@@ -53,7 +53,6 @@ class FakeTransactions:
     def get_df(
         self, seed: Union[int, None] = None, number_of_baskets: int = 1000
     ) -> DataFrame:
-
         stores_provider = DynamicProvider(
             provider_name="store",
             elements=["Hammersmith", "Ealing", "Richmond", "Twickenham", "Staines"],
@@ -138,5 +137,6 @@ class FakeTransactions:
         flattened_transactions = self.flatten_transactions(transactions)
         spark = SparkSession.builder.getOrCreate()
         return spark.createDataFrame(
-            flattened_transactions, schema=self.transactions_schema  # type: ignore
+            flattened_transactions,
+            schema=self.transactions_schema,  # type: ignore
         )

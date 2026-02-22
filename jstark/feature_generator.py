@@ -27,9 +27,7 @@ class FeatureGenerator(metaclass=ABCMeta):
         period_unit_of_measure_values = "".join([e.value for e in PeriodUnitOfMeasure])
         regex = (
             # https://regex101.com/r/Xvf3ey/1
-            r"^(\d*)(["
-            + period_unit_of_measure_values
-            + r"])(\d*)$"
+            r"^(\d*)([" + period_unit_of_measure_values + r"])(\d*)$"
         )
         _feature_periods = []
         for fp in feature_periods:

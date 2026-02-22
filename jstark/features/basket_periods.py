@@ -47,8 +47,8 @@ class BasketPeriods(DerivedFeature):
             + f"range 0 to {self.feature_period.start - self.feature_period.end + 1} "
             + f"because {self.feature_period.start - self.feature_period.end + 1} is "
             + f"the number of {self.feature_period.period_unit_of_measure.name.lower()}"
-            + f's between {self.start_date.strftime("%Y-%m-%d")} and'
-            + f' {self.end_date.strftime("%Y-%m-%d")}. When grouped by Customer and'
+            + f"s between {self.start_date.strftime('%Y-%m-%d')} and"
+            + f" {self.end_date.strftime('%Y-%m-%d')}. When grouped by Customer and"
             + " Product this feature is a useful indicator of the frequency of"
             + " which a Customer purchases a Product."
         )
