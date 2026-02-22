@@ -2,6 +2,7 @@
 
 Helper class for figuring out dates relative to a given date
 """
+
 from datetime import date, timedelta
 from dateutil.relativedelta import relativedelta
 
@@ -45,11 +46,15 @@ class FirstAndLastDateOfPeriod:
         return (
             date(self.__date_in_period.year, 1, 1)
             if self.__date_in_period.month in [1, 2, 3]
-            else date(self.__date_in_period.year, 4, 1)
-            if self.__date_in_period.month in [4, 5, 6]
-            else date(self.__date_in_period.year, 7, 1)
-            if self.__date_in_period.month in [7, 8, 9]
-            else date(self.__date_in_period.year, 10, 1)
+            else (
+                date(self.__date_in_period.year, 4, 1)
+                if self.__date_in_period.month in [4, 5, 6]
+                else (
+                    date(self.__date_in_period.year, 7, 1)
+                    if self.__date_in_period.month in [7, 8, 9]
+                    else date(self.__date_in_period.year, 10, 1)
+                )
+            )
         )
 
     @property
@@ -57,11 +62,15 @@ class FirstAndLastDateOfPeriod:
         return (
             date(self.__date_in_period.year, 3, 31)
             if self.__date_in_period.month in [1, 2, 3]
-            else date(self.__date_in_period.year, 6, 30)
-            if self.__date_in_period.month in [4, 5, 6]
-            else date(self.__date_in_period.year, 9, 30)
-            if self.__date_in_period.month in [7, 8, 9]
-            else date(self.__date_in_period.year, 12, 31)
+            else (
+                date(self.__date_in_period.year, 6, 30)
+                if self.__date_in_period.month in [4, 5, 6]
+                else (
+                    date(self.__date_in_period.year, 9, 30)
+                    if self.__date_in_period.month in [7, 8, 9]
+                    else date(self.__date_in_period.year, 12, 31)
+                )
+            )
         )
 
     @property

@@ -1,4 +1,5 @@
 """Max abstract bsae class"""
+
 from abc import ABCMeta
 from typing import Callable
 

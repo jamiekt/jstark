@@ -1,5 +1,5 @@
-"""Test FakeTransactions
-"""
+"""Test FakeTransactions"""
+
 from pyspark.sql import DataFrame
 import pyspark.sql.functions as f
 from jstark.sample.transactions import FakeTransactions

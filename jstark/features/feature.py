@@ -2,6 +2,7 @@
 
 All feature classes are derived from here
 """
+
 from abc import ABCMeta, abstractmethod
 from datetime import date, timedelta, datetime
 from typing import Callable, Dict
@@ -83,13 +84,22 @@ class Feature(metaclass=ABCMeta):
         return (
             n_days_ago
             if self.feature_period.period_unit_of_measure == PeriodUnitOfMeasure.DAY
-            else FirstAndLastDateOfPeriod(n_weeks_ago).first_date_in_week
-            if self.feature_period.period_unit_of_measure == PeriodUnitOfMeasure.WEEK
-            else FirstAndLastDateOfPeriod(n_months_ago).first_date_in_month
-            if self.feature_period.period_unit_of_measure == PeriodUnitOfMeasure.MONTH
-            else FirstAndLastDateOfPeriod(n_quarters_ago).first_date_in_quarter
-            if self.feature_period.period_unit_of_measure == PeriodUnitOfMeasure.QUARTER
-            else FirstAndLastDateOfPeriod(n_years_ago).first_date_in_year
+            else (
+                FirstAndLastDateOfPeriod(n_weeks_ago).first_date_in_week
+                if self.feature_period.period_unit_of_measure
+                == PeriodUnitOfMeasure.WEEK
+                else (
+                    FirstAndLastDateOfPeriod(n_months_ago).first_date_in_month
+                    if self.feature_period.period_unit_of_measure
+                    == PeriodUnitOfMeasure.MONTH
+                    else (
+                        FirstAndLastDateOfPeriod(n_quarters_ago).first_date_in_quarter
+                        if self.feature_period.period_unit_of_measure
+                        == PeriodUnitOfMeasure.QUARTER
+                        else FirstAndLastDateOfPeriod(n_years_ago).first_date_in_year
+                    )
+                )
+            )
         )
 
     @property
@@ -102,13 +112,22 @@ class Feature(metaclass=ABCMeta):
         last_day_of_period = (
             n_days_ago
             if self.feature_period.period_unit_of_measure == PeriodUnitOfMeasure.DAY
-            else FirstAndLastDateOfPeriod(n_weeks_ago).last_date_in_week
-            if self.feature_period.period_unit_of_measure == PeriodUnitOfMeasure.WEEK
-            else FirstAndLastDateOfPeriod(n_months_ago).last_date_in_month
-            if self.feature_period.period_unit_of_measure == PeriodUnitOfMeasure.MONTH
-            else FirstAndLastDateOfPeriod(n_quarters_ago).last_date_in_quarter
-            if self.feature_period.period_unit_of_measure == PeriodUnitOfMeasure.QUARTER
-            else FirstAndLastDateOfPeriod(n_years_ago).last_date_in_year
+            else (
+                FirstAndLastDateOfPeriod(n_weeks_ago).last_date_in_week
+                if self.feature_period.period_unit_of_measure
+                == PeriodUnitOfMeasure.WEEK
+                else (
+                    FirstAndLastDateOfPeriod(n_months_ago).last_date_in_month
+                    if self.feature_period.period_unit_of_measure
+                    == PeriodUnitOfMeasure.MONTH
+                    else (
+                        FirstAndLastDateOfPeriod(n_quarters_ago).last_date_in_quarter
+                        if self.feature_period.period_unit_of_measure
+                        == PeriodUnitOfMeasure.QUARTER
+                        else FirstAndLastDateOfPeriod(n_years_ago).last_date_in_year
+                    )
+                )
+            )
         )
         # min() is used to ensure we don't return a date later than self.as_at
         return min(last_day_of_period, self.as_at)
