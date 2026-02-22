@@ -1,4 +1,5 @@
 """RecencyWeightedBasket feature"""
+
 from datetime import date
 
 from .feature import DerivedFeature
@@ -127,7 +128,7 @@ class RecencyWeightedBasket(RecencyWeightedApproxBasket):
             + f" ({self.feature_name}) is for"
             + f" {self.feature_period.number_of_periods}"
             + f" {self.feature_period.period_unit_of_measure.name.lower()}"
-            + f"{'s' if self.feature_period.number_of_periods>1 else ''}. You might"
+            + f"{'s' if self.feature_period.number_of_periods > 1 else ''}. You might"
             + f" consider using {self.feature_name.replace('Basket', 'ApproxBasket')}"
             + " instead which is less accurate but computationally cheaper."
         )
