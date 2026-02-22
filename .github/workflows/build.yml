@@ -54,7 +54,15 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
-    name: Python ${{ matrix.python-version }} on ${{ startsWith(matrix.os, 'macos-') && 'macOS' || startsWith(matrix.os, 'windows-') && 'Windows' || 'Linux' }}
+        pyspark-version: ['3.5', '4.0']
+        exclude:
+        - pyspark-version: '3.5'
+          python-version: '3.13'
+        - pyspark-version: '3.5'
+          python-version: '3.14'
+        - pyspark-version: '4.0'
+          python-version: '3.14'
+    name: Python ${{ matrix.python-version }}, PySpark ${{ matrix.pyspark-version }} on ${{ startsWith(matrix.os, 'macos-') && 'macOS' || startsWith(matrix.os, 'windows-') && 'Windows' || 'Linux' }}
     runs-on: ${{ matrix.os }}
     # PySpark 4.x Python workers crash on Windows CI runners with
     # "Connection reset" socket errors. This is a known PySpark issue,
@@ -72,6 +80,9 @@ jobs:
     - name: Install dependencies
       run: uv sync
 
+    - name: Install PySpark ${{ matrix.pyspark-version }}
+      run: uv pip install 'pyspark==${{ matrix.pyspark-version }}.*'
+
     - name: Run tests
       run: uv run pytest -vvv --durations=1 --cov=jstark
 
@@ -87,7 +98,7 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: coverage-${{ matrix.os }}-py${{ matrix.python-version }}
+        name: coverage-${{ matrix.os }}-py${{ matrix.python-version }}-pyspark${{ matrix.pyspark-version }}
         path: _site
 
   upload-pages-artifacts:
