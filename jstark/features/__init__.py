@@ -15,7 +15,7 @@ from .min_gross_spend import MinGrossSpend
 from .max_gross_spend import MaxGrossSpend
 from .min_net_spend import MinNetSpend
 from .max_net_spend import MaxNetSpend
-from .average_gross_spend_per_basket import AverageGrossSpendPerBasket
+from .average_gross_spend_per_basket import AvgGrossSpendPerBasket
 from .quantity import Quantity
 from .average_quantity_per_basket import AvgQuantityPerBasket
 from .most_recent_purchase_date import MostRecentPurchaseDate
@@ -36,7 +36,7 @@ from .recency_weighted_basket import (
     RecencyWeightedApproxBasket95,
     RecencyWeightedApproxBasket99,
 )
-from .average_basket import AverageBasket
+from .average_basket import AvgBasket
 
 __all__ = [
     "BaseFeature",
@@ -56,7 +56,7 @@ __all__ = [
     "MaxGrossSpend",
     "MinNetSpend",
     "MaxNetSpend",
-    "AverageGrossSpendPerBasket",
+    "AvgGrossSpendPerBasket",
     "Quantity",
     "AvgQuantityPerBasket",
     "MostRecentPurchaseDate",
@@ -75,5 +75,5 @@ __all__ = [
     "RecencyWeightedApproxBasket90",
     "RecencyWeightedApproxBasket95",
     "RecencyWeightedApproxBasket99",
-    "AverageBasket",
+    "AvgBasket",
 ]

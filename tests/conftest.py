@@ -51,6 +51,25 @@ def dataframe_of_faker_purchases(
 def dataframe_of_purchases(
     spark_session: SparkSession, as_at_timestamp: datetime, purchases_schema: StructType
 ) -> DataFrame:
+    # We need lots of transactions of the same thing just with different days so
+    # let's create the bulk of it once and then add the different days to it.
+    chew_car_timestamp = as_at_timestamp - timedelta(days=2)
+    chew_car = {
+        "Timestamp": chew_car_timestamp,
+        "Customer": "Chewie",
+        "Store": "Hammersmith",
+        "Channel": "Instore",
+        "Basket": uuid.uuid4(),
+        "items": [
+            {
+                "Product": "Carrot",
+                "Quantity": 1,
+                "GrossSpend": Decimal(0.1),
+                "NetSpend": Decimal(0.1),
+                "Discount": Decimal(0.0),
+            },
+        ],
+    }
     transactions = [
         {
             "Timestamp": as_at_timestamp - relativedelta(months=12),
@@ -154,6 +173,66 @@ def dataframe_of_purchases(
                     "Discount": Decimal(0.1),
                 },
             ],
+        },
+        {
+            **chew_car,
+            "Basket": uuid.uuid4(),
+            "Timestamp": chew_car_timestamp - relativedelta(months=3),
+        },
+        {
+            **chew_car,
+            "Basket": uuid.uuid4(),
+            "Timestamp": chew_car_timestamp - relativedelta(months=5),
+        },
+        {
+            **chew_car,
+            "Basket": uuid.uuid4(),
+            "Timestamp": chew_car_timestamp - relativedelta(months=6),
+        },
+        {
+            **chew_car,
+            "Basket": uuid.uuid4(),
+            "Timestamp": chew_car_timestamp - relativedelta(months=9),
+        },
+        {
+            **chew_car,
+            "Basket": uuid.uuid4(),
+            "Timestamp": chew_car_timestamp - relativedelta(months=10),
+        },
+        {
+            **chew_car,
+            "Basket": uuid.uuid4(),
+            "Timestamp": chew_car_timestamp - relativedelta(months=12),
+        },
+        {
+            **chew_car,
+            "Basket": uuid.uuid4(),
+            "Timestamp": chew_car_timestamp - relativedelta(months=13),
+        },
+        {
+            **chew_car,
+            "Basket": uuid.uuid4(),
+            "Timestamp": chew_car_timestamp - relativedelta(months=15),
+        },
+        {
+            **chew_car,
+            "Basket": uuid.uuid4(),
+            "Timestamp": chew_car_timestamp - relativedelta(months=16),
+        },
+        {
+            **chew_car,
+            "Basket": uuid.uuid4(),
+            "Timestamp": chew_car_timestamp - relativedelta(months=17),
+        },
+        {
+            **chew_car,
+            "Basket": uuid.uuid4(),
+            "Timestamp": chew_car_timestamp - relativedelta(months=18),
+        },
+        {
+            **chew_car,
+            "Basket": uuid.uuid4(),
+            "Timestamp": chew_car_timestamp - relativedelta(months=21),
         },
     ]
     flattened_transactions = FakeTransactions.flatten_transactions(transactions)
