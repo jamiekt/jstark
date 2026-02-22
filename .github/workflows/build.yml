@@ -133,3 +133,11 @@ jobs:
     - name: Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v4
+    # Final "complete" job; always runs, but only if deploy-to-github-pages did not fail
+  complete:
+    needs: [deploy-to-github-pages]
+    if: always() && needs.deploy-to-github-pages.result != 'failure'
+    runs-on: ubuntu-latest
+    steps:
+    - name: Complete Workflow
+      run: echo "Workflow completed (not failed in deploy-to-github-pages)"
