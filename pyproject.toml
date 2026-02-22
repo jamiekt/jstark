@@ -41,7 +41,7 @@ path = "jstark/__about__.py"
 dev = [
   "pytest",
   "pytest-cov",
-  "black",
+  "ruff",
   "pre-commit",
   "python-dateutil",
   "genbadge[coverage]",
@@ -49,6 +49,12 @@ dev = [
   "anybadge",
   "pylint-json2html",
 ]
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "W"]
 
 [tool.coverage.run]
 branch = true

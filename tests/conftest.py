@@ -158,7 +158,8 @@ def dataframe_of_purchases(
     ]
     flattened_transactions = FakeTransactions.flatten_transactions(transactions)
     return spark_session.createDataFrame(
-        flattened_transactions, schema=purchases_schema  # type: ignore
+        flattened_transactions,
+        schema=purchases_schema,  # type: ignore
     )
 
 

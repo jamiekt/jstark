@@ -140,8 +140,8 @@ class Feature(metaclass=ABCMeta):
             "end-date": self.end_date.strftime("%Y-%m-%d"),
             "description": (
                 f"{self.description_subject} between "
-                + f'{self.start_date.strftime("%Y-%m-%d")} and '
-                + f'{self.end_date.strftime("%Y-%m-%d")}'
+                + f"{self.start_date.strftime('%Y-%m-%d')} and "
+                + f"{self.end_date.strftime('%Y-%m-%d')}"
             ),
             "generated-at": datetime.now().strftime("%Y-%m-%d"),
             "commentary": self.commentary,

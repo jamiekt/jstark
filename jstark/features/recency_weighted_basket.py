@@ -52,7 +52,7 @@ class RecencyWeightedApproxBasket(DerivedFeature):
         return (
             "RecencyWeightedApproxBasket"
             + f"{self.feature_period.period_unit_of_measure.name.title()}s"
-            + f"{int(self.smoothing_factor*100)}"
+            + f"{int(self.smoothing_factor * 100)}"
             + f"_{self.feature_period.mnemonic}"
         )
 
