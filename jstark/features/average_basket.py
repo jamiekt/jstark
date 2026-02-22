@@ -1,4 +1,5 @@
 "Average baskets per given periodunitofmeasure feature"
+
 from .feature import DerivedFeature
 
 from pyspark.sql import Column

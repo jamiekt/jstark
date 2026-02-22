@@ -1,5 +1,4 @@
-"""Base class for all feature generators
-"""
+"""Base class for all feature generators"""
 
 from abc import ABCMeta
 import re

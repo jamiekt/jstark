@@ -1,5 +1,5 @@
-"""jstark exceptions
-"""
+"""jstark exceptions"""
+
 from jstark.period_unit_of_measure import PeriodUnitOfMeasure
 
 

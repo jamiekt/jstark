@@ -1,4 +1,5 @@
 """Sum abstract base class"""
+
 from abc import ABCMeta
 from typing import Callable
 
