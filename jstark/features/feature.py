@@ -81,26 +81,17 @@ class Feature(metaclass=ABCMeta):
             months=self.feature_period.start * 3
         )
         n_years_ago = self.as_at - relativedelta(years=self.feature_period.start)
-        return (
-            n_days_ago
-            if self.feature_period.period_unit_of_measure == PeriodUnitOfMeasure.DAY
-            else (
-                FirstAndLastDateOfPeriod(n_weeks_ago).first_date_in_week
-                if self.feature_period.period_unit_of_measure
-                == PeriodUnitOfMeasure.WEEK
-                else (
-                    FirstAndLastDateOfPeriod(n_months_ago).first_date_in_month
-                    if self.feature_period.period_unit_of_measure
-                    == PeriodUnitOfMeasure.MONTH
-                    else (
-                        FirstAndLastDateOfPeriod(n_quarters_ago).first_date_in_quarter
-                        if self.feature_period.period_unit_of_measure
-                        == PeriodUnitOfMeasure.QUARTER
-                        else FirstAndLastDateOfPeriod(n_years_ago).first_date_in_year
-                    )
-                )
-            )
-        )
+        match self.feature_period.period_unit_of_measure:
+            case PeriodUnitOfMeasure.DAY:
+                return n_days_ago
+            case PeriodUnitOfMeasure.WEEK:
+                return FirstAndLastDateOfPeriod(n_weeks_ago).first_date_in_week
+            case PeriodUnitOfMeasure.MONTH:
+                return FirstAndLastDateOfPeriod(n_months_ago).first_date_in_month
+            case PeriodUnitOfMeasure.QUARTER:
+                return FirstAndLastDateOfPeriod(n_quarters_ago).first_date_in_quarter
+            case PeriodUnitOfMeasure.YEAR:
+                return FirstAndLastDateOfPeriod(n_years_ago).first_date_in_year
 
     @property
     def end_date(self) -> date:
@@ -109,26 +100,25 @@ class Feature(metaclass=ABCMeta):
         n_months_ago = self.as_at - relativedelta(months=self.feature_period.end)
         n_quarters_ago = self.as_at - relativedelta(months=self.feature_period.end * 3)
         n_years_ago = self.as_at - relativedelta(years=self.feature_period.end)
-        last_day_of_period = (
-            n_days_ago
-            if self.feature_period.period_unit_of_measure == PeriodUnitOfMeasure.DAY
-            else (
-                FirstAndLastDateOfPeriod(n_weeks_ago).last_date_in_week
-                if self.feature_period.period_unit_of_measure
-                == PeriodUnitOfMeasure.WEEK
-                else (
-                    FirstAndLastDateOfPeriod(n_months_ago).last_date_in_month
-                    if self.feature_period.period_unit_of_measure
-                    == PeriodUnitOfMeasure.MONTH
-                    else (
-                        FirstAndLastDateOfPeriod(n_quarters_ago).last_date_in_quarter
-                        if self.feature_period.period_unit_of_measure
-                        == PeriodUnitOfMeasure.QUARTER
-                        else FirstAndLastDateOfPeriod(n_years_ago).last_date_in_year
-                    )
-                )
-            )
-        )
+        match self.feature_period.period_unit_of_measure:
+            case PeriodUnitOfMeasure.DAY:
+                last_day_of_period = n_days_ago
+            case PeriodUnitOfMeasure.WEEK:
+                last_day_of_period = FirstAndLastDateOfPeriod(
+                    n_weeks_ago
+                ).last_date_in_week
+            case PeriodUnitOfMeasure.MONTH:
+                last_day_of_period = FirstAndLastDateOfPeriod(
+                    n_months_ago
+                ).last_date_in_month
+            case PeriodUnitOfMeasure.QUARTER:
+                last_day_of_period = FirstAndLastDateOfPeriod(
+                    n_quarters_ago
+                ).last_date_in_quarter
+            case PeriodUnitOfMeasure.YEAR:
+                last_day_of_period = FirstAndLastDateOfPeriod(
+                    n_years_ago
+                ).last_date_in_year
         # min() is used to ensure we don't return a date later than self.as_at
         return min(last_day_of_period, self.as_at)
 
