@@ -58,10 +58,6 @@ jobs:
         exclude:
         - pyspark-version: '3.5'
           python-version: '3.13'
-        - pyspark-version: '3.5'
-          python-version: '3.14'
-        - pyspark-version: '4.0'
-          python-version: '3.14'
     name: Python ${{ matrix.python-version }}, PySpark ${{ matrix.pyspark-version }} on ${{ startsWith(matrix.os, 'macos-') && 'macOS' || startsWith(matrix.os, 'windows-') && 'Windows' || 'Linux' }}
     runs-on: ${{ matrix.os }}
     # PySpark 4.x Python workers crash on Windows CI runners with
