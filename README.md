@@ -24,8 +24,8 @@ Multiple periods can be calculated in a single Spark job:
 from datetime import date
 from jstark.grocery import GroceryFeatures
 
-grfg = GroceryFeatures(as_at=date(2022, 1, 1), feature_periods=["3m1", "6m4"])
-output_df = input_df.groupBy("Store").agg(*grfg.features)
+gf = GroceryFeatures(as_at=date(2022, 1, 1), feature_periods=["3m1", "6m4"])
+output_df = input_df.groupBy("Store").agg(*gf.features)
 ```
 
 This produces `BasketCount_3m1`, `BasketCount_6m4`, and every other feature for both periods.
@@ -46,8 +46,8 @@ from jstark.sample.transactions import FakeTransactions
 from jstark.grocery import GroceryFeatures
 
 input_df = FakeTransactions().get_df(seed=42, number_of_baskets=10000)
-grfg = GroceryFeatures(date(2022, 1, 1), ["4q4", "3q3", "2q2", "1q1"])
-output_df = input_df.groupBy("Store").agg(*grfg.features)
+gf = GroceryFeatures(date(2022, 1, 1), ["4q4", "3q3", "2q2", "1q1"])
+output_df = input_df.groupBy("Store").agg(*gf.features)
 output_df.select(
     "Store", "BasketCount_4q4", "BasketCount_3q3", "BasketCount_2q2", "BasketCount_1q1"
 ).show()
@@ -83,9 +83,9 @@ pprint([(c.name, c.metadata["description"]) for c in output_df.schema if c.name.
 You can also inspect what input columns each feature requires:
 
 ```python
-grfg.references["BasketCount_1q1"]                  # ['Basket', 'Timestamp']
-grfg.references["CustomerCount_1q1"]                 # ['Customer', 'Timestamp']
-grfg.references["AvgGrossSpendPerBasket_1q1"]        # ['Basket', 'GrossSpend', 'Timestamp']
+gf.references["BasketCount_1q1"]                   # ['Basket', 'Timestamp']
+gf.references["CustomerCount_1q1"]                 # ['Customer', 'Timestamp']
+gf.references["AvgGrossSpendPerBasket_1q1"]        # ['Basket', 'GrossSpend', 'Timestamp']
 ```
 
 All features require a `Timestamp` column ([TimestampType](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.types.TimestampType.html)). Most require additional columns depending on what they measure.
