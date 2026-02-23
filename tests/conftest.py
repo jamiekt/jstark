@@ -8,9 +8,7 @@ import pytest
 from pyspark.sql import DataFrame, SparkSession, Row
 import pyspark.sql.functions as f
 from pyspark.sql.types import StructType
-from jstark.grocery.grocery_retailer_feature_generator import (
-    GroceryRetailerFeatureGenerator,
-)
+from jstark.grocery import GroceryRetailerFeatureGenerator
 from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
 from jstark.sample.transactions import FakeTransactions
 
