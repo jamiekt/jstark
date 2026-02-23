@@ -30,7 +30,7 @@ dependencies = [
 dynamic = ["version"]
 
 [project.optional-dependencies]
-sample = ["faker"]
+faker = ["faker>=40.0.0"]
 
 [project.urls]
 Documentation = "https://github.com/unknown/jstark#readme"
