@@ -138,8 +138,7 @@ jobs:
       uses: actions/deploy-pages@v4
     # Final "complete" job; always runs, but only if deploy-to-github-pages did not fail
   complete:
-    needs: [deploy-to-github-pages]
-    if: always() && needs.deploy-to-github-pages.result != 'failure'
+    needs: [deploy-to-github-pages, run, pylint, lint]
     runs-on: ubuntu-latest
     steps:
     - name: Complete Workflow
