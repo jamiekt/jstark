@@ -25,9 +25,12 @@ classifiers = [
 ]
 dependencies = [
   "pyspark",
-  "faker"
 ]
+
 dynamic = ["version"]
+
+[project.optional-dependencies]
+sample = ["faker"]
 
 [project.urls]
 Documentation = "https://github.com/unknown/jstark#readme"

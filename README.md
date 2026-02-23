@@ -35,8 +35,10 @@ This produces `BasketCount_3m1`, `BasketCount_6m4`, and every other feature for 
 **Prerequisites:** Java runtime required for PySpark. On macOS: `brew install openjdk@11`.
 
 ```shell
-pip install pyspark jstark
+pip install jstark[sample]
 ```
+
+The `sample` extra installs [Faker](https://faker.readthedocs.io/), which is needed for the sample data generator used below. If you don't need sample data, `pip install jstark` is sufficient.
 
 ```python
 from datetime import date

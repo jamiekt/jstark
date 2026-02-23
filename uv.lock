@@ -409,8 +409,12 @@ wheels = [
 name = "jstark"
 source = { editable = "." }
 dependencies = [
-    { name = "faker" },
     { name = "pyspark" },
+]
+
+[package.optional-dependencies]
+sample = [
+    { name = "faker" },
 ]
 
 [package.dev-dependencies]
@@ -428,9 +432,10 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "faker" },
+    { name = "faker", marker = "extra == 'sample'" },
     { name = "pyspark" },
 ]
+provides-extras = ["sample"]
 
 [package.metadata.requires-dev]
 dev = [
