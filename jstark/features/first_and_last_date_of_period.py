@@ -43,35 +43,31 @@ class FirstAndLastDateOfPeriod:
 
     @property
     def first_date_in_quarter(self) -> date:
-        return (
-            date(self.__date_in_period.year, 1, 1)
-            if self.__date_in_period.month in [1, 2, 3]
-            else (
-                date(self.__date_in_period.year, 4, 1)
-                if self.__date_in_period.month in [4, 5, 6]
-                else (
-                    date(self.__date_in_period.year, 7, 1)
-                    if self.__date_in_period.month in [7, 8, 9]
-                    else date(self.__date_in_period.year, 10, 1)
-                )
-            )
-        )
+        match self.__date_in_period.month:
+            case 1 | 2 | 3:
+                return date(self.__date_in_period.year, 1, 1)
+            case 4 | 5 | 6:
+                return date(self.__date_in_period.year, 4, 1)
+            case 7 | 8 | 9:
+                return date(self.__date_in_period.year, 7, 1)
+            case 10 | 11 | 12:
+                return date(self.__date_in_period.year, 10, 1)
+            case _:
+                raise ValueError(f"Unknown month: {self.__date_in_period.month}")
 
     @property
     def last_date_in_quarter(self) -> date:
-        return (
-            date(self.__date_in_period.year, 3, 31)
-            if self.__date_in_period.month in [1, 2, 3]
-            else (
-                date(self.__date_in_period.year, 6, 30)
-                if self.__date_in_period.month in [4, 5, 6]
-                else (
-                    date(self.__date_in_period.year, 9, 30)
-                    if self.__date_in_period.month in [7, 8, 9]
-                    else date(self.__date_in_period.year, 12, 31)
-                )
-            )
-        )
+        match self.__date_in_period.month:
+            case 1 | 2 | 3:
+                return date(self.__date_in_period.year, 3, 31)
+            case 4 | 5 | 6:
+                return date(self.__date_in_period.year, 6, 30)
+            case 7 | 8 | 9:
+                return date(self.__date_in_period.year, 9, 30)
+            case 10 | 11 | 12:
+                return date(self.__date_in_period.year, 12, 31)
+            case _:
+                raise ValueError(f"Unknown month: {self.__date_in_period.month}")
 
     @property
     def first_date_in_year(self) -> date:
