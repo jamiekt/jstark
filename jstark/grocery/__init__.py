@@ -36,7 +36,7 @@ from .recency_weighted_basket import (
     RecencyWeightedApproxBasket99,
 )
 from .average_basket import AvgBasket
-from .grocery_retailer_feature_generator import GroceryRetailerFeatureGenerator
+from .grocery_features import GroceryFeatures
 
 __all__ = [
     "GrossSpend",
@@ -75,5 +75,5 @@ __all__ = [
     "RecencyWeightedApproxBasket95",
     "RecencyWeightedApproxBasket99",
     "AvgBasket",
-    "GroceryRetailerFeatureGenerator",
+    "GroceryFeatures",
 ]

@@ -44,7 +44,7 @@ from jstark.features.feature import Feature
 from jstark.feature_generator import FeatureGenerator
 
 
-class GroceryRetailerFeatureGenerator(FeatureGenerator):
+class GroceryFeatures(FeatureGenerator):
     def __init__(
         self,
         as_at: date,
