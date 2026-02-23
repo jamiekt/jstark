@@ -42,7 +42,7 @@ uv run pylint --rcfile .github/linters/pylintrc jstark tests
 
 ### Class Hierarchy
 
-`FeatureGenerator` (abstract, `jstark/feature_generator.py`) is the base class that parses period mnemonics, holds the as_at date, and produces PySpark `Column` objects via its `features` property. `GroceryRetailerFeatureGenerator` (`jstark/grocery_retailer_feature_generator.py`) is the concrete implementation that defines ~37 feature classes in its `FEATURE_CLASSES` list.
+`FeatureGenerator` (abstract, `jstark/feature_generator.py`) is the base class that parses period mnemonics, holds the as_at date, and produces PySpark `Column` objects via its `features` property. `GroceryRetailerFeatureGenerator` (`jstark/grocery/grocery_retailer_feature_generator.py`) is the concrete implementation that defines ~37 feature classes in its `FEATURE_CLASSES` list. All concrete grocery-domain feature classes live in the `jstark/grocery/` subpackage.
 
 Features themselves have a two-branch hierarchy in `jstark/features/feature.py`:
 - `BaseFeature` — aggregates raw transactional data using an aggregator (sum, count, count_distinct, min, max, etc.) with date filtering via PySpark `when` clauses.

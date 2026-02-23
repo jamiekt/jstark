@@ -3,7 +3,7 @@ import pytest
 
 
 from jstark.exceptions import AsAtIsNotADate
-from jstark.features.gross_spend import GrossSpend
+from jstark.grocery.gross_spend import GrossSpend
 from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
 
 
