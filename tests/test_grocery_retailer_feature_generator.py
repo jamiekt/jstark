@@ -4,7 +4,9 @@ from math import pow
 from pyspark.sql import DataFrame, Row
 import pyspark.sql.functions as f
 
-from jstark.grocery_retailer_feature_generator import GroceryRetailerFeatureGenerator
+from jstark.grocery.grocery_retailer_feature_generator import (
+    GroceryRetailerFeatureGenerator,
+)
 from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
 from jstark.exceptions import FeaturePeriodMnemonicIsInvalid
 
