@@ -40,6 +40,7 @@ from jstark.features import (
     RecencyWeightedApproxBasket99,
     AvgBasket,
 )
+from jstark.features.feature import Feature
 from jstark.feature_generator import FeatureGenerator
 
 
@@ -54,9 +55,7 @@ class GroceryRetailerFeatureGenerator(FeatureGenerator):
     ) -> None:
         super().__init__(as_at, feature_periods)
 
-    # would prefer list[Type[Feature]] as type hint but
-    # this only works on py3.10 and above
-    FEATURE_CLASSES: list = [
+    FEATURE_CLASSES: list[type[Feature]] = [
         Count,
         NetSpend,
         GrossSpend,

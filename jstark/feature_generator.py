@@ -9,6 +9,7 @@ from pyspark.sql import Column, SparkSession
 
 from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
 from jstark.exceptions import FeaturePeriodMnemonicIsInvalid
+from jstark.features.feature import Feature
 
 
 class FeatureGenerator(metaclass=ABCMeta):
@@ -46,9 +47,7 @@ class FeatureGenerator(metaclass=ABCMeta):
                 )
         self.feature_periods = _feature_periods
 
-    # would prefer list[Type[Feature]] as type hint but
-    # this only works on py3.10 and above
-    FEATURE_CLASSES: list
+    FEATURE_CLASSES: list[type["Feature"]] = []
 
     @property
     def as_at(self) -> date:
