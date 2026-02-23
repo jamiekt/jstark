@@ -22,9 +22,9 @@ Multiple periods can be calculated in a single Spark job:
 
 ```python
 from datetime import date
-from jstark.grocery import GroceryRetailerFeatureGenerator
+from jstark.grocery import GroceryFeatures
 
-grfg = GroceryRetailerFeatureGenerator(as_at=date(2022, 1, 1), feature_periods=["3m1", "6m4"])
+grfg = GroceryFeatures(as_at=date(2022, 1, 1), feature_periods=["3m1", "6m4"])
 output_df = input_df.groupBy("Store").agg(*grfg.features)
 ```
 
@@ -43,10 +43,10 @@ The `sample` extra installs [Faker](https://faker.readthedocs.io/), which is nee
 ```python
 from datetime import date
 from jstark.sample.transactions import FakeTransactions
-from jstark.grocery import GroceryRetailerFeatureGenerator
+from jstark.grocery import GroceryFeatures
 
 input_df = FakeTransactions().get_df(seed=42, number_of_baskets=10000)
-grfg = GroceryRetailerFeatureGenerator(date(2022, 1, 1), ["4q4", "3q3", "2q2", "1q1"])
+grfg = GroceryFeatures(date(2022, 1, 1), ["4q4", "3q3", "2q2", "1q1"])
 output_df = input_df.groupBy("Store").agg(*grfg.features)
 output_df.select(
     "Store", "BasketCount_4q4", "BasketCount_3q3", "BasketCount_2q2", "BasketCount_1q1"

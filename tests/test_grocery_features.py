@@ -4,16 +4,14 @@ from math import pow
 from pyspark.sql import DataFrame, Row
 import pyspark.sql.functions as f
 
-from jstark.grocery import GroceryRetailerFeatureGenerator
+from jstark.grocery import GroceryFeatures
 from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
 from jstark.exceptions import FeaturePeriodMnemonicIsInvalid
 
 
 def test_feature_period_mnemonic():
-    pfg1 = GroceryRetailerFeatureGenerator(
-        date.today(), [FeaturePeriod(PeriodUnitOfMeasure.DAY, 0, 0)]
-    )
-    pfg2 = GroceryRetailerFeatureGenerator(date.today(), ["0d0"])
+    pfg1 = GroceryFeatures(date.today(), [FeaturePeriod(PeriodUnitOfMeasure.DAY, 0, 0)])
+    pfg2 = GroceryFeatures(date.today(), ["0d0"])
     assert (
         pfg1.feature_periods[0].period_unit_of_measure.value
         == pfg2.feature_periods[0].period_unit_of_measure.value
@@ -24,7 +22,7 @@ def test_feature_period_mnemonic():
 
 def test_feature_period_invalid_mnemonic():
     with pytest.raises(FeaturePeriodMnemonicIsInvalid) as exc_info:
-        GroceryRetailerFeatureGenerator(date.today(), ["qwerty"])
+        GroceryFeatures(date.today(), ["qwerty"])
     assert str(exc_info.value) == (
         "FeaturePeriod mnemonic must be an integer followed by a letter "
         + "from ['d', 'w', 'm', 'q', 'y'] followed by an integer"
@@ -33,7 +31,7 @@ def test_feature_period_invalid_mnemonic():
 
 def test_feature_period_invalid_mnemonic_empty_string():
     with pytest.raises(FeaturePeriodMnemonicIsInvalid) as exc_info:
-        GroceryRetailerFeatureGenerator(date.today(), [""])
+        GroceryFeatures(date.today(), [""])
     assert str(exc_info.value) == (
         "FeaturePeriod mnemonic must be an integer followed by a letter "
         + "from ['d', 'w', 'm', 'q', 'y'] followed by an integer"
@@ -42,7 +40,7 @@ def test_feature_period_invalid_mnemonic_empty_string():
 
 def test_feature_period_invalid_mnemonic_unit_of_measure():
     with pytest.raises(FeaturePeriodMnemonicIsInvalid) as exc_info:
-        GroceryRetailerFeatureGenerator(date.today(), ["0z0"])
+        GroceryFeatures(date.today(), ["0z0"])
     assert str(exc_info.value) == (
         "FeaturePeriod mnemonic must be an integer followed by a letter "
         + "from ['d', 'w', 'm', 'q', 'y'] followed by an integer"
@@ -55,7 +53,7 @@ def test_parse_references_grossspend():
     but still a good idea to have a couple of little tests here to verify and
     document its behaviour
     """
-    assert GroceryRetailerFeatureGenerator.parse_references(
+    assert GroceryFeatures.parse_references(
         "Alias(UnresolvedAttribute(List(GrossSpend),None,false,Origin()),"
         "UnresolvedAttribute(List(Timestamp),None,false,Origin()))"
     ) == ["GrossSpend", "Timestamp"]
@@ -63,20 +61,20 @@ def test_parse_references_grossspend():
 
 def test_parse_references_count():
     """Basic test that static method parse_references works"""
-    assert GroceryRetailerFeatureGenerator.parse_references(
+    assert GroceryFeatures.parse_references(
         "Alias(UnresolvedAttribute(List(Timestamp),None,false,Origin()))"
     ) == ["Timestamp"]
 
 
 def test_references_count(
-    purchasing_feature_generator: GroceryRetailerFeatureGenerator,
+    purchasing_feature_generator: GroceryFeatures,
 ):
     """Verify that Count_0d0 requires field Timestamp"""
     assert purchasing_feature_generator.references["Count_0d0"] == ["Timestamp"]
 
 
 def test_references_grossspend(
-    purchasing_feature_generator: GroceryRetailerFeatureGenerator,
+    purchasing_feature_generator: GroceryFeatures,
 ):
     """Verify that Count_0d0 requires fields Timestamp,GrossSpend"""
     assert purchasing_feature_generator.references["GrossSpend_0d0"] == [
@@ -102,7 +100,7 @@ def test_gross_spend_today(
         return result
 
     df = luke_and_leia_purchases.groupBy().agg(
-        *GroceryRetailerFeatureGenerator(
+        *GroceryFeatures(
             as_at=as_at_timestamp.date(),
             feature_periods=[
                 FeaturePeriod(PeriodUnitOfMeasure.DAY, 0, 0),
@@ -111,7 +109,7 @@ def test_gross_spend_today(
     )
     _validate_expected_value(df, 5.5)
     df = luke_and_leia_purchases.groupBy().agg(
-        *GroceryRetailerFeatureGenerator(
+        *GroceryFeatures(
             as_at=as_at_timestamp.date() - timedelta(days=1),
             feature_periods=[
                 FeaturePeriod(PeriodUnitOfMeasure.DAY, 0, 0),
@@ -133,7 +131,7 @@ def test_gross_spend_today_and_yesterday(
         return result
 
     df = luke_and_leia_purchases.groupBy().agg(
-        *GroceryRetailerFeatureGenerator(
+        *GroceryFeatures(
             as_at=as_at_timestamp.date(),
             feature_periods=[
                 FeaturePeriod(PeriodUnitOfMeasure.DAY, 1, 0),
@@ -142,7 +140,7 @@ def test_gross_spend_today_and_yesterday(
     )
     _validate_expected_value(df, 9.5)
     df = luke_and_leia_purchases.groupBy().agg(
-        *GroceryRetailerFeatureGenerator(
+        *GroceryFeatures(
             as_at=as_at_timestamp.date() - timedelta(days=1),
             feature_periods=[
                 FeaturePeriod(PeriodUnitOfMeasure.DAY, 1, 0),
@@ -228,7 +226,7 @@ def test_gross_spend_this_year_and_last_year(luke_and_leia_purchases_first: Row)
 
 def test_grossspend_metadata_description(
     dataframe_of_purchases: DataFrame,
-    purchasing_feature_generator: GroceryRetailerFeatureGenerator,
+    purchasing_feature_generator: GroceryFeatures,
 ):
     """Test GrossSpend_2d0 metadata"""
     df = dataframe_of_purchases.agg(*purchasing_feature_generator.features)
@@ -239,7 +237,7 @@ def test_grossspend_metadata_description(
 
 def test_recencydays_and_mostrecentpurchasedate(
     dataframe_of_purchases: DataFrame,
-    purchasing_feature_generator: GroceryRetailerFeatureGenerator,
+    purchasing_feature_generator: GroceryFeatures,
 ):
     """Test RecencyDays_2y0 & MostRecentPurchaseDate_2y0"""
     dataframe_of_purchases = dataframe_of_purchases.where(
@@ -362,9 +360,7 @@ def test_basketweeks(
     specified as_at date is 2022-11-30, so there are only 5 weeks in the 52 weeks
     leading up to 2022-11-30 in which any baskets were purchased
     """
-    pfg = GroceryRetailerFeatureGenerator(
-        as_at=as_at_timestamp, feature_periods=["52w0"]
-    )
+    pfg = GroceryFeatures(as_at=as_at_timestamp, feature_periods=["52w0"])
     output_df = (
         dataframe_of_faker_purchases.groupBy()
         .agg(*pfg.features)
@@ -379,9 +375,7 @@ def test_basketweeks_commentary(
     as_at_timestamp: datetime, dataframe_of_faker_purchases: DataFrame
 ):
     """Test BasketWeeks commentary"""
-    pfg = GroceryRetailerFeatureGenerator(
-        as_at=as_at_timestamp, feature_periods=["52w1"]
-    )
+    pfg = GroceryFeatures(as_at=as_at_timestamp, feature_periods=["52w1"])
     output_df = (
         dataframe_of_faker_purchases.groupBy()
         .agg(*pfg.features)
@@ -398,7 +392,7 @@ def test_basketweeks_commentary(
 
 
 def get_dataframes_for_perweek_feature_tests(as_at_timestamp, luke_and_leia_purchases):
-    fg = GroceryRetailerFeatureGenerator(
+    fg = GroceryFeatures(
         as_at=as_at_timestamp.date(),
         feature_periods=[
             FeaturePeriod(PeriodUnitOfMeasure.WEEK, 13, 0),
@@ -504,7 +498,7 @@ def test_averagebasketsperweek_luke_and_leia(
 
 def test_averagepurchasecycle_chewie_carrot(
     dataframe_of_purchases: DataFrame,
-    purchasing_feature_generator: GroceryRetailerFeatureGenerator,
+    purchasing_feature_generator: GroceryFeatures,
 ):
     """
     Test AveragePurchaseCycle

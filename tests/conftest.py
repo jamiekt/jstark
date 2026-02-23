@@ -8,7 +8,7 @@ import pytest
 from pyspark.sql import DataFrame, SparkSession, Row
 import pyspark.sql.functions as f
 from pyspark.sql.types import StructType
-from jstark.grocery import GroceryRetailerFeatureGenerator
+from jstark.grocery import GroceryFeatures
 from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
 from jstark.sample.transactions import FakeTransactions
 
@@ -252,8 +252,8 @@ def luke_and_leia_purchases(dataframe_of_purchases: DataFrame) -> DataFrame:
 @pytest.fixture(scope="session")
 def purchasing_feature_generator(
     as_at_timestamp: datetime,
-) -> GroceryRetailerFeatureGenerator:
-    return GroceryRetailerFeatureGenerator(
+) -> GroceryFeatures:
+    return GroceryFeatures(
         as_at=as_at_timestamp.date(),
         feature_periods=[
             FeaturePeriod(PeriodUnitOfMeasure.DAY, 0, 0),
@@ -279,7 +279,7 @@ def purchasing_feature_generator(
 @pytest.fixture(scope="session")
 def luke_and_leia_purchases_first(
     luke_and_leia_purchases: DataFrame,
-    purchasing_feature_generator: GroceryRetailerFeatureGenerator,
+    purchasing_feature_generator: GroceryFeatures,
 ) -> Row:
     """
     If we only collect once, the tests should run quicker

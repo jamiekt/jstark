@@ -42,7 +42,7 @@ uv run pylint --rcfile .github/linters/pylintrc jstark tests
 
 ### Class Hierarchy
 
-`FeatureGenerator` (abstract, `jstark/feature_generator.py`) is the base class that parses period mnemonics, holds the as_at date, and produces PySpark `Column` objects via its `features` property. `GroceryRetailerFeatureGenerator` (`jstark/grocery/grocery_retailer_feature_generator.py`) is the concrete implementation that defines ~37 feature classes in its `FEATURE_CLASSES` list. All concrete grocery-domain feature classes live in the `jstark/grocery/` subpackage.
+`FeatureGenerator` (abstract, `jstark/feature_generator.py`) is the base class that parses period mnemonics, holds the as_at date, and produces PySpark `Column` objects via its `features` property. `GroceryFeatures` (`jstark/grocery/grocery_features.py`) is the concrete implementation that defines ~37 feature classes in its `FEATURE_CLASSES` list. All concrete grocery-domain feature classes live in the `jstark/grocery/` subpackage.
 
 Features themselves have a two-branch hierarchy in `jstark/features/feature.py`:
 - `BaseFeature` — aggregates raw transactional data using an aggregator (sum, count, count_distinct, min, max, etc.) with date filtering via PySpark `when` clauses.
@@ -54,13 +54,13 @@ Both branches inherit from `Feature`, which handles date range calculation (`sta
 
 Features are used by passing them to PySpark's `agg()`:
 ```python
-grfg = GroceryRetailerFeatureGenerator(as_at=date(2022, 1, 1), feature_periods=["3m1", "6m4"])
+grfg = GroceryFeatures(as_at=date(2022, 1, 1), feature_periods=["3m1", "6m4"])
 output_df = input_df.groupBy("Store").agg(*grfg.features)
 ```
 
 ### Test Structure
 
-Tests use pytest with session-scoped fixtures in `tests/conftest.py`. A shared `SparkSession` fixture and pre-built test DataFrames (both hand-crafted and Faker-generated via `jstark/sample/transactions.py`) are reused across tests for performance. The main test file is `tests/test_grocery_retailer_feature_generator.py`.
+Tests use pytest with session-scoped fixtures in `tests/conftest.py`. A shared `SparkSession` fixture and pre-built test DataFrames (both hand-crafted and Faker-generated via `jstark/sample/transactions.py`) are reused across tests for performance. The main test file is `tests/test_grocery_features.py`.
 
 ## Code Style
 
