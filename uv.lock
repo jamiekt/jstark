@@ -413,7 +413,7 @@ dependencies = [
 ]
 
 [package.optional-dependencies]
-sample = [
+faker = [
     { name = "faker" },
 ]
 
@@ -432,10 +432,10 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "faker", marker = "extra == 'sample'" },
+    { name = "faker", marker = "extra == 'faker'", specifier = ">=40.0.0" },
     { name = "pyspark" },
 ]
-provides-extras = ["sample"]
+provides-extras = ["faker"]
 
 [package.metadata.requires-dev]
 dev = [
