@@ -1,4 +1,5 @@
 import random
+from functools import cached_property
 import uuid
 from datetime import date
 from typing import Dict, Any, Iterable, Union, List
@@ -17,7 +18,11 @@ from faker import Faker
 from faker.providers import DynamicProvider
 
 
-class FakeTransactions:
+class FakeGroceryTransactions:
+    def __init__(self, seed: Union[int, None] = None, number_of_baskets: int = 1000):
+        self.seed = seed
+        self.number_of_baskets = number_of_baskets
+
     @property
     def transactions_schema(self) -> StructType:
         return StructType(
@@ -50,9 +55,8 @@ class FakeTransactions:
             for d2 in d["items"]
         ]
 
-    def get_df(
-        self, seed: Union[int, None] = None, number_of_baskets: int = 1000
-    ) -> DataFrame:
+    @cached_property
+    def df(self) -> DataFrame:
         stores_provider = DynamicProvider(
             provider_name="store",
             elements=["Hammersmith", "Ealing", "Richmond", "Twickenham", "Staines"],
@@ -81,8 +85,8 @@ class FakeTransactions:
         )
 
         fake = Faker()
-        if seed:
-            Faker.seed(seed)
+        if self.seed:
+            Faker.seed(self.seed)
         fake.add_provider(stores_provider)
         fake.add_provider(channels_provider)
 
@@ -92,17 +96,17 @@ class FakeTransactions:
         transactions = []
 
         possible_quantities = [1, 2, 3, 4, 5]
-        if seed:
-            random.seed(seed)
+        if self.seed:
+            random.seed(self.seed)
         quantities = random.choices(
             possible_quantities,
             weights=[100, 40, 20, 10, 8],
-            k=number_of_baskets * len(products_provider.elements),
+            k=self.number_of_baskets * len(products_provider.elements),
         )
-        for basket in range(number_of_baskets):
+        for basket in range(self.number_of_baskets):
             items = []
-            if seed:
-                random.seed(seed)
+            if self.seed:
+                random.seed(self.seed)
             for item in range(random.randint(1, len(products_provider.elements))):
                 p = products_fake.unique.product()
                 quantity = quantities[(basket * len(possible_quantities)) + item]

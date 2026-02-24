@@ -10,7 +10,7 @@ import pyspark.sql.functions as f
 from pyspark.sql.types import StructType
 from jstark.grocery import GroceryFeatures
 from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
-from jstark.sample.transactions import FakeTransactions
+from jstark.sample.transactions import FakeGroceryTransactions
 
 
 @pytest.fixture(scope="session")
@@ -37,14 +37,12 @@ def as_at_timestamp() -> datetime:
 
 @pytest.fixture(scope="session")
 def purchases_schema() -> StructType:
-    return FakeTransactions().transactions_schema
+    return FakeGroceryTransactions().transactions_schema
 
 
 @pytest.fixture(scope="session")
-def dataframe_of_faker_purchases(
-    spark_session: SparkSession, as_at_timestamp: datetime, purchases_schema: StructType
-) -> DataFrame:
-    return FakeTransactions().get_df(seed=42, number_of_baskets=10000)
+def dataframe_of_faker_purchases() -> DataFrame:
+    return FakeGroceryTransactions(seed=42, number_of_baskets=10000).df
 
 
 @pytest.fixture(scope="session")
@@ -235,7 +233,7 @@ def dataframe_of_purchases(
             "Timestamp": chew_car_timestamp - relativedelta(months=21),
         },
     ]
-    flattened_transactions = FakeTransactions.flatten_transactions(transactions)
+    flattened_transactions = FakeGroceryTransactions.flatten_transactions(transactions)
     return spark_session.createDataFrame(
         flattened_transactions,
         schema=purchases_schema,  # type: ignore
