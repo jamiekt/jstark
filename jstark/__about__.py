@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2022-present Jamie Thomson <854953+jamiekt@users.noreply.github.com>
+# SPDX-FileCopyrightText: 2022-present Jamie Thomson <jamie@jamie-thomson.net>
 #
 # SPDX-License-Identifier: MIT
 """__about__.py"""
