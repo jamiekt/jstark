@@ -2,7 +2,7 @@ import random
 from functools import cached_property
 import uuid
 from datetime import date
-from typing import Dict, Any, Iterable, Union, List
+from typing import Any, Iterable
 from decimal import Decimal
 
 from pyspark.sql import SparkSession, DataFrame
@@ -19,7 +19,7 @@ from faker.providers import DynamicProvider
 
 
 class FakeGroceryTransactions:
-    def __init__(self, seed: Union[int, None] = None, number_of_baskets: int = 1000):
+    def __init__(self, seed: int | None = None, number_of_baskets: int = 1000):
         self.seed = seed
         self.number_of_baskets = number_of_baskets
 
@@ -41,7 +41,7 @@ class FakeGroceryTransactions:
         )
 
     @staticmethod
-    def flatten_transactions(transactions: List[Any]) -> Iterable[Dict[str, Any]]:
+    def flatten_transactions(transactions: list[Any]) -> Iterable[dict[str, Any]]:
         return [
             {
                 "Customer": d["Customer"],
