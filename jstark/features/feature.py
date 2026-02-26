@@ -5,7 +5,7 @@ All feature classes are derived from here
 
 from abc import ABCMeta, abstractmethod
 from datetime import date, timedelta, datetime
-from typing import Callable, Dict
+from typing import Callable
 from dateutil.relativedelta import relativedelta
 
 
@@ -123,7 +123,7 @@ class Feature(metaclass=ABCMeta):
         return min(last_day_of_period, self.as_at)
 
     @property
-    def column_metadata(self) -> Dict[str, str]:
+    def column_metadata(self) -> dict[str, str]:
         return {
             "created-with-love-by": "https://github.com/jamiekt/jstark",
             "start-date": self.start_date.strftime("%Y-%m-%d"),

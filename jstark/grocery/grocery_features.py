@@ -1,5 +1,4 @@
 from datetime import date
-from typing import List, Union
 
 from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
 from jstark.grocery.count import Count
@@ -48,7 +47,7 @@ class GroceryFeatures(FeatureGenerator):
     def __init__(
         self,
         as_at: date,
-        feature_periods: Union[List[FeaturePeriod], List[str]] = [
+        feature_periods: list[FeaturePeriod] | list[str] = [
             FeaturePeriod(PeriodUnitOfMeasure.DAY, 2, 0),
             FeaturePeriod(PeriodUnitOfMeasure.DAY, 4, 3),
         ],

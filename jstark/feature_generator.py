@@ -3,7 +3,6 @@
 from abc import ABCMeta
 import re
 from datetime import date
-from typing import List, Union, Dict
 
 from pyspark.sql import Column, SparkSession
 
@@ -18,12 +17,10 @@ class FeatureGenerator(metaclass=ABCMeta):
     def __init__(
         self,
         as_at: date,
-        feature_periods: Union[List[FeaturePeriod], List[str]] = [
+        feature_periods: list[FeaturePeriod] | list[str] = [
             FeaturePeriod(PeriodUnitOfMeasure.WEEK, 52, 0),
         ],
     ) -> None:
-        # sourcery skip: use-named-expression
-        # walrus operator not supported until python3.8, we are still supporting 3.7
         self.as_at = as_at
         period_unit_of_measure_values = "".join([e.value for e in PeriodUnitOfMeasure])
         regex = (
@@ -58,15 +55,15 @@ class FeatureGenerator(metaclass=ABCMeta):
         self.__as_at = value
 
     @property
-    def feature_periods(self) -> List[FeaturePeriod]:
+    def feature_periods(self) -> list[FeaturePeriod]:
         return self.__feature_periods
 
     @feature_periods.setter
-    def feature_periods(self, value: List[FeaturePeriod]) -> None:
+    def feature_periods(self, value: list[FeaturePeriod]) -> None:
         self.__feature_periods = value
 
     @property
-    def features(self) -> List[Column]:
+    def features(self) -> list[Column]:
         return [
             feature.column
             for feature in [
@@ -80,7 +77,7 @@ class FeatureGenerator(metaclass=ABCMeta):
         ]
 
     @property
-    def references(self) -> Dict[str, List[str]]:
+    def references(self) -> dict[str, list[str]]:
         # this function requires a SparkSession in order to do its thing.
         # In normal operation a SparkSession will probably already exist
         # but in unit tests that might not be the case, so getOrCreate one
@@ -92,7 +89,7 @@ class FeatureGenerator(metaclass=ABCMeta):
         }
 
     @staticmethod
-    def parse_references(references: str) -> List[str]:
+    def parse_references(references: str) -> list[str]:
         return sorted(
             set(re.findall(r"UnresolvedAttribute\(List\(([^)]+)\)", references))
         )
