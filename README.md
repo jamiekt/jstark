@@ -131,47 +131,50 @@ output_df = df.groupBy().agg(*gf.features)
 
 cog.outl("| Feature | Description |")
 cog.outl("| --- | --- |")
-for name, description in [(c.name, c.metadata["description"]) for c in output_df.schema]:
+for name, description in sorted(
+    [(c.name, c.metadata["description"]) for c in output_df.schema],
+    key=lambda x: x[0]
+):
     cog.outl(f"| {name} | {description} |")
 ]]]-->
 | Feature | Description |
 | --- | --- |
-| Count_3m1 | Count of rows between 2021-10-01 and 2021-12-31 |
-| NetSpend_3m1 | Sum of NetSpend between 2021-10-01 and 2021-12-31 |
-| GrossSpend_3m1 | Sum of GrossSpend between 2021-10-01 and 2021-12-31 |
-| RecencyDays_3m1 | Minimum number of days since occurrence between 2021-10-01 and 2021-12-31 |
-| BasketCount_3m1 | Distinct count of Baskets between 2021-10-01 and 2021-12-31 |
-| StoreCount_3m1 | Distinct count of Stores between 2021-10-01 and 2021-12-31 |
-| ProductCount_3m1 | Distinct count of Products between 2021-10-01 and 2021-12-31 |
-| CustomerCount_3m1 | Distinct count of Customers between 2021-10-01 and 2021-12-31 |
-| ChannelCount_3m1 | Distinct count of Channels between 2021-10-01 and 2021-12-31 |
 | ApproxBasketCount_3m1 | Approximate distinct count of Baskets between 2021-10-01 and 2021-12-31 |
 | ApproxCustomerCount_3m1 | Approximate distinct count of Customers between 2021-10-01 and 2021-12-31 |
-| Discount_3m1 | Sum of Discount between 2021-10-01 and 2021-12-31 |
-| MinGrossSpend_3m1 | Minimum GrossSpend value between 2021-10-01 and 2021-12-31 |
-| MaxGrossSpend_3m1 | Maximum GrossSpend value between 2021-10-01 and 2021-12-31 |
-| MinNetSpend_3m1 | Minimum of NetSpend value between 2021-10-01 and 2021-12-31 |
-| MaxNetSpend_3m1 | Maximum of NetSpend value between 2021-10-01 and 2021-12-31 |
-| AvgGrossSpendPerBasket_3m1 | Average GrossSpend per Basket between 2021-10-01 and 2021-12-31 |
-| Quantity_3m1 | Sum of Quantity between 2021-10-01 and 2021-12-31 |
-| AvgQuantityPerBasket_3m1 | Average Quantity per Basket between 2021-10-01 and 2021-12-31 |
-| MostRecentPurchaseDate_3m1 | Most recent purchase date between 2021-10-01 and 2021-12-31 |
-| MinNetPrice_3m1 | Minimum of (NetSpend / Quantity) between 2021-10-01 and 2021-12-31 |
-| MaxNetPrice_3m1 | Maximum of (NetSpend / Quantity) between 2021-10-01 and 2021-12-31 |
-| MinGrossPrice_3m1 | Minimum of (GrossSpend / Quantity) between 2021-10-01 and 2021-12-31 |
-| MaxGrossPrice_3m1 | Maximum of (GrossSpend / Quantity) between 2021-10-01 and 2021-12-31 |
-| EarliestPurchaseDate_3m1 | Earliest purchase date between 2021-10-01 and 2021-12-31 |
-| AvgDiscountPerBasket_3m1 | Average Discount per Basket between 2021-10-01 and 2021-12-31 |
-| AvgPurchaseCycle_3m1 | Average purchase cycle between 2021-10-01 and 2021-12-31 |
-| CyclesSinceLastPurchase_3m1 | Cycles since last purchase between 2021-10-01 and 2021-12-31 |
-| BasketMonths_3m1 | Number of months in which at least one basket was purchased between 2021-10-01 and 2021-12-31 |
-| RecencyWeightedBasketMonths95_3m1 | Exponentially weighted moving average, with smoothing factor of 0.95, of the number of baskets per month between 2021-10-01 and 2021-12-31 |
-| RecencyWeightedBasketMonths90_3m1 | Exponentially weighted moving average, with smoothing factor of 0.9, of the number of baskets per month between 2021-10-01 and 2021-12-31 |
-| RecencyWeightedBasketMonths99_3m1 | Exponentially weighted moving average, with smoothing factor of 0.99, of the number of baskets per month between 2021-10-01 and 2021-12-31 |
-| RecencyWeightedApproxBasketMonths95_3m1 | Exponentially weighted moving average, with smoothing factor of 0.95, of the approximate number of baskets per month between 2021-10-01 and 2021-12-31 |
-| RecencyWeightedApproxBasketMonths90_3m1 | Exponentially weighted moving average, with smoothing factor of 0.9, of the approximate number of baskets per month between 2021-10-01 and 2021-12-31 |
-| RecencyWeightedApproxBasketMonths99_3m1 | Exponentially weighted moving average, with smoothing factor of 0.99, of the approximate number of baskets per month between 2021-10-01 and 2021-12-31 |
 | AverageBasketsPerMonth_3m1 | Average number of baskets per month between 2021-10-01 and 2021-12-31 |
+| AvgDiscountPerBasket_3m1 | Average Discount per Basket between 2021-10-01 and 2021-12-31 |
+| AvgGrossSpendPerBasket_3m1 | Average GrossSpend per Basket between 2021-10-01 and 2021-12-31 |
+| AvgPurchaseCycle_3m1 | Average purchase cycle between 2021-10-01 and 2021-12-31 |
+| AvgQuantityPerBasket_3m1 | Average Quantity per Basket between 2021-10-01 and 2021-12-31 |
+| BasketCount_3m1 | Distinct count of Baskets between 2021-10-01 and 2021-12-31 |
+| BasketMonths_3m1 | Number of months in which at least one basket was purchased between 2021-10-01 and 2021-12-31 |
+| ChannelCount_3m1 | Distinct count of Channels between 2021-10-01 and 2021-12-31 |
+| Count_3m1 | Count of rows between 2021-10-01 and 2021-12-31 |
+| CustomerCount_3m1 | Distinct count of Customers between 2021-10-01 and 2021-12-31 |
+| CyclesSinceLastPurchase_3m1 | Cycles since last purchase between 2021-10-01 and 2021-12-31 |
+| Discount_3m1 | Sum of Discount between 2021-10-01 and 2021-12-31 |
+| EarliestPurchaseDate_3m1 | Earliest purchase date between 2021-10-01 and 2021-12-31 |
+| GrossSpend_3m1 | Sum of GrossSpend between 2021-10-01 and 2021-12-31 |
+| MaxGrossPrice_3m1 | Maximum of (GrossSpend / Quantity) between 2021-10-01 and 2021-12-31 |
+| MaxGrossSpend_3m1 | Maximum GrossSpend value between 2021-10-01 and 2021-12-31 |
+| MaxNetPrice_3m1 | Maximum of (NetSpend / Quantity) between 2021-10-01 and 2021-12-31 |
+| MaxNetSpend_3m1 | Maximum of NetSpend value between 2021-10-01 and 2021-12-31 |
+| MinGrossPrice_3m1 | Minimum of (GrossSpend / Quantity) between 2021-10-01 and 2021-12-31 |
+| MinGrossSpend_3m1 | Minimum GrossSpend value between 2021-10-01 and 2021-12-31 |
+| MinNetPrice_3m1 | Minimum of (NetSpend / Quantity) between 2021-10-01 and 2021-12-31 |
+| MinNetSpend_3m1 | Minimum of NetSpend value between 2021-10-01 and 2021-12-31 |
+| MostRecentPurchaseDate_3m1 | Most recent purchase date between 2021-10-01 and 2021-12-31 |
+| NetSpend_3m1 | Sum of NetSpend between 2021-10-01 and 2021-12-31 |
+| ProductCount_3m1 | Distinct count of Products between 2021-10-01 and 2021-12-31 |
+| Quantity_3m1 | Sum of Quantity between 2021-10-01 and 2021-12-31 |
+| RecencyDays_3m1 | Minimum number of days since occurrence between 2021-10-01 and 2021-12-31 |
+| RecencyWeightedApproxBasketMonths90_3m1 | Exponentially weighted moving average, with smoothing factor of 0.9, of the approximate number of baskets per month between 2021-10-01 and 2021-12-31 |
+| RecencyWeightedApproxBasketMonths95_3m1 | Exponentially weighted moving average, with smoothing factor of 0.95, of the approximate number of baskets per month between 2021-10-01 and 2021-12-31 |
+| RecencyWeightedApproxBasketMonths99_3m1 | Exponentially weighted moving average, with smoothing factor of 0.99, of the approximate number of baskets per month between 2021-10-01 and 2021-12-31 |
+| RecencyWeightedBasketMonths90_3m1 | Exponentially weighted moving average, with smoothing factor of 0.9, of the number of baskets per month between 2021-10-01 and 2021-12-31 |
+| RecencyWeightedBasketMonths95_3m1 | Exponentially weighted moving average, with smoothing factor of 0.95, of the number of baskets per month between 2021-10-01 and 2021-12-31 |
+| RecencyWeightedBasketMonths99_3m1 | Exponentially weighted moving average, with smoothing factor of 0.99, of the number of baskets per month between 2021-10-01 and 2021-12-31 |
+| StoreCount_3m1 | Distinct count of Stores between 2021-10-01 and 2021-12-31 |
 <!--[[[end]]]-->
 </details>
 
