@@ -25,6 +25,7 @@ classifiers = [
 ]
 dependencies = [
   "pyspark",
+  "python-dateutil",
 ]
 
 dynamic = ["version"]
@@ -49,7 +50,6 @@ dev = [
   "pytest-cov",
   "ruff",
   "pre-commit",
-  "python-dateutil",
   "genbadge[coverage]",
   "pylint",
   "anybadge",
