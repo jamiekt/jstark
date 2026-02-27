@@ -128,6 +128,9 @@ dmypy.json
 
 .vscode
 
+# hatch-vcs generated version file
+jstark/_version.py
+
 pylint.html
 pylint.out
 pylint.svg

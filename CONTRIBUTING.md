@@ -26,6 +26,24 @@ uv creates a standard `.venv/` directory in the project root. VS Code should det
 *Contributions welcomed here*
 
 
+## Releasing
+
+jstark follows [semver](https://semver.org/). The package version is derived automatically from git tags using [hatch-vcs](https://github.com/ofek/hatch-vcs) — there is no hardcoded version in the source code.
+
+To publish a new release:
+
+1. Ensure all changes are merged to `main` and CI is green.
+1. Create and push a tag:
+
+   ```shell
+   git tag v0.1.0
+   git push origin v0.1.0
+   ```
+
+1. The `publish.yml` workflow will run tests, build the package, and publish to PyPI using trusted publishing.
+
+Tag names **must** start with `v` followed by a semver version (e.g. `v0.1.0`, `v1.0.0`, `v2.3.1`).
+
 ## Troubleshooting
 
 ### libffi-dev on wsl
