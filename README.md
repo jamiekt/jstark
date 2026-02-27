@@ -28,7 +28,8 @@ gf = GroceryFeatures(as_at=date(2022, 1, 1), feature_periods=["3m1", "6m4"])
 output_df = input_df.groupBy("Store").agg(*gf.features)
 ```
 
-This produces `BasketCount_3m1`, `BasketCount_6m4`, and every other feature for both periods.
+This produces `BasketCount_3m1`, `BasketCount_6m4`, and every other feature for both periods. See the
+[Features reference](#features-reference) for a list of all available features.
 
 ## Quick start
 
@@ -90,15 +91,17 @@ gf.references["AvgGrossSpendPerBasket_1q1"]        # ['Basket', 'GrossSpend', 'T
 
 All features require a `Timestamp` column ([TimestampType](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.types.TimestampType.html)). Most require additional columns depending on what they measure.
 
-## Grocery features
+## Features reference
 
-This is a list of all Grocery features for:
+
+<details><summary>Grocery features</summary>
+
+A list of all Grocery features available if one were to call:
 
 ```python
 GroceryFeatures(date(2022, 1, 1), ["3m1"])
 ```
 
-<details>
 
 <!--[[[cog
 from datetime import date, datetime, time
