@@ -410,6 +410,7 @@ name = "jstark"
 source = { editable = "." }
 dependencies = [
     { name = "pyspark" },
+    { name = "python-dateutil" },
 ]
 
 [package.optional-dependencies]
@@ -426,7 +427,6 @@ dev = [
     { name = "pylint-json2html" },
     { name = "pytest" },
     { name = "pytest-cov" },
-    { name = "python-dateutil" },
     { name = "ruff" },
 ]
 
@@ -434,6 +434,7 @@ dev = [
 requires-dist = [
     { name = "faker", marker = "extra == 'faker'", specifier = ">=40.0.0" },
     { name = "pyspark" },
+    { name = "python-dateutil" },
 ]
 provides-extras = ["faker"]
 
@@ -446,7 +447,6 @@ dev = [
     { name = "pylint-json2html" },
     { name = "pytest" },
     { name = "pytest-cov" },
-    { name = "python-dateutil" },
     { name = "ruff" },
 ]
 
