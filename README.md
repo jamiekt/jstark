@@ -14,7 +14,8 @@ A [PySpark](https://spark.apache.org/docs/latest/api/python/) library for genera
 
 ## Feature period mnemonics
 
-Feature names end with a mnemonic describing the time window. The format is `{start}{unit}{end}` where the unit is one of `d` (days), `w` (weeks), `m` (months), `q` (quarters) or `y` (years).
+Feature names end with a mnemonic describing the time window. The format is `{start}{unit}{end}` where the unit is one
+of `d` (days), `w` (weeks), `m` (months), `q` (quarters) or `y` (years).
 
 For example, `BasketCount_3m1` is the distinct count of baskets from 3 months before to 1 month before the as at date.
 
@@ -36,10 +37,11 @@ This produces `BasketCount_3m1`, `BasketCount_6m4`, and every other feature for 
 **Prerequisites:** Java runtime required for PySpark. On macOS: `brew install openjdk@11`.
 
 ```shell
-pip install jstark[sample]
+pip install jstark[faker]
 ```
 
-The `sample` extra installs [Faker](https://faker.readthedocs.io/), which is needed for the sample data generator used below. If you don't need sample data, `pip install jstark` is sufficient.
+The `faker` extra installs [Faker](https://faker.readthedocs.io/), which is needed for the sample data generator used
+below. If you don't need sample data, `pip install jstark` is sufficient.
 
 ```python
 from datetime import date
@@ -54,7 +56,7 @@ output_df.select(
 ).show()
 ```
 
-```
+```shell
 +-----------+---------------+---------------+---------------+---------------+
 |      Store|BasketCount_4q4|BasketCount_3q3|BasketCount_2q2|BasketCount_1q1|
 +-----------+---------------+---------------+---------------+---------------+
@@ -75,7 +77,7 @@ from pprint import pprint
 pprint([(c.name, c.metadata["description"]) for c in output_df.schema if c.name.endswith("1q1")])
 ```
 
-```
+```python
 [('BasketCount_1q1',
   'Distinct count of Baskets between 2021-10-01 and 2021-12-31'),
  ...]
@@ -101,7 +103,6 @@ A list of all Grocery features available if one were to call:
 ```python
 GroceryFeatures(date(2022, 1, 1), ["3m1"])
 ```
-
 
 <!--[[[cog
 from datetime import date, datetime, time
