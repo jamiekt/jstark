@@ -433,7 +433,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "faker", marker = "extra == 'faker'", specifier = ">=40.0.0" },
-    { name = "pyspark" },
+    { name = "pyspark", specifier = ">=3.5" },
     { name = "python-dateutil" },
 ]
 provides-extras = ["faker"]
