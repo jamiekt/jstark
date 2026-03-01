@@ -50,10 +50,8 @@ class FirstAndLastDateOfPeriod:
                 return date(self.__date_in_period.year, 4, 1)
             case 7 | 8 | 9:
                 return date(self.__date_in_period.year, 7, 1)
-            case 10 | 11 | 12:
+            case _:  # all other months:
                 return date(self.__date_in_period.year, 10, 1)
-            case _:
-                raise ValueError(f"Unknown month: {self.__date_in_period.month}")
 
     @property
     def last_date_in_quarter(self) -> date:
@@ -64,10 +62,8 @@ class FirstAndLastDateOfPeriod:
                 return date(self.__date_in_period.year, 6, 30)
             case 7 | 8 | 9:
                 return date(self.__date_in_period.year, 9, 30)
-            case 10 | 11 | 12:
+            case _:  # all other months:
                 return date(self.__date_in_period.year, 12, 31)
-            case _:
-                raise ValueError(f"Unknown month: {self.__date_in_period.month}")
 
     @property
     def first_date_in_year(self) -> date:

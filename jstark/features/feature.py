@@ -90,7 +90,7 @@ class Feature(metaclass=ABCMeta):
                 return FirstAndLastDateOfPeriod(n_months_ago).first_date_in_month
             case PeriodUnitOfMeasure.QUARTER:
                 return FirstAndLastDateOfPeriod(n_quarters_ago).first_date_in_quarter
-            case PeriodUnitOfMeasure.YEAR:
+            case _:  # PeriodUnitOfMeasure.YEAR:
                 return FirstAndLastDateOfPeriod(n_years_ago).first_date_in_year
 
     @property
@@ -115,7 +115,7 @@ class Feature(metaclass=ABCMeta):
                 last_day_of_period = FirstAndLastDateOfPeriod(
                     n_quarters_ago
                 ).last_date_in_quarter
-            case PeriodUnitOfMeasure.YEAR:
+            case _:  # PeriodUnitOfMeasure.YEAR:
                 last_day_of_period = FirstAndLastDateOfPeriod(
                     n_years_ago
                 ).last_date_in_year
