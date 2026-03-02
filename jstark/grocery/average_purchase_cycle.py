@@ -4,8 +4,8 @@ import pyspark.sql.functions as f
 from pyspark.sql import Column
 
 from jstark.features.feature import DerivedFeature
-from .earliest_purchase_date import EarliestPurchaseDate
-from .most_recent_purchase_date import MostRecentPurchaseDate
+from jstark.features.earliest_purchase_date import EarliestPurchaseDate
+from jstark.features.most_recent_purchase_date import MostRecentPurchaseDate
 from .basket_count import BasketCount
 
 

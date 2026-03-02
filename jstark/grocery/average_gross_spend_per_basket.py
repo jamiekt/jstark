@@ -4,7 +4,7 @@ import pyspark.sql.functions as f
 from pyspark.sql import Column
 
 from jstark.features.feature import DerivedFeature
-from .gross_spend import GrossSpend
+from jstark.features.gross_spend import GrossSpend
 from .basket_count import BasketCount
 
 

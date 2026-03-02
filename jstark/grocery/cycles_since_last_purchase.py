@@ -5,7 +5,7 @@ from pyspark.sql import Column
 
 from jstark.features.feature import DerivedFeature
 from .average_purchase_cycle import AvgPurchaseCycle
-from .recency_days import RecencyDays
+from jstark.features.recency_days import RecencyDays
 
 
 class CyclesSinceLastPurchase(DerivedFeature):
