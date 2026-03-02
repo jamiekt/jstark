@@ -4,7 +4,7 @@ import pyspark.sql.functions as f
 from pyspark.sql import Column
 
 from jstark.features.feature import DerivedFeature
-from .quantity import Quantity
+from jstark.features.quantity import Quantity
 from .basket_count import BasketCount
 
 
