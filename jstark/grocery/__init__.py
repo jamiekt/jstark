@@ -4,12 +4,10 @@ from jstark.features.count import Count
 from jstark.features.recency_days import RecencyDays
 from .basket_count import BasketCount
 from .store_count import StoreCount
-from .product_count import ProductCount
 from jstark.features.customer_count import CustomerCount
 from .channel_count import ChannelCount
 from .approx_basket_count import ApproxBasketCount
 from jstark.features.approx_customer_count import ApproxCustomerCount
-from .discount import Discount
 from jstark.features.min_gross_spend import MinGrossSpend
 from jstark.features.max_gross_spend import MaxGrossSpend
 from jstark.features.min_net_spend import MinNetSpend

@@ -11,6 +11,7 @@ from pyspark.sql.types import StructType
 from jstark.grocery import GroceryFeatures
 from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
 from jstark.sample.transactions import FakeGroceryTransactions
+from jstark.sample.mealkit_orders import FakeMealkitOrders
 
 
 @pytest.fixture(scope="session")
@@ -33,6 +34,16 @@ def as_at_timestamp() -> datetime:
     # This is a Wednesday. That's important to know because
     # it affects week calculations.
     return datetime(2022, 11, 30, 10, 12, 13)
+
+
+@pytest.fixture(scope="session")
+def mealkit_orders_schema() -> StructType:
+    return FakeMealkitOrders().mealkit_orders_schema
+
+
+@pytest.fixture(scope="session")
+def dataframe_of_faker_mealkit_orders() -> DataFrame:
+    return FakeMealkitOrders(seed=42, number_of_orders=10000).df
 
 
 @pytest.fixture(scope="session")
