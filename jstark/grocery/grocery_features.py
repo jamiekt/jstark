@@ -7,12 +7,13 @@ from jstark.features.gross_spend import GrossSpend
 from jstark.features.recency_days import RecencyDays
 from jstark.grocery.basket_count import BasketCount
 from jstark.grocery.store_count import StoreCount
-from jstark.grocery.product_count import ProductCount
+from jstark.features.product_count import ProductCount
+from jstark.features.approx_product_count import ApproxProductCount
 from jstark.features.customer_count import CustomerCount
 from jstark.grocery.channel_count import ChannelCount
 from jstark.features.approx_customer_count import ApproxCustomerCount
 from jstark.grocery.approx_basket_count import ApproxBasketCount
-from jstark.grocery.discount import Discount
+from jstark.features.discount import Discount
 from jstark.features.min_gross_spend import MinGrossSpend
 from jstark.features.max_gross_spend import MaxGrossSpend
 from jstark.features.min_net_spend import MinNetSpend
@@ -65,6 +66,7 @@ class GroceryFeatures(FeatureGenerator):
         CustomerCount,
         ChannelCount,
         ApproxBasketCount,
+        ApproxProductCount,
         ApproxCustomerCount,
         Discount,
         MinGrossSpend,
