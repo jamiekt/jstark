@@ -17,11 +17,15 @@ class FeatureGenerator(metaclass=ABCMeta):
     def __init__(
         self,
         as_at: date,
-        feature_periods: list[FeaturePeriod] | list[str] | None = None,
+        feature_periods: list[FeaturePeriod]
+        | list[str]
+        | set[FeaturePeriod]
+        | set[str]
+        | None = None,
         feature_stems: set[str] | list[str] | None = None,
     ) -> None:
         if feature_periods is None:
-            feature_periods = [FeaturePeriod(PeriodUnitOfMeasure.WEEK, 52, 0)]
+            feature_periods = {FeaturePeriod(PeriodUnitOfMeasure.WEEK, 52, 0)}
         if feature_stems is None:
             feature_stems = set[str]()
         if isinstance(feature_stems, list):
