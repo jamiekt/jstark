@@ -17,10 +17,15 @@ class FeatureGenerator(metaclass=ABCMeta):
     def __init__(
         self,
         as_at: date,
-        feature_periods: list[FeaturePeriod] | list[str] = [
-            FeaturePeriod(PeriodUnitOfMeasure.WEEK, 52, 0),
-        ],
+        feature_periods: list[FeaturePeriod] | list[str] | None = None,
+        feature_stems: set[str] | list[str] | None = None,
     ) -> None:
+        if feature_periods is None:
+            feature_periods = [FeaturePeriod(PeriodUnitOfMeasure.WEEK, 52, 0)]
+        if feature_stems is None:
+            feature_stems = set[str]()
+        if isinstance(feature_stems, list):
+            feature_stems = set[str](feature_stems)
         self.as_at = as_at
         period_unit_of_measure_values = "".join([e.value for e in PeriodUnitOfMeasure])
         regex = (
@@ -43,8 +48,9 @@ class FeatureGenerator(metaclass=ABCMeta):
                     )
                 )
         self.feature_periods = _feature_periods
+        self.feature_stems = feature_stems
 
-    FEATURE_CLASSES: list[type["Feature"]] = []
+    FEATURE_CLASSES: set[type["Feature"]] = set[type["Feature"]]()
 
     @property
     def as_at(self) -> date:
@@ -64,14 +70,25 @@ class FeatureGenerator(metaclass=ABCMeta):
 
     @property
     def features(self) -> list[Column]:
+        # Find feature stems that do not correspond to any class in FEATURE_CLASSES.
+        # If any are not found, raise an Exception.
+        missing_stems = self.feature_stems - {
+            cls.__name__ for cls in self.FEATURE_CLASSES
+        }
+        if missing_stems:
+            # Only raise on the first (sorted for determinism)
+            raise Exception(f"Feature(s) {sorted(missing_stems)} not found")
+        desired_features = (
+            [fc for fc in self.FEATURE_CLASSES if fc.__name__ in self.feature_stems]
+            if self.feature_stems
+            else self.FEATURE_CLASSES
+        )
         return [
             feature.column
             for feature in [
                 f[0](as_at=self.as_at, feature_period=f[1])
                 for f in (
-                    (cls, fp)
-                    for cls in self.FEATURE_CLASSES
-                    for fp in self.feature_periods
+                    (cls, fp) for cls in desired_features for fp in self.feature_periods
                 )
             ]
         ]
