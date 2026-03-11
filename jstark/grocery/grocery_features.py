@@ -52,10 +52,11 @@ class GroceryFeatures(FeatureGenerator):
             FeaturePeriod(PeriodUnitOfMeasure.DAY, 2, 0),
             FeaturePeriod(PeriodUnitOfMeasure.DAY, 4, 3),
         ],
+        feature_stems: set[str] | list[str] = set[str](),
     ) -> None:
-        super().__init__(as_at, feature_periods)
+        super().__init__(as_at, feature_periods, feature_stems)
 
-    FEATURE_CLASSES: list[type[Feature]] = [
+    FEATURE_CLASSES: set[type[Feature]] = {
         Count,
         NetSpend,
         GrossSpend,
@@ -93,4 +94,4 @@ class GroceryFeatures(FeatureGenerator):
         RecencyWeightedApproxBasket90,
         RecencyWeightedApproxBasket99,
         AvgBasket,
-    ]
+    }

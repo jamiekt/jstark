@@ -1,4 +1,5 @@
-from datetime import datetime
+from datetime import datetime, date
+import pytest
 from pyspark.sql import DataFrame
 
 from jstark.mealkit.mealkit_features import MealkitFeatures
@@ -36,3 +37,32 @@ def test_as_at_timestamp(dataframe_of_faker_mealkit_orders: DataFrame):
         as_at=as_at_timestamp, feature_periods=["1q1", "2q2", "3q3", "4q4"]
     )
     dataframe_of_faker_mealkit_orders.groupBy().agg(*mf.features)
+
+
+def test_desired_features(dataframe_of_faker_mealkit_orders: DataFrame):
+    mf = MealkitFeatures(
+        as_at=date(2022, 11, 30),
+        feature_periods=["1q1", "2q2", "3q3", "4q4"],
+        feature_stems=["OrderCount"],
+    )
+    output_df = dataframe_of_faker_mealkit_orders.groupBy().agg(*mf.features)
+    assert output_df.columns == [
+        "OrderCount_1q1",
+        "OrderCount_2q2",
+        "OrderCount_3q3",
+        "OrderCount_4q4",
+    ]
+
+
+def test_non_existent_desired_features(dataframe_of_faker_mealkit_orders: DataFrame):
+    mf = MealkitFeatures(
+        as_at=date(2022, 11, 30),
+        feature_periods=["1q1", "2q2", "3q3", "4q4"],
+        feature_stems=["NonExistentFeature", "NonExistentFeature2"],
+    )
+    with pytest.raises(Exception) as exc_info:
+        dataframe_of_faker_mealkit_orders.groupBy().agg(*mf.features)
+    assert (
+        str(exc_info.value)
+        == "Feature(s) ['NonExistentFeature', 'NonExistentFeature2'] not found"
+    )
