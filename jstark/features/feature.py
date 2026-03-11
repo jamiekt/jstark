@@ -95,11 +95,15 @@ class Feature(metaclass=ABCMeta):
 
     @property
     def end_date(self) -> date:
-        n_days_ago = self.as_at - timedelta(days=self.feature_period.end)
-        n_weeks_ago = self.as_at - timedelta(weeks=self.feature_period.end)
-        n_months_ago = self.as_at - relativedelta(months=self.feature_period.end)
-        n_quarters_ago = self.as_at - relativedelta(months=self.feature_period.end * 3)
-        n_years_ago = self.as_at - relativedelta(years=self.feature_period.end)
+        # Convert datetime to date if needed
+        as_at_date = (
+            self.as_at.date() if isinstance(self.as_at, datetime) else self.as_at
+        )
+        n_days_ago = as_at_date - timedelta(days=self.feature_period.end)
+        n_weeks_ago = as_at_date - timedelta(weeks=self.feature_period.end)
+        n_months_ago = as_at_date - relativedelta(months=self.feature_period.end)
+        n_quarters_ago = as_at_date - relativedelta(months=self.feature_period.end * 3)
+        n_years_ago = as_at_date - relativedelta(years=self.feature_period.end)
         match self.feature_period.period_unit_of_measure:
             case PeriodUnitOfMeasure.DAY:
                 last_day_of_period = n_days_ago
@@ -120,7 +124,7 @@ class Feature(metaclass=ABCMeta):
                     n_years_ago
                 ).last_date_in_year
         # min() is used to ensure we don't return a date later than self.as_at
-        return min(last_day_of_period, self.as_at)
+        return min(last_day_of_period, as_at_date)
 
     @property
     def column_metadata(self) -> dict[str, str]:
