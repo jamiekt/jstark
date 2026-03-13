@@ -3,6 +3,7 @@ import pytest
 from pyspark.sql import DataFrame, SparkSession
 
 from jstark.mealkit.mealkit_features import MealkitFeatures
+from jstark.features.feature import FeaturePeriod, PeriodUnitOfMeasure
 
 
 def test_orderweeks(
@@ -121,6 +122,18 @@ def test_cuisine(spark_session: SparkSession):
         + "you to determine how many Italian recipes have been ordered."
     )
     first = output_df.first()
+    assert first is not None
     assert first["ItalianCuisineCount_1m1"] == 3
     assert first["FrenchCuisineCount_1m1"] == 2
     assert first["SpanishCuisineCount_1m1"] == 1
+    assert [
+        c.metadata["description"]
+        for c in output_df.schema
+        if c.name == "ItalianCuisineCount_1m1"
+    ][0] == "Count of Italian recipes between 2022-01-01 and 2022-01-31"
+
+
+def test_none_args(spark_session: SparkSession):
+    mf = MealkitFeatures(as_at=date(2022, 2, 1))
+    assert mf.feature_periods == [FeaturePeriod(PeriodUnitOfMeasure.WEEK, 52, 0)]
+    assert mf.feature_stems == set[str]()
