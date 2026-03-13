@@ -94,6 +94,8 @@ jobs:
       run: |
         uv run coverage xml
         uv run genbadge coverage -i coverage.xml -o coverage.svg
+        COVERAGE_SCORE=$(sed -n 's/^Total coverage: \([-0-9.]*\)\%/\1/p' < coverage.xml)
+        echo COVERAGE_SCORE="${COVERAGE_SCORE}"
 
     - name: generate coverage html report
       run: uv run coverage html
