@@ -1,6 +1,6 @@
 from datetime import date
 
-from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
+from jstark.feature_period import FeaturePeriod
 from jstark.features.count import Count
 from jstark.features.recency_days import RecencyDays
 from jstark.features.customer_count import CustomerCount
@@ -124,11 +124,12 @@ class MealkitFeatures(FeatureGenerator):
     def __init__(
         self,
         as_at: date,
-        feature_periods: list[FeaturePeriod] | list[str] = [
-            FeaturePeriod(PeriodUnitOfMeasure.DAY, 2, 0),
-            FeaturePeriod(PeriodUnitOfMeasure.DAY, 4, 3),
-        ],
-        feature_stems: set[str] | list[str] = set[str](),
+        feature_periods: list[FeaturePeriod]
+        | list[str]
+        | set[FeaturePeriod]
+        | set[str]
+        | None = None,
+        feature_stems: set[str] | list[str] | None = None,
     ) -> None:
         super().__init__(as_at, feature_periods, feature_stems)
 
