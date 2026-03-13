@@ -1,6 +1,6 @@
 from datetime import datetime, date
 import pytest
-from pyspark.sql import DataFrame
+from pyspark.sql import DataFrame, SparkSession
 
 from jstark.mealkit.mealkit_features import MealkitFeatures
 
@@ -87,3 +87,40 @@ def test_cuisines(dataframe_of_faker_mealkit_orders: DataFrame):
     assert first["Cuisines_2q2"] == ["Italian", "French", "Spanish"]
     assert first["Cuisines_3q3"] == ["Italian", "French", "Spanish"]
     assert first["Cuisines_4q4"] == ["Italian", "French", "Spanish"]
+
+
+def test_cuisine(spark_session: SparkSession):
+    df = spark_session.createDataFrame(
+        [
+            ("Italian", datetime(2022, 1, 10, 1, 2, 3)),
+            ("Italian", datetime(2022, 1, 10, 1, 2, 3)),
+            ("Italian", datetime(2022, 1, 10, 1, 2, 3)),
+            ("French", datetime(2022, 1, 10, 1, 2, 3)),
+            ("French", datetime(2022, 1, 10, 1, 2, 3)),
+            ("Spanish", datetime(2022, 1, 10, 1, 2, 3)),
+        ],
+        ["cuisine", "timestamp"],
+    )
+    mf = MealkitFeatures(
+        as_at=date(2022, 2, 1),
+        feature_periods=["1m1"],
+        feature_stems=[
+            "ItalianCuisineCount",
+            "FrenchCuisineCount",
+            "SpanishCuisineCount",
+        ],
+    )
+    output_df = df.groupBy().agg(*mf.features)
+    assert (
+        output_df.schema["ItalianCuisineCount_1m1"].metadata["description"]
+        == "Count of Italian recipes between 2022-01-01 and 2022-01-31"
+    )
+    assert output_df.schema["ItalianCuisineCount_1m1"].metadata["commentary"] == (
+        "The number of Italian recipes. Typically the dataframe supplied to this "
+        + "feature will have many recipes for the same cuisine, this feature allows "
+        + "you to determine how many Italian recipes have been ordered."
+    )
+    first = output_df.first()
+    assert first["ItalianCuisineCount_1m1"] == 3
+    assert first["FrenchCuisineCount_1m1"] == 2
+    assert first["SpanishCuisineCount_1m1"] == 1
