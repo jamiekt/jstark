@@ -29,122 +29,95 @@ from jstark.mealkit.cuisine_count import (
     FrenchCuisineCount,
     SpanishCuisineCount,
     SrilankanCuisineCount,
-)
-from jstark.mealkit.cuisine_count import (
+    LebaneseCuisineCount,
+    GreekCuisineCount,
+    VietnameseCuisineCount,
+    DanishCuisineCount,
+    WesternEuropeCuisineCount,
+    FusionCuisineCount,
+    DutchCuisineCount,
+    KoreanCuisineCount,
+    SouthEastAsianCuisineCount,
     MalaysianCuisineCount,
     AmericanCuisineCount,
     AsianCuisineCount,
+    IndianCuisineCount,
     GermanCuisineCount,
-)
-from jstark.mealkit.cuisine_count import (
     CentralAmericaCuisineCount,
     ArgentinianCuisineCount,
     NorthAmericanCuisineCount,
     NewZealandCuisineCount,
-)
-from jstark.mealkit.cuisine_count import (
     CanadianCuisineCount,
     SwedishCuisineCount,
     EgyptianCuisineCount,
     NorthernEuropeanCuisineCount,
-)
-from jstark.mealkit.cuisine_count import (
     CajunCuisineCount,
     AustrianCuisineCount,
     MexicanCuisineCount,
     MediterraneanCuisineCount,
-)
-from jstark.mealkit.cuisine_count import (
     ThaiCuisineCount,
     ChineseCuisineCount,
     LatinAmericanCuisineCount,
     SouthAsiaCuisineCount,
-)
-from jstark.mealkit.cuisine_count import (
     MiddleEasternCuisineCount,
     TraditionalCuisineCount,
     SteakhouseCuisineCount,
     PacificislandsCuisineCount,
-)
-from jstark.mealkit.cuisine_count import (
     EastAsiaCuisineCount,
     BritishCuisineCount,
     CaribbeanCuisineCount,
     FilipinoCuisineCount,
-)
-from jstark.mealkit.cuisine_count import (
     TurkishCuisineCount,
     BelgianCuisineCount,
     SouthAmericanCuisineCount,
     NorthAfricanCuisineCount,
-)
-from jstark.mealkit.cuisine_count import (
     SouthAfricanCuisineCount,
     WestAfricanCuisineCount,
     EastAfricanCuisineCount,
     WesternEuropeanCuisineCount,
-)
-from jstark.mealkit.cuisine_count import (
     PortugueseCuisineCount,
     PeruvianCuisineCount,
     JapaneseCuisineCount,
     PacificIslandsCuisineCount,
-)
-from jstark.mealkit.cuisine_count import (
     SouthernEuropeCuisineCount,
     AfricanCuisineCount,
     CentralAsiaCuisineCount,
     NorthamericaCuisineCount,
-)
-from jstark.mealkit.cuisine_count import (
     EuropeanCuisineCount,
     MoroccanCuisineCount,
     AustralianCuisineCount,
     HungarianCuisineCount,
-)
-from jstark.mealkit.cuisine_count import (
     IranianCuisineCount,
     SoutheastAsiaCuisineCount,
     HawaiianCuisineCount,
     ScandinavianCuisineCount,
-)
-from jstark.mealkit.cuisine_count import (
     BrazilianCuisineCount,
     IndonesianCuisineCount,
     MongolianCuisineCount,
     RussianCuisineCount,
-)
-from jstark.mealkit.cuisine_count import (
     SouthAsianCuisineCount,
     BulgarianCuisineCount,
     FusionCuisineCusiineCount,
     IrishCuisineCount,
-)
-from jstark.mealkit.cuisine_count import (
     GeorgianCuisineCount,
     SouthwestCuisineCount,
     CambodianCuisineCount,
     LatinCuisineCount,
-)
-from jstark.mealkit.cuisine_count import (
     CubanCuisineCount,
     SoutheastCuisineCount,
     SouthHyphenAfricanCuisineCount,
     JamaicanCuisineCount,
-)
-from jstark.mealkit.cuisine_count import (
     IsrealiCuisineCount,
     EasteuropeanCuisineCount,
     SingaporeanCuisineCount,
     NordicCuisineCount,
-)
-from jstark.mealkit.cuisine_count import (
     WestHyphenAfricanCuisineCount,
     NortheastCuisineCount,
     TonganCuisineCount,
     WestafricaCuisineCount,
+    ZanzibarianCuisineCount,
+    MidwestCuisineCount,
 )
-from jstark.mealkit.cuisine_count import ZanzibarianCuisineCount, MidwestCuisineCount
 
 
 class MealkitFeatures(FeatureGenerator):
@@ -183,13 +156,24 @@ class MealkitFeatures(FeatureGenerator):
         AvgPurchaseCycle,
         Cuisines,
         CuisineCount,
+        # All of the following are counts for a specific cuisine
         ItalianCuisineCount,
         FrenchCuisineCount,
         SpanishCuisineCount,
         SrilankanCuisineCount,
+        LebaneseCuisineCount,
+        GreekCuisineCount,
+        VietnameseCuisineCount,
+        DanishCuisineCount,
+        WesternEuropeCuisineCount,
+        FusionCuisineCount,
+        DutchCuisineCount,
+        KoreanCuisineCount,
+        SouthEastAsianCuisineCount,
         MalaysianCuisineCount,
         AmericanCuisineCount,
         AsianCuisineCount,
+        IndianCuisineCount,
         GermanCuisineCount,
         CentralAmericaCuisineCount,
         ArgentinianCuisineCount,
