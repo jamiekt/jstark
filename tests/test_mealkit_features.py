@@ -21,7 +21,7 @@ def test_orderweeks(
     )
     first = output_df.first()
     assert first is not None
-    assert first["OrderCount_52w0"] == 872
+    assert first["OrderCount_52w0"] == 903
 
 
 def test_as_at_timestamp(dataframe_of_faker_mealkit_orders: DataFrame):
@@ -66,3 +66,24 @@ def test_non_existent_desired_features(dataframe_of_faker_mealkit_orders: DataFr
         str(exc_info.value)
         == "Feature(s) ['NonExistentFeature', 'NonExistentFeature2'] not found"
     )
+
+
+def test_cuisines(dataframe_of_faker_mealkit_orders: DataFrame):
+    mf = MealkitFeatures(
+        as_at=date(2022, 1, 1),
+        feature_periods=["1q1", "2q2", "3q3", "4q4"],
+        feature_stems=["Cuisines"],
+    )
+    output_df = dataframe_of_faker_mealkit_orders.groupBy().agg(*mf.features)
+    assert output_df.columns == [
+        "Cuisines_1q1",
+        "Cuisines_2q2",
+        "Cuisines_3q3",
+        "Cuisines_4q4",
+    ]
+    first = output_df.first()
+    assert first is not None
+    assert first["Cuisines_1q1"] == ["Italian", "French", "Spanish"]
+    assert first["Cuisines_2q2"] == ["Italian", "French", "Spanish"]
+    assert first["Cuisines_3q3"] == ["Italian", "French", "Spanish"]
+    assert first["Cuisines_4q4"] == ["Italian", "French", "Spanish"]

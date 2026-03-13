@@ -22,6 +22,8 @@ from jstark.feature_generator import FeatureGenerator
 from jstark.mealkit.average_quantity_per_order import AvgQuantityPerOrder
 from jstark.mealkit.cycles_since_last_order import CyclesSinceLastOrder
 from jstark.mealkit.average_purchase_cycle import AvgPurchaseCycle
+from jstark.mealkit.cuisines import Cuisines
+from jstark.mealkit.cuisine_count import CuisineCount
 
 
 class MealkitFeatures(FeatureGenerator):
@@ -58,4 +60,6 @@ class MealkitFeatures(FeatureGenerator):
         AvgQuantityPerOrder,
         CyclesSinceLastOrder,
         AvgPurchaseCycle,
+        Cuisines,
+        CuisineCount,
     }
