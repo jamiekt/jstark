@@ -1,4 +1,4 @@
-"""Max abstract base class"""
+"""CollectSet abstract base class"""
 
 from abc import ABCMeta
 from typing import Callable
@@ -9,9 +9,9 @@ from pyspark.sql import Column
 from .feature import BaseFeature
 
 
-class Max(BaseFeature, metaclass=ABCMeta):
+class CollectSet(BaseFeature, metaclass=ABCMeta):
     def aggregator(self) -> Callable[[Column], Column]:
-        return self.max_aggregator
+        return self.collect_set_aggregator
 
     def default_value(self) -> Column:
-        return f.lit(None)
+        return f.lit([])

@@ -183,6 +183,9 @@ class BaseFeature(Feature, metaclass=ABCMeta):
     def min_aggregator(self, column: Column) -> Column:
         return f.min(column)
 
+    def collect_set_aggregator(self, column: Column) -> Column:
+        return f.collect_set(column)
+
     @abstractmethod
     def aggregator(self) -> Callable[[Column], Column]:
         """Aggregator function"""
