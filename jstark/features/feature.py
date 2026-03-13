@@ -171,6 +171,9 @@ class BaseFeature(Feature, metaclass=ABCMeta):
     def count_aggregator(self, column: Column) -> Column:
         return f.count(column)
 
+    def count_if_aggregator(self, column: Column) -> Column:
+        return f.count_if(column)
+
     def count_distinct_aggregator(self, column: Column) -> Column:
         return f.countDistinct(column)
 

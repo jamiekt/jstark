@@ -24,6 +24,127 @@ from jstark.mealkit.cycles_since_last_order import CyclesSinceLastOrder
 from jstark.mealkit.average_purchase_cycle import AvgPurchaseCycle
 from jstark.mealkit.cuisines import Cuisines
 from jstark.mealkit.cuisine_count import CuisineCount
+from jstark.mealkit.cuisine_count import (
+    ItalianCuisineCount,
+    FrenchCuisineCount,
+    SpanishCuisineCount,
+    SrilankanCuisineCount,
+)
+from jstark.mealkit.cuisine_count import (
+    MalaysianCuisineCount,
+    AmericanCuisineCount,
+    AsianCuisineCount,
+    GermanCuisineCount,
+)
+from jstark.mealkit.cuisine_count import (
+    CentralAmericaCuisineCount,
+    ArgentinianCuisineCount,
+    NorthAmericanCuisineCount,
+    NewZealandCuisineCount,
+)
+from jstark.mealkit.cuisine_count import (
+    CanadianCuisineCount,
+    SwedishCuisineCount,
+    EgyptianCuisineCount,
+    NorthernEuropeanCuisineCount,
+)
+from jstark.mealkit.cuisine_count import (
+    CajunCuisineCount,
+    AustrianCuisineCount,
+    MexicanCuisineCount,
+    MediterraneanCuisineCount,
+)
+from jstark.mealkit.cuisine_count import (
+    ThaiCuisineCount,
+    ChineseCuisineCount,
+    LatinAmericanCuisineCount,
+    SouthAsiaCuisineCount,
+)
+from jstark.mealkit.cuisine_count import (
+    MiddleEasternCuisineCount,
+    TraditionalCuisineCount,
+    SteakhouseCuisineCount,
+    PacificislandsCuisineCount,
+)
+from jstark.mealkit.cuisine_count import (
+    EastAsiaCuisineCount,
+    BritishCuisineCount,
+    CaribbeanCuisineCount,
+    FilipinoCuisineCount,
+)
+from jstark.mealkit.cuisine_count import (
+    TurkishCuisineCount,
+    BelgianCuisineCount,
+    SouthAmericanCuisineCount,
+    NorthAfricanCuisineCount,
+)
+from jstark.mealkit.cuisine_count import (
+    SouthAfricanCuisineCount,
+    WestAfricanCuisineCount,
+    EastAfricanCuisineCount,
+    WesternEuropeanCuisineCount,
+)
+from jstark.mealkit.cuisine_count import (
+    PortugueseCuisineCount,
+    PeruvianCuisineCount,
+    JapaneseCuisineCount,
+    PacificIslandsCuisineCount,
+)
+from jstark.mealkit.cuisine_count import (
+    SouthernEuropeCuisineCount,
+    AfricanCuisineCount,
+    CentralAsiaCuisineCount,
+    NorthamericaCuisineCount,
+)
+from jstark.mealkit.cuisine_count import (
+    EuropeanCuisineCount,
+    MoroccanCuisineCount,
+    AustralianCuisineCount,
+    HungarianCuisineCount,
+)
+from jstark.mealkit.cuisine_count import (
+    IranianCuisineCount,
+    SoutheastAsiaCuisineCount,
+    HawaiianCuisineCount,
+    ScandinavianCuisineCount,
+)
+from jstark.mealkit.cuisine_count import (
+    BrazilianCuisineCount,
+    IndonesianCuisineCount,
+    MongolianCuisineCount,
+    RussianCuisineCount,
+)
+from jstark.mealkit.cuisine_count import (
+    SouthAsianCuisineCount,
+    BulgarianCuisineCount,
+    FusionCuisineCusiineCount,
+    IrishCuisineCount,
+)
+from jstark.mealkit.cuisine_count import (
+    GeorgianCuisineCount,
+    SouthwestCuisineCount,
+    CambodianCuisineCount,
+    LatinCuisineCount,
+)
+from jstark.mealkit.cuisine_count import (
+    CubanCuisineCount,
+    SoutheastCuisineCount,
+    SouthHyphenAfricanCuisineCount,
+    JamaicanCuisineCount,
+)
+from jstark.mealkit.cuisine_count import (
+    IsrealiCuisineCount,
+    EasteuropeanCuisineCount,
+    SingaporeanCuisineCount,
+    NordicCuisineCount,
+)
+from jstark.mealkit.cuisine_count import (
+    WestHyphenAfricanCuisineCount,
+    NortheastCuisineCount,
+    TonganCuisineCount,
+    WestafricaCuisineCount,
+)
+from jstark.mealkit.cuisine_count import ZanzibarianCuisineCount, MidwestCuisineCount
 
 
 class MealkitFeatures(FeatureGenerator):
@@ -62,4 +183,86 @@ class MealkitFeatures(FeatureGenerator):
         AvgPurchaseCycle,
         Cuisines,
         CuisineCount,
+        ItalianCuisineCount,
+        FrenchCuisineCount,
+        SpanishCuisineCount,
+        SrilankanCuisineCount,
+        MalaysianCuisineCount,
+        AmericanCuisineCount,
+        AsianCuisineCount,
+        GermanCuisineCount,
+        CentralAmericaCuisineCount,
+        ArgentinianCuisineCount,
+        NorthAmericanCuisineCount,
+        NewZealandCuisineCount,
+        CanadianCuisineCount,
+        SwedishCuisineCount,
+        EgyptianCuisineCount,
+        NorthernEuropeanCuisineCount,
+        CajunCuisineCount,
+        AustrianCuisineCount,
+        MexicanCuisineCount,
+        MediterraneanCuisineCount,
+        ThaiCuisineCount,
+        ChineseCuisineCount,
+        LatinAmericanCuisineCount,
+        SouthAsiaCuisineCount,
+        MiddleEasternCuisineCount,
+        TraditionalCuisineCount,
+        SteakhouseCuisineCount,
+        PacificislandsCuisineCount,
+        EastAsiaCuisineCount,
+        BritishCuisineCount,
+        CaribbeanCuisineCount,
+        FilipinoCuisineCount,
+        TurkishCuisineCount,
+        BelgianCuisineCount,
+        SouthAmericanCuisineCount,
+        NorthAfricanCuisineCount,
+        SouthAfricanCuisineCount,
+        WestAfricanCuisineCount,
+        EastAfricanCuisineCount,
+        WesternEuropeanCuisineCount,
+        PortugueseCuisineCount,
+        PeruvianCuisineCount,
+        JapaneseCuisineCount,
+        PacificIslandsCuisineCount,
+        SouthernEuropeCuisineCount,
+        AfricanCuisineCount,
+        CentralAsiaCuisineCount,
+        NorthamericaCuisineCount,
+        EuropeanCuisineCount,
+        MoroccanCuisineCount,
+        AustralianCuisineCount,
+        HungarianCuisineCount,
+        IranianCuisineCount,
+        SoutheastAsiaCuisineCount,
+        HawaiianCuisineCount,
+        ScandinavianCuisineCount,
+        BrazilianCuisineCount,
+        IndonesianCuisineCount,
+        MongolianCuisineCount,
+        RussianCuisineCount,
+        SouthAsianCuisineCount,
+        BulgarianCuisineCount,
+        FusionCuisineCusiineCount,
+        IrishCuisineCount,
+        GeorgianCuisineCount,
+        SouthwestCuisineCount,
+        CambodianCuisineCount,
+        LatinCuisineCount,
+        CubanCuisineCount,
+        SoutheastCuisineCount,
+        SouthHyphenAfricanCuisineCount,
+        JamaicanCuisineCount,
+        IsrealiCuisineCount,
+        EasteuropeanCuisineCount,
+        SingaporeanCuisineCount,
+        NordicCuisineCount,
+        WestHyphenAfricanCuisineCount,
+        NortheastCuisineCount,
+        TonganCuisineCount,
+        WestafricaCuisineCount,
+        ZanzibarianCuisineCount,
+        MidwestCuisineCount,
     }
