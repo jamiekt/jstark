@@ -16,6 +16,21 @@ def test_errors_if_as_at_is_not_a_date():
     assert str(exc_info.value) == "as_at value must be of type date"
 
 
+def test_as_at_is_immutable():
+    """
+    We don't want as_at to be changed. This is a choice we have made
+    so let's assert that behaviour.
+    """
+    as_at = date(2022, 11, 30)
+    _0d0 = GrossSpend(as_at, FeaturePeriod(PeriodUnitOfMeasure.DAY, 0, 0))
+    assert _0d0.as_at == as_at
+    with pytest.raises(AttributeError) as exc_info:
+        _0d0.as_at = date(2022, 11, 29)
+    assert (
+        str(exc_info.value) == "property 'as_at' of 'GrossSpend' object has no setter"
+    )
+
+
 def test_start_date_days():
     as_at = date(2022, 11, 30)
     _0d0 = GrossSpend(as_at, FeaturePeriod(PeriodUnitOfMeasure.DAY, 0, 0))

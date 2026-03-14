@@ -11,8 +11,16 @@ from .basket_count import BasketCount
 class AvgGrossSpendPerBasket(DerivedFeature):
     def column_expression(self) -> Column:
         return f.try_divide(
-            GrossSpend(self.as_at, self.feature_period).column,
-            BasketCount(self.as_at, self.feature_period).column,
+            GrossSpend(
+                self.as_at,
+                self.feature_period,
+                first_day_of_week=self._first_day_of_week,
+            ).column,
+            BasketCount(
+                self.as_at,
+                self.feature_period,
+                first_day_of_week=self._first_day_of_week,
+            ).column,
         )
 
     @property

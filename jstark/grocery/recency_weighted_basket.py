@@ -16,9 +16,13 @@ class RecencyWeightedApproxBasket(DerivedFeature):
     """RecencyWeightedApproxBasket"""
 
     def __init__(
-        self, as_at: date, feature_period: FeaturePeriod, smoothing_factor: float
+        self,
+        as_at: date,
+        feature_period: FeaturePeriod,
+        smoothing_factor: float,
+        first_day_of_week: str | None = None,
     ) -> None:
-        super().__init__(as_at, feature_period)
+        super().__init__(as_at, feature_period, first_day_of_week)
         self.__smoothing_factor = smoothing_factor
 
     @property
@@ -33,6 +37,7 @@ class RecencyWeightedApproxBasket(DerivedFeature):
                 feature_period=FeaturePeriod(
                     self.feature_period.period_unit_of_measure, period, period
                 ),
+                first_day_of_week=self._first_day_of_week,
             ).column * pow(self.smoothing_factor, period)
         return expr
 
@@ -81,9 +86,13 @@ class RecencyWeightedBasket(RecencyWeightedApproxBasket):
     """RecencyWeightedBasket feature"""
 
     def __init__(
-        self, as_at: date, feature_period: FeaturePeriod, smoothing_factor: float
+        self,
+        as_at: date,
+        feature_period: FeaturePeriod,
+        smoothing_factor: float,
+        first_day_of_week: str | None = None,
     ) -> None:
-        super().__init__(as_at, feature_period, smoothing_factor)
+        super().__init__(as_at, feature_period, smoothing_factor, first_day_of_week)
 
     def column_expression(self) -> Column:
         expr = f.lit(0.0)
@@ -93,6 +102,7 @@ class RecencyWeightedBasket(RecencyWeightedApproxBasket):
                 feature_period=FeaturePeriod(
                     self.feature_period.period_unit_of_measure, period, period
                 ),
+                first_day_of_week=self._first_day_of_week,
             ).column * pow(super().smoothing_factor, period)
         return expr
 
@@ -141,30 +151,60 @@ class RecencyWeightedBasket(RecencyWeightedApproxBasket):
 
 
 class RecencyWeightedBasket90(RecencyWeightedBasket):
-    def __init__(self, as_at: date, feature_period: FeaturePeriod) -> None:
-        super().__init__(as_at, feature_period, 0.9)
+    def __init__(
+        self,
+        as_at: date,
+        feature_period: FeaturePeriod,
+        first_day_of_week: str | None = None,
+    ) -> None:
+        super().__init__(as_at, feature_period, 0.9, first_day_of_week)
 
 
 class RecencyWeightedBasket95(RecencyWeightedBasket):
-    def __init__(self, as_at: date, feature_period: FeaturePeriod) -> None:
-        super().__init__(as_at, feature_period, 0.95)
+    def __init__(
+        self,
+        as_at: date,
+        feature_period: FeaturePeriod,
+        first_day_of_week: str | None = None,
+    ) -> None:
+        super().__init__(as_at, feature_period, 0.95, first_day_of_week)
 
 
 class RecencyWeightedBasket99(RecencyWeightedBasket):
-    def __init__(self, as_at: date, feature_period: FeaturePeriod) -> None:
-        super().__init__(as_at, feature_period, 0.99)
+    def __init__(
+        self,
+        as_at: date,
+        feature_period: FeaturePeriod,
+        first_day_of_week: str | None = None,
+    ) -> None:
+        super().__init__(as_at, feature_period, 0.99, first_day_of_week)
 
 
 class RecencyWeightedApproxBasket90(RecencyWeightedApproxBasket):
-    def __init__(self, as_at: date, feature_period: FeaturePeriod) -> None:
-        super().__init__(as_at, feature_period, 0.9)
+    def __init__(
+        self,
+        as_at: date,
+        feature_period: FeaturePeriod,
+        first_day_of_week: str | None = None,
+    ) -> None:
+        super().__init__(as_at, feature_period, 0.9, first_day_of_week)
 
 
 class RecencyWeightedApproxBasket95(RecencyWeightedApproxBasket):
-    def __init__(self, as_at: date, feature_period: FeaturePeriod) -> None:
-        super().__init__(as_at, feature_period, 0.95)
+    def __init__(
+        self,
+        as_at: date,
+        feature_period: FeaturePeriod,
+        first_day_of_week: str | None = None,
+    ) -> None:
+        super().__init__(as_at, feature_period, 0.95, first_day_of_week)
 
 
 class RecencyWeightedApproxBasket99(RecencyWeightedApproxBasket):
-    def __init__(self, as_at: date, feature_period: FeaturePeriod) -> None:
-        super().__init__(as_at, feature_period, 0.99)
+    def __init__(
+        self,
+        as_at: date,
+        feature_period: FeaturePeriod,
+        first_day_of_week: str | None = None,
+    ) -> None:
+        super().__init__(as_at, feature_period, 0.99, first_day_of_week)

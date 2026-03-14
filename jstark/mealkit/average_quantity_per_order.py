@@ -11,8 +11,16 @@ from .order_count import OrderCount
 class AvgQuantityPerOrder(DerivedFeature):
     def column_expression(self) -> Column:
         return f.try_divide(
-            Quantity(self.as_at, self.feature_period).column,
-            OrderCount(self.as_at, self.feature_period).column,
+            Quantity(
+                self.as_at,
+                self.feature_period,
+                first_day_of_week=self._first_day_of_week,
+            ).column,
+            OrderCount(
+                self.as_at,
+                self.feature_period,
+                first_day_of_week=self._first_day_of_week,
+            ).column,
         )
 
     @property

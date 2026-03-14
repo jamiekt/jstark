@@ -21,6 +21,7 @@ class AvgOrder(DerivedFeature):
                     self.feature_period.start,
                     self.feature_period.end,
                 ),
+                first_day_of_week=self._first_day_of_week,
             ).column
             / self.feature_period.number_of_periods
         )
