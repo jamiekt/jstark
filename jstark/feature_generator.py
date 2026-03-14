@@ -125,3 +125,14 @@ class FeatureGenerator(metaclass=ABCMeta):
         return sorted(
             set(re.findall(r"UnresolvedAttribute\(List\(([^)]+)\)", references))
         )
+
+    def __repr__(self) -> str:
+        periods = [fp.mnemonic for fp in self.feature_periods]
+        stems = set(self.feature_stems)
+        return (
+            f"{self.__class__.__name__}"
+            f"(as_at={self.as_at}"
+            f", feature_periods={periods}"
+            f", feature_stems={stems}"
+            f", first_day_of_week={self.first_day_of_week})"
+        )
