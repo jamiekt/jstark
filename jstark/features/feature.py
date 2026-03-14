@@ -32,7 +32,7 @@ class Feature(metaclass=ABCMeta):
             as_at = as_at.date()
         if not isinstance(as_at, date):
             raise AsAtIsNotADate
-        self.__as_at = as_at
+        self._as_at = as_at
         self._first_day_of_week = first_day_of_week
 
     @property
@@ -45,7 +45,7 @@ class Feature(metaclass=ABCMeta):
 
     @property
     def as_at(self) -> date:
-        return self.__as_at
+        return self._as_at
 
     @property
     def feature_name(self) -> str:
