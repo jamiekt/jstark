@@ -1,5 +1,8 @@
 """BasketPeriods feature"""
 
+import functools
+import operator
+
 from jstark.features.feature import DerivedFeature
 
 from pyspark.sql import Column
@@ -28,7 +31,8 @@ class BasketPeriods(DerivedFeature):
                     1,
                 ).otherwise(0)
             )
-        return sum(exprs)
+
+        return functools.reduce(operator.add, exprs)
 
     def default_value(self) -> Column:
         return f.lit(None)
