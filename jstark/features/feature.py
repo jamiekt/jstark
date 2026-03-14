@@ -37,11 +37,11 @@ class Feature(metaclass=ABCMeta):
 
     @property
     def feature_period(self) -> FeaturePeriod:
-        return self.__feature_period
+        return self._feature_period
 
     @feature_period.setter
     def feature_period(self, value) -> None:
-        self.__feature_period = value
+        self._feature_period = value
 
     @property
     def as_at(self) -> date:
