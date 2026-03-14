@@ -136,3 +136,6 @@ pylint.out
 pylint.svg
 coverage.svg
 htmlcov
+
+# Claude Code local settings
+.claude/settings.local.json
