@@ -554,3 +554,30 @@ def test_averagepurchasecycle_chewie_carrot(
     assert df_first is not None
     assert df_first["AvgPurchaseCycle_2y0"] == pytest.approx(45.5)
     assert df_first["CyclesSinceLastPurchase_2y0"] == pytest.approx(2.065934065934066)
+
+
+def test_repr():
+    gf = GroceryFeatures(
+        as_at=date(2022, 11, 30),
+        feature_periods=[
+            FeaturePeriod(PeriodUnitOfMeasure.DAY, 0, 0),
+            FeaturePeriod(PeriodUnitOfMeasure.DAY, 2, 0),
+            FeaturePeriod(PeriodUnitOfMeasure.DAY, 2, 2),
+        ],
+        feature_stems={"GrossSpend", "BasketCount"},
+        first_day_of_week=None,
+    )
+    repr_string = repr(gf)
+    # We can't control which order the feature stems appear in repr so we'll check
+    # both possibilities
+    feature_stems_str1 = "{'GrossSpend', 'BasketCount'}"
+    feature_stems_str2 = "{'BasketCount', 'GrossSpend'}"
+    repr1 = (
+        "GroceryFeatures(as_at=2022-11-30, feature_periods=['0d0', '2d0', '2d2'], "
+        + f"feature_stems={feature_stems_str1}, first_day_of_week=None)"
+    )
+    repr2 = (
+        "GroceryFeatures(as_at=2022-11-30, feature_periods=['0d0', '2d0', '2d2'], "
+        + f"feature_stems={feature_stems_str2}, first_day_of_week=None)"
+    )
+    assert repr_string == repr1 or repr_string == repr2
