@@ -13,10 +13,22 @@ class AvgPurchaseCycle(DerivedFeature):
     def column_expression(self) -> Column:
         return f.try_divide(
             f.datediff(
-                MostRecentPurchaseDate(self.as_at, self.feature_period).column,
-                EarliestPurchaseDate(self.as_at, self.feature_period).column,
+                MostRecentPurchaseDate(
+                    self.as_at,
+                    self.feature_period,
+                    first_day_of_week=self._first_day_of_week,
+                ).column,
+                EarliestPurchaseDate(
+                    self.as_at,
+                    self.feature_period,
+                    first_day_of_week=self._first_day_of_week,
+                ).column,
             ),
-            OrderCount(self.as_at, self.feature_period).column,
+            OrderCount(
+                self.as_at,
+                self.feature_period,
+                first_day_of_week=self._first_day_of_week,
+            ).column,
         )
 
     @property

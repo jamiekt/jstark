@@ -22,6 +22,7 @@ class BasketPeriods(DerivedFeature):
                         feature_period=FeaturePeriod(
                             self.feature_period.period_unit_of_measure, period, period
                         ),
+                        first_day_of_week=self._first_day_of_week,
                     ).column
                     > 0,
                     1,

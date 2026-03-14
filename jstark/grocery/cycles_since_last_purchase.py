@@ -11,8 +11,16 @@ from jstark.features.recency_days import RecencyDays
 class CyclesSinceLastPurchase(DerivedFeature):
     def column_expression(self) -> Column:
         return f.try_divide(
-            RecencyDays(self.as_at, self.feature_period).column,
-            AvgPurchaseCycle(self.as_at, self.feature_period).column,
+            RecencyDays(
+                self.as_at,
+                self.feature_period,
+                first_day_of_week=self._first_day_of_week,
+            ).column,
+            AvgPurchaseCycle(
+                self.as_at,
+                self.feature_period,
+                first_day_of_week=self._first_day_of_week,
+            ).column,
         )
 
     @property

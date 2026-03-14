@@ -11,8 +11,16 @@ from .basket_count import BasketCount
 class AvgQuantityPerBasket(DerivedFeature):
     def column_expression(self) -> Column:
         return f.try_divide(
-            Quantity(self.as_at, self.feature_period).column,
-            BasketCount(self.as_at, self.feature_period).column,
+            Quantity(
+                self.as_at,
+                self.feature_period,
+                first_day_of_week=self._first_day_of_week,
+            ).column,
+            BasketCount(
+                self.as_at,
+                self.feature_period,
+                first_day_of_week=self._first_day_of_week,
+            ).column,
         )
 
     @property

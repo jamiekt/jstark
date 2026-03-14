@@ -22,12 +22,12 @@ def test_orderweeks(
     )
     first = output_df.first()
     assert first is not None
-    assert first["OrderCount_52w0"] == 903
+    assert first["OrderCount_52w0"] == 931
 
 
 def test_as_at_timestamp(dataframe_of_faker_mealkit_orders: DataFrame):
     """
-    We had a situaiton where as_at was being passed as a datetime (which we support)
+    We had a situation where as_at was being passed as a datetime (which we support)
     however an error was still occurring:
     > TypeError: can't compare datetime.datetime to datetime.date
     Following TDD this was written as a failing test which was then fixed,

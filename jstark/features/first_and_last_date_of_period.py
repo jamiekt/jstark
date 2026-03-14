@@ -12,22 +12,38 @@ class FirstAndLastDateOfPeriod:
     of a period that includes the supplied date
     """
 
-    def __init__(self, date_in_period: date) -> None:
+    def __init__(
+        self, date_in_period: date, first_day_of_week: str | None = None
+    ) -> None:
         self.__date_in_period = date_in_period
+        self.__weekdays = [
+            "Sunday",
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+        ]
+        if first_day_of_week is None:
+            first_day_of_week = "Sunday"
+        if first_day_of_week not in self.__weekdays:
+            raise ValueError(f"first_day_of_week must be one of {self.__weekdays}")
+        self._first_day_of_week = first_day_of_week
 
     @property
     def first_date_in_week(self) -> date:
-        # Use strftime because we want Sunday to be first day of the week.
-        # date.DayOfWeek() has different behaviour
-        return self.__date_in_period - timedelta(
-            days=int(self.__date_in_period.strftime("%w"))
+        current_weekday_index = self.__weekdays.index(
+            self.__date_in_period.strftime("%A")
         )
+        first_day_index = self.__weekdays.index(self._first_day_of_week)
+        # Number of days to subtract to get to the first day of this week (may be 0)
+        days_to_subtract = (current_weekday_index - first_day_index) % 7
+        return self.__date_in_period - timedelta(days=days_to_subtract)
 
     @property
     def last_date_in_week(self) -> date:
-        return self.__date_in_period + timedelta(
-            days=6 - int(self.__date_in_period.strftime("%w"))
-        )
+        return self.first_date_in_week + timedelta(days=6)
 
     @property
     def first_date_in_month(self) -> date:

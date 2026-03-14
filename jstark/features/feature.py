@@ -18,9 +18,22 @@ from jstark.exceptions import AsAtIsNotADate
 
 
 class Feature(metaclass=ABCMeta):
-    def __init__(self, as_at: date, feature_period: FeaturePeriod) -> None:
+    def __init__(
+        self,
+        as_at: date,
+        feature_period: FeaturePeriod,
+        first_day_of_week: str | None = None,
+    ) -> None:
         self.feature_period = feature_period
-        self.as_at = as_at
+        if isinstance(as_at, datetime):
+            import warnings
+
+            warnings.warn(f"as_at={as_at!r} was converted to a date")
+            as_at = as_at.date()
+        if not isinstance(as_at, date):
+            raise AsAtIsNotADate
+        self.__as_at = as_at
+        self._first_day_of_week = first_day_of_week
 
     @property
     def feature_period(self) -> FeaturePeriod:
@@ -33,12 +46,6 @@ class Feature(metaclass=ABCMeta):
     @property
     def as_at(self) -> date:
         return self.__as_at
-
-    @as_at.setter
-    def as_at(self, value) -> None:
-        if not isinstance(value, date):
-            raise AsAtIsNotADate
-        self.__as_at = value
 
     @property
     def feature_name(self) -> str:
@@ -85,7 +92,9 @@ class Feature(metaclass=ABCMeta):
             case PeriodUnitOfMeasure.DAY:
                 return n_days_ago
             case PeriodUnitOfMeasure.WEEK:
-                return FirstAndLastDateOfPeriod(n_weeks_ago).first_date_in_week
+                return FirstAndLastDateOfPeriod(
+                    n_weeks_ago, self._first_day_of_week
+                ).first_date_in_week
             case PeriodUnitOfMeasure.MONTH:
                 return FirstAndLastDateOfPeriod(n_months_ago).first_date_in_month
             case PeriodUnitOfMeasure.QUARTER:
@@ -95,21 +104,17 @@ class Feature(metaclass=ABCMeta):
 
     @property
     def end_date(self) -> date:
-        # Convert datetime to date if needed
-        as_at_date = (
-            self.as_at.date() if isinstance(self.as_at, datetime) else self.as_at
-        )
-        n_days_ago = as_at_date - timedelta(days=self.feature_period.end)
-        n_weeks_ago = as_at_date - timedelta(weeks=self.feature_period.end)
-        n_months_ago = as_at_date - relativedelta(months=self.feature_period.end)
-        n_quarters_ago = as_at_date - relativedelta(months=self.feature_period.end * 3)
-        n_years_ago = as_at_date - relativedelta(years=self.feature_period.end)
+        n_days_ago = self.as_at - timedelta(days=self.feature_period.end)
+        n_weeks_ago = self.as_at - timedelta(weeks=self.feature_period.end)
+        n_months_ago = self.as_at - relativedelta(months=self.feature_period.end)
+        n_quarters_ago = self.as_at - relativedelta(months=self.feature_period.end * 3)
+        n_years_ago = self.as_at - relativedelta(years=self.feature_period.end)
         match self.feature_period.period_unit_of_measure:
             case PeriodUnitOfMeasure.DAY:
                 last_day_of_period = n_days_ago
             case PeriodUnitOfMeasure.WEEK:
                 last_day_of_period = FirstAndLastDateOfPeriod(
-                    n_weeks_ago
+                    n_weeks_ago, self._first_day_of_week
                 ).last_date_in_week
             case PeriodUnitOfMeasure.MONTH:
                 last_day_of_period = FirstAndLastDateOfPeriod(
@@ -124,7 +129,7 @@ class Feature(metaclass=ABCMeta):
                     n_years_ago
                 ).last_date_in_year
         # min() is used to ensure we don't return a date later than self.as_at
-        return min(last_day_of_period, as_at_date)
+        return min(last_day_of_period, self.as_at)
 
     @property
     def column_metadata(self) -> dict[str, str]:
