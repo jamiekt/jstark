@@ -88,6 +88,21 @@ def test_count_today(luke_and_leia_purchases_first: Row):
     assert float(luke_and_leia_purchases_first["Count_0d0"]) == 2
 
 
+def test_flattened_references(purchasing_feature_generator: GroceryFeatures):
+    assert purchasing_feature_generator.flattened_references == {
+        "GrossSpend",
+        "Timestamp",
+        "Basket",
+        "Channel",
+        "Store",
+        "NetSpend",
+        "Discount",
+        "Product",
+        "Quantity",
+        "Customer",
+    }
+
+
 def test_gross_spend_today(
     as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame
 ):

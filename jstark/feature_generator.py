@@ -115,6 +115,10 @@ class FeatureGenerator(metaclass=ABCMeta):
             for node in [c._jc.node() for c in self.features]  # type: ignore
         }
 
+    @property
+    def flattened_references(self) -> set[str]:
+        return {item for sublist in self.references.values() for item in sublist}
+
     @staticmethod
     def parse_references(references: str) -> list[str]:
         return sorted(
