@@ -94,13 +94,16 @@ jobs:
       run: |
         uv run coverage xml
         uv run genbadge coverage -i coverage.xml -o coverage.svg
-        COVERAGE_SCORE=$(sed -n 's/^Total coverage: \([-0-9.]*\)\%/\1/p' < coverage.xml)
-        echo COVERAGE_SCORE="${COVERAGE_SCORE}"
+        COVERAGE_LINE_RATE_SCORE=$(python3 -c "import xml.etree.ElementTree as ET; print(ET.parse('coverage.xml').getroot().get('line-rate'))")
+        COVERAGE_BRANCH_RATE_SCORE=$(python3 -c "import xml.etree.ElementTree as ET; print(ET.parse('coverage.xml').getroot().get('branch-rate'))")
+        echo COVERAGE_LINE_RATE_SCORE="${COVERAGE_LINE_RATE_SCORE}"
+        echo COVERAGE_BRANCH_RATE_SCORE="${COVERAGE_BRANCH_RATE_SCORE}"
 
     - name: generate coverage html report
       run: uv run coverage html
 
-    - run: mkdir _site && cp coverage.svg _site/. && cp -r htmlcov _site/.
+    - name: copy coverage badges and html report to _site
+      run: mkdir _site && cp coverage.svg _site/. && cp -r htmlcov _site/.
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
