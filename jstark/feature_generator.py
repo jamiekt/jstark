@@ -60,11 +60,11 @@ class FeatureGenerator(metaclass=ABCMeta):
 
     @property
     def as_at(self) -> date:
-        return self.__as_at
+        return self._as_at
 
     @as_at.setter
     def as_at(self, value: date) -> None:
-        self.__as_at = value
+        self._as_at = value
 
     @property
     def feature_periods(self) -> list[FeaturePeriod]:
