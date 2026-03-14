@@ -147,6 +147,14 @@ class Feature(metaclass=ABCMeta):
             "name-stem": str(type(self).__name__),
         }
 
+    def __repr__(self) -> str:
+        return (
+            f"{self.__class__.__name__}"
+            f"(as_at={self.as_at}"
+            f", feature_period='{self.feature_period.mnemonic}'"
+            f", first_day_of_week={self._first_day_of_week})"
+        )
+
 
 class DerivedFeature(Feature, metaclass=ABCMeta):
     """A DerivedFeature is a feature that is calculated by combining

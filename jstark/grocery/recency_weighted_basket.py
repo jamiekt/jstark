@@ -81,6 +81,15 @@ class RecencyWeightedApproxBasket(DerivedFeature):
             + f" {self.feature_period.period_unit_of_measure.name.lower()}."
         )
 
+    def __repr__(self) -> str:
+        return (
+            f"{self.__class__.__name__}"
+            f"(as_at={self.as_at}"
+            f", feature_period='{self.feature_period.mnemonic}'"
+            f", smoothing_factor={self.smoothing_factor}"
+            f", first_day_of_week={self._first_day_of_week})"
+        )
+
 
 class RecencyWeightedBasket(RecencyWeightedApproxBasket):
     """RecencyWeightedBasket feature"""

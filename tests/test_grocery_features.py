@@ -1,10 +1,11 @@
 from datetime import date, datetime, timedelta
 import pytest
 from math import pow
+from jstark.grocery.recency_weighted_basket import RecencyWeightedBasket
 from pyspark.sql import DataFrame, Row
 import pyspark.sql.functions as f
 
-from jstark.grocery import GroceryFeatures
+from jstark.grocery import GroceryFeatures, BasketCount
 from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
 from jstark.exceptions import FeaturePeriodMnemonicIsInvalid
 
@@ -556,7 +557,7 @@ def test_averagepurchasecycle_chewie_carrot(
     assert df_first["CyclesSinceLastPurchase_2y0"] == pytest.approx(2.065934065934066)
 
 
-def test_repr():
+def test_feature_generator_repr():
     gf = GroceryFeatures(
         as_at=date(2022, 11, 30),
         feature_periods=[
@@ -581,3 +582,32 @@ def test_repr():
         + f"feature_stems={feature_stems_str2}, first_day_of_week=None)"
     )
     assert repr_string == repr1 or repr_string == repr2
+
+
+def test_feature_repr():
+
+    bc = BasketCount(
+        as_at=date(2022, 11, 30),
+        feature_period=FeaturePeriod(PeriodUnitOfMeasure.DAY, 0, 0),
+        first_day_of_week=None,
+    )
+    repr_string = repr(bc)
+    assert (
+        repr_string
+        == "BasketCount(as_at=2022-11-30, feature_period='0d0', first_day_of_week=None)"
+    )
+
+    rwb = RecencyWeightedBasket(
+        as_at=date(2022, 11, 30),
+        feature_period=FeaturePeriod(PeriodUnitOfMeasure.DAY, 0, 0),
+        smoothing_factor=0.9,
+        first_day_of_week=None,
+    )
+    repr_string = repr(rwb)
+    expected = (
+        "RecencyWeightedBasket(as_at=2022-11-30"
+        ", feature_period='0d0'"
+        ", smoothing_factor=0.9"
+        ", first_day_of_week=None)"
+    )
+    assert repr_string == expected
