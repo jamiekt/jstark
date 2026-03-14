@@ -3,6 +3,7 @@
 from abc import ABCMeta
 import re
 from datetime import date
+from functools import cached_property
 
 from pyspark.sql import Column, SparkSession
 
@@ -74,7 +75,7 @@ class FeatureGenerator(metaclass=ABCMeta):
     def feature_periods(self, value: list[FeaturePeriod]) -> None:
         self.__feature_periods = value
 
-    @property
+    @cached_property
     def features(self) -> list[Column]:
         # Find feature stems that do not correspond to any class in FEATURE_CLASSES.
         # If any are not found, raise an Exception.
@@ -103,7 +104,7 @@ class FeatureGenerator(metaclass=ABCMeta):
             ]
         ]
 
-    @property
+    @cached_property
     def references(self) -> dict[str, list[str]]:
         # this function requires a SparkSession in order to do its thing.
         # In normal operation a SparkSession will probably already exist
@@ -115,7 +116,7 @@ class FeatureGenerator(metaclass=ABCMeta):
             for node in [c._jc.node() for c in self.features]  # type: ignore
         }
 
-    @property
+    @cached_property
     def flattened_references(self) -> set[str]:
         return {item for sublist in self.references.values() for item in sublist}
 
