@@ -430,7 +430,6 @@ faker = [
 [package.dev-dependencies]
 dev = [
     { name = "anybadge" },
-    { name = "cogapp" },
     { name = "faker" },
     { name = "genbadge", extra = ["coverage"] },
     { name = "pre-commit" },
