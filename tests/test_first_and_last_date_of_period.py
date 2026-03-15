@@ -11,13 +11,13 @@ def test_invalid_first_day_of_week():
 
 def test_first_date_in_week_for_default_first_day_of_week():
     assert FirstAndLastDateOfPeriod(date(2022, 12, 8)).first_date_in_week == date(
-        2022, 12, 4
+        2022, 12, 5
     )
 
 
 def test_last_date_in_week_for_default_first_day_of_week():
     assert FirstAndLastDateOfPeriod(date(2022, 12, 8)).last_date_in_week == date(
-        2022, 12, 10
+        2022, 12, 11
     )
 
 

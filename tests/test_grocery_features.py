@@ -400,7 +400,7 @@ def test_basketweeks_commentary(
     assert [(c.metadata["commentary"]) for c in output_df.schema][0] == (
         "The number of weeks in which at least one basket was purchased. "
         + "The value will be in the range 0 to 52"
-        + " because 52 is the number of weeks between 2021-11-28 and 2022-11-26."
+        + " because 52 is the number of weeks between 2021-11-29 and 2022-11-27."
         + " When grouped by Customer and Product"
         + " this feature is a useful indicator of the frequency of which a"
         + " Customer purchases a Product."

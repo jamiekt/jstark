@@ -22,7 +22,7 @@ def test_orderweeks(
     )
     first = output_df.first()
     assert first is not None
-    assert first["OrderCount_52w0"] == 931
+    assert first["OrderCount_52w0"] == 903
 
 
 def test_as_at_timestamp(dataframe_of_faker_mealkit_orders: DataFrame):
