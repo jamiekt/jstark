@@ -42,7 +42,7 @@ def test_start_date_days():
 
 
 def test_start_and_end_date_when_period_unit_of_measure_is_weeks():
-    first_day_of_week = date(2022, 11, 27)  # this is a Sunday
+    first_day_of_week = date(2022, 11, 28)  # this is a Monday
     for i in range(7):
         as_at = first_day_of_week + timedelta(days=i)
         # all days in the same week should return the same results
@@ -51,16 +51,16 @@ def test_start_and_end_date_when_period_unit_of_measure_is_weeks():
         _1w1 = GrossSpend(as_at, FeaturePeriod(PeriodUnitOfMeasure.WEEK, 1, 1))
         _2w0 = GrossSpend(as_at, FeaturePeriod(PeriodUnitOfMeasure.WEEK, 2, 0))
         _2w1 = GrossSpend(as_at, FeaturePeriod(PeriodUnitOfMeasure.WEEK, 2, 1))
-        assert _0w0.start_date == first_day_of_week
+        assert _0w0.start_date == date(2022, 11, 28)
         assert _0w0.end_date == as_at
-        assert _1w0.start_date == date(2022, 11, 20)
+        assert _1w0.start_date == date(2022, 11, 21)
         assert _1w0.end_date == as_at
-        assert _1w1.start_date == date(2022, 11, 20)
-        assert _1w1.end_date == date(2022, 11, 26)
-        assert _2w0.start_date == date(2022, 11, 13)
+        assert _1w1.start_date == date(2022, 11, 21)
+        assert _1w1.end_date == date(2022, 11, 27)
+        assert _2w0.start_date == date(2022, 11, 14)
         assert _2w0.end_date == as_at
-        assert _2w1.start_date == date(2022, 11, 13)
-        assert _2w1.end_date == date(2022, 11, 26)
+        assert _2w1.start_date == date(2022, 11, 14)
+        assert _2w1.end_date == date(2022, 11, 27)
 
 
 def test_start_and_end_date_when_period_unit_of_measure_is_months():

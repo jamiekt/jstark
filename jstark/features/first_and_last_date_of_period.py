@@ -17,16 +17,19 @@ class FirstAndLastDateOfPeriod:
     ) -> None:
         self._date_in_period = date_in_period
         self._weekdays = [
-            "Sunday",
             "Monday",
             "Tuesday",
             "Wednesday",
             "Thursday",
             "Friday",
             "Saturday",
+            "Sunday",
         ]
         if first_day_of_week is None:
-            first_day_of_week = "Sunday"
+            # use what python determines to be the first day of the week
+            first_day_of_week = (
+                date.today() - timedelta(date.today().weekday())
+            ).strftime("%A")
         if first_day_of_week not in self._weekdays:
             raise ValueError(f"first_day_of_week must be one of {self._weekdays}")
         self._first_day_of_week = first_day_of_week
