@@ -571,21 +571,15 @@ def test_feature_generator_repr():
     repr_string = repr(gf)
     # We can't control which order the feature stems appear in repr so we'll check
     # both possibilities
-    feature_stems_str1 = "{'GrossSpend', 'BasketCount'}"
-    feature_stems_str2 = "{'BasketCount', 'GrossSpend'}"
-    repr1 = (
+    feature_stems_str = "['BasketCount', 'GrossSpend']"
+    repr_ = (
         "GroceryFeatures(as_at=2022-11-30, feature_periods=['0d0', '2d0', '2d2'], "
-        + f"feature_stems={feature_stems_str1}, first_day_of_week=None)"
+        + f"feature_stems={feature_stems_str}, first_day_of_week=None)"
     )
-    repr2 = (
-        "GroceryFeatures(as_at=2022-11-30, feature_periods=['0d0', '2d0', '2d2'], "
-        + f"feature_stems={feature_stems_str2}, first_day_of_week=None)"
-    )
-    assert repr_string == repr1 or repr_string == repr2
+    assert repr_string == repr_
 
 
 def test_feature_repr():
-
     bc = BasketCount(
         as_at=date(2022, 11, 30),
         feature_period=FeaturePeriod(PeriodUnitOfMeasure.DAY, 0, 0),

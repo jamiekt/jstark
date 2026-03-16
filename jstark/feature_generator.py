@@ -127,8 +127,8 @@ class FeatureGenerator(metaclass=ABCMeta):
         )
 
     def __repr__(self) -> str:
-        periods = [fp.mnemonic for fp in self.feature_periods]
-        stems = set(self.feature_stems)
+        periods = sorted([fp.mnemonic for fp in self.feature_periods])
+        stems = sorted(self.feature_stems) if self.feature_stems is not None else None
         return (
             f"{self.__class__.__name__}"
             f"(as_at={self.as_at}"

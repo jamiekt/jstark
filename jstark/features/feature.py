@@ -152,7 +152,7 @@ class Feature(metaclass=ABCMeta):
             f"{self.__class__.__name__}"
             f"(as_at={self.as_at}"
             f", feature_period='{self.feature_period.mnemonic}'"
-            f", first_day_of_week={self._first_day_of_week})"
+            f", first_day_of_week={self._first_day_of_week!r})"
         )
 
 
