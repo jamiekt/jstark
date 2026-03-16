@@ -223,26 +223,60 @@ output_df = df.groupBy().agg(*mf.features)
 cog.outl("| Feature | Description |")
 cog.outl("| --- | --- |")
 for name, description in sorted(
-    [(c.name, c.metadata["description"]) for c in output_df.schema],
+    [(c.name, c.metadata["description"]) for c in output_df.schema  if "cuisine" not in c.name.lower() or c.name.lower() in ["cuisines_3m1", "cuisinecount_3m1"]],
     key=lambda x: x[0]
 ):
     cog.outl(f"| {name} | {description} |")
+
+cog.outl("---")
+cog.outl("")
+cog.outl("The following features provide insights into different cuisines:")
+cog.outl("")
+
+cog.outl("| Feature | Description |")
+cog.outl("| --- | --- |")
+for name, description in sorted(
+    [(c.name, c.metadata["description"]) for c in output_df.schema if "cuisine" in c.name.lower() and c.name.lower() not in ["cuisines_3m1", "cuisinecount_3m1"]],
+    key=lambda x: x[0]
+):
+    cog.outl(f"| {name} | {description} |")
+
 ]]]-->
 | Feature | Description |
 | --- | --- |
-| AfricanCuisineCount_3m1 | Count of African recipes between 2021-10-01 and 2021-12-31 |
-| AmericanCuisineCount_3m1 | Count of American recipes between 2021-10-01 and 2021-12-31 |
 | ApproxCustomerCount_3m1 | Approximate distinct count of Customers between 2021-10-01 and 2021-12-31 |
 | ApproxOrderCount_3m1 | Approximate distinct count of Orders between 2021-10-01 and 2021-12-31 |
 | ApproxProductCount_3m1 | Approximate distinct count of Products between 2021-10-01 and 2021-12-31 |
 | ApproxRecipeCount_3m1 | Approximate distinct count of Recipes between 2021-10-01 and 2021-12-31 |
+| AverageOrdersPerMonth_3m1 | Average number of orders per month between 2021-10-01 and 2021-12-31 |
+| AvgPurchaseCycle_3m1 | Average purchase cycle between 2021-10-01 and 2021-12-31 |
+| AvgQuantityPerOrder_3m1 | Average Quantity per Order between 2021-10-01 and 2021-12-31 |
+| Count_3m1 | Count of rows between 2021-10-01 and 2021-12-31 |
+| CuisineCount_3m1 | Distinct count of Cuisines between 2021-10-01 and 2021-12-31 |
+| Cuisines_3m1 | Set of Cuisines between 2021-10-01 and 2021-12-31 |
+| CustomerCount_3m1 | Distinct count of Customers between 2021-10-01 and 2021-12-31 |
+| CyclesSinceLastOrder_3m1 | Cycles since last order between 2021-10-01 and 2021-12-31 |
+| Discount_3m1 | Sum of Discount between 2021-10-01 and 2021-12-31 |
+| EarliestPurchaseDate_3m1 | Earliest purchase date between 2021-10-01 and 2021-12-31 |
+| MostRecentPurchaseDate_3m1 | Most recent purchase date between 2021-10-01 and 2021-12-31 |
+| OrderCount_3m1 | Distinct count of Orders between 2021-10-01 and 2021-12-31 |
+| OrderMonths_3m1 | Number of months in which at least one order was placed between 2021-10-01 and 2021-12-31 |
+| ProductCount_3m1 | Distinct count of Products between 2021-10-01 and 2021-12-31 |
+| Quantity_3m1 | Sum of Quantity between 2021-10-01 and 2021-12-31 |
+| RecencyDays_3m1 | Minimum number of days since occurrence between 2021-10-01 and 2021-12-31 |
+| RecipeCount_3m1 | Distinct count of Recipes between 2021-10-01 and 2021-12-31 |
+---
+
+The following features provide insights into different cuisines:
+
+| Feature | Description |
+| --- | --- |
+| AfricanCuisineCount_3m1 | Count of African recipes between 2021-10-01 and 2021-12-31 |
+| AmericanCuisineCount_3m1 | Count of American recipes between 2021-10-01 and 2021-12-31 |
 | ArgentinianCuisineCount_3m1 | Count of Argentinian recipes between 2021-10-01 and 2021-12-31 |
 | AsianCuisineCount_3m1 | Count of Asian recipes between 2021-10-01 and 2021-12-31 |
 | AustralianCuisineCount_3m1 | Count of Australian recipes between 2021-10-01 and 2021-12-31 |
 | AustrianCuisineCount_3m1 | Count of Austrian recipes between 2021-10-01 and 2021-12-31 |
-| AverageOrdersPerMonth_3m1 | Average number of orders per month between 2021-10-01 and 2021-12-31 |
-| AvgPurchaseCycle_3m1 | Average purchase cycle between 2021-10-01 and 2021-12-31 |
-| AvgQuantityPerOrder_3m1 | Average Quantity per Order between 2021-10-01 and 2021-12-31 |
 | BelgianCuisineCount_3m1 | Count of Belgian recipes between 2021-10-01 and 2021-12-31 |
 | BrazilianCuisineCount_3m1 | Count of Brazilian recipes between 2021-10-01 and 2021-12-31 |
 | BritishCuisineCount_3m1 | Count of British recipes between 2021-10-01 and 2021-12-31 |
@@ -254,16 +288,9 @@ for name, description in sorted(
 | CentralAmericaCuisineCount_3m1 | Count of Central america recipes between 2021-10-01 and 2021-12-31 |
 | CentralAsiaCuisineCount_3m1 | Count of Centralasia recipes between 2021-10-01 and 2021-12-31 |
 | ChineseCuisineCount_3m1 | Count of Chinese recipes between 2021-10-01 and 2021-12-31 |
-| Count_3m1 | Count of rows between 2021-10-01 and 2021-12-31 |
 | CubanCuisineCount_3m1 | Count of Cuban recipes between 2021-10-01 and 2021-12-31 |
-| CuisineCount_3m1 | Distinct count of Cuisines between 2021-10-01 and 2021-12-31 |
-| Cuisines_3m1 | Set of Cuisines between 2021-10-01 and 2021-12-31 |
-| CustomerCount_3m1 | Distinct count of Customers between 2021-10-01 and 2021-12-31 |
-| CyclesSinceLastOrder_3m1 | Cycles since last order between 2021-10-01 and 2021-12-31 |
 | DanishCuisineCount_3m1 | Count of Danish recipes between 2021-10-01 and 2021-12-31 |
-| Discount_3m1 | Sum of Discount between 2021-10-01 and 2021-12-31 |
 | DutchCuisineCount_3m1 | Count of Dutch recipes between 2021-10-01 and 2021-12-31 |
-| EarliestPurchaseDate_3m1 | Earliest purchase date between 2021-10-01 and 2021-12-31 |
 | EastAfricanCuisineCount_3m1 | Count of East african recipes between 2021-10-01 and 2021-12-31 |
 | EastAsiaCuisineCount_3m1 | Count of East asia recipes between 2021-10-01 and 2021-12-31 |
 | EasteuropeanCuisineCount_3m1 | Count of Easteuropean recipes between 2021-10-01 and 2021-12-31 |
@@ -297,7 +324,6 @@ for name, description in sorted(
 | MidwestCuisineCount_3m1 | Count of Midwest recipes between 2021-10-01 and 2021-12-31 |
 | MongolianCuisineCount_3m1 | Count of Mongolian recipes between 2021-10-01 and 2021-12-31 |
 | MoroccanCuisineCount_3m1 | Count of Moroccan recipes between 2021-10-01 and 2021-12-31 |
-| MostRecentPurchaseDate_3m1 | Most recent purchase date between 2021-10-01 and 2021-12-31 |
 | NewZealandCuisineCount_3m1 | Count of New zealand recipes between 2021-10-01 and 2021-12-31 |
 | NordicCuisineCount_3m1 | Count of Nordic recipes between 2021-10-01 and 2021-12-31 |
 | NorthAfricanCuisineCount_3m1 | Count of North african recipes between 2021-10-01 and 2021-12-31 |
@@ -305,16 +331,10 @@ for name, description in sorted(
 | NorthamericaCuisineCount_3m1 | Count of Northamerica recipes between 2021-10-01 and 2021-12-31 |
 | NortheastCuisineCount_3m1 | Count of Northeast recipes between 2021-10-01 and 2021-12-31 |
 | NorthernEuropeanCuisineCount_3m1 | Count of Northern europe recipes between 2021-10-01 and 2021-12-31 |
-| OrderCount_3m1 | Distinct count of Orders between 2021-10-01 and 2021-12-31 |
-| OrderMonths_3m1 | Number of months in which at least one order was placed between 2021-10-01 and 2021-12-31 |
 | PacificIslandsCuisineCount_3m1 | Count of Pacific-islands recipes between 2021-10-01 and 2021-12-31 |
 | PacificislandsCuisineCount_3m1 | Count of Pacificislands recipes between 2021-10-01 and 2021-12-31 |
 | PeruvianCuisineCount_3m1 | Count of Peruvian recipes between 2021-10-01 and 2021-12-31 |
 | PortugueseCuisineCount_3m1 | Count of Portuguese recipes between 2021-10-01 and 2021-12-31 |
-| ProductCount_3m1 | Distinct count of Products between 2021-10-01 and 2021-12-31 |
-| Quantity_3m1 | Sum of Quantity between 2021-10-01 and 2021-12-31 |
-| RecencyDays_3m1 | Minimum number of days since occurrence between 2021-10-01 and 2021-12-31 |
-| RecipeCount_3m1 | Distinct count of Recipes between 2021-10-01 and 2021-12-31 |
 | RussianCuisineCount_3m1 | Count of Russian recipes between 2021-10-01 and 2021-12-31 |
 | ScandinavianCuisineCount_3m1 | Count of Scandinavian recipes between 2021-10-01 and 2021-12-31 |
 | SingaporeanCuisineCount_3m1 | Count of Singaporean recipes between 2021-10-01 and 2021-12-31 |
