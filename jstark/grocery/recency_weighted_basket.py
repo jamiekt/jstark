@@ -87,7 +87,7 @@ class RecencyWeightedApproxBasket(DerivedFeature):
             f"(as_at={self.as_at}"
             f", feature_period='{self.feature_period.mnemonic}'"
             f", smoothing_factor={self.smoothing_factor}"
-            f", first_day_of_week={self._first_day_of_week})"
+            f", first_day_of_week={self._first_day_of_week!r})"
         )
 
 
