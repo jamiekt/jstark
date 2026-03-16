@@ -54,6 +54,8 @@ dev = [
   "pylint",
   "anybadge",
   "pylint-json2html",
+  "cogapp>=3.6.0",
+  "faker>=40.4.0",
 ]
 
 [tool.ruff]
