@@ -25,6 +25,7 @@ class FeatureGenerator(metaclass=ABCMeta):
         | None = None,
         feature_stems: set[str] | list[str] | None = None,
         first_day_of_week: str | None = None,
+        use_absolute_periods: bool = False,
     ) -> None:
         if feature_periods is None:
             feature_periods = {FeaturePeriod(PeriodUnitOfMeasure.WEEK, 52, 0)}
@@ -56,6 +57,7 @@ class FeatureGenerator(metaclass=ABCMeta):
         self.feature_periods = _feature_periods
         self.feature_stems = feature_stems
         self.first_day_of_week = first_day_of_week
+        self.use_absolute_periods = use_absolute_periods
 
     FEATURE_CLASSES: set[type["Feature"]] = set[type["Feature"]]()
 
@@ -97,6 +99,7 @@ class FeatureGenerator(metaclass=ABCMeta):
                     as_at=self.as_at,
                     feature_period=f[1],
                     first_day_of_week=self.first_day_of_week,
+                    use_absolute_periods=self.use_absolute_periods,
                 )
                 for f in (
                     (cls, fp) for cls in desired_features for fp in self.feature_periods

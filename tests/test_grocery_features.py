@@ -605,3 +605,19 @@ def test_feature_repr():
         ", first_day_of_week=None)"
     )
     assert repr_string == expected
+
+
+def test_use_absolute_periods(
+    as_at_timestamp: datetime, luke_and_leia_purchases: DataFrame
+):
+    """Test that use_absolute_periods uses period-absolute as the feature name suffix"""
+    fg = GroceryFeatures(
+        as_at=as_at_timestamp.date(),
+        feature_periods=[
+            FeaturePeriod(PeriodUnitOfMeasure.DAY, 0, 0),
+        ],
+        feature_stems=["Count"],
+        use_absolute_periods=True,
+    )
+    df = luke_and_leia_purchases.groupBy().agg(*fg.features)
+    assert "Count_20221130" in df.columns

@@ -21,8 +21,9 @@ class RecencyWeightedApproxBasket(DerivedFeature):
         feature_period: FeaturePeriod,
         smoothing_factor: float,
         first_day_of_week: str | None = None,
+        use_absolute_periods: bool = False,
     ) -> None:
-        super().__init__(as_at, feature_period, first_day_of_week)
+        super().__init__(as_at, feature_period, first_day_of_week, use_absolute_periods)
         self.__smoothing_factor = smoothing_factor
 
     @property
@@ -100,8 +101,15 @@ class RecencyWeightedBasket(RecencyWeightedApproxBasket):
         feature_period: FeaturePeriod,
         smoothing_factor: float,
         first_day_of_week: str | None = None,
+        use_absolute_periods: bool = False,
     ) -> None:
-        super().__init__(as_at, feature_period, smoothing_factor, first_day_of_week)
+        super().__init__(
+            as_at,
+            feature_period,
+            smoothing_factor,
+            first_day_of_week,
+            use_absolute_periods,
+        )
 
     def column_expression(self) -> Column:
         expr = f.lit(0.0)
@@ -165,8 +173,11 @@ class RecencyWeightedBasket90(RecencyWeightedBasket):
         as_at: date,
         feature_period: FeaturePeriod,
         first_day_of_week: str | None = None,
+        use_absolute_periods: bool = False,
     ) -> None:
-        super().__init__(as_at, feature_period, 0.9, first_day_of_week)
+        super().__init__(
+            as_at, feature_period, 0.9, first_day_of_week, use_absolute_periods
+        )
 
 
 class RecencyWeightedBasket95(RecencyWeightedBasket):
@@ -175,8 +186,11 @@ class RecencyWeightedBasket95(RecencyWeightedBasket):
         as_at: date,
         feature_period: FeaturePeriod,
         first_day_of_week: str | None = None,
+        use_absolute_periods: bool = False,
     ) -> None:
-        super().__init__(as_at, feature_period, 0.95, first_day_of_week)
+        super().__init__(
+            as_at, feature_period, 0.95, first_day_of_week, use_absolute_periods
+        )
 
 
 class RecencyWeightedBasket99(RecencyWeightedBasket):
@@ -185,8 +199,11 @@ class RecencyWeightedBasket99(RecencyWeightedBasket):
         as_at: date,
         feature_period: FeaturePeriod,
         first_day_of_week: str | None = None,
+        use_absolute_periods: bool = False,
     ) -> None:
-        super().__init__(as_at, feature_period, 0.99, first_day_of_week)
+        super().__init__(
+            as_at, feature_period, 0.99, first_day_of_week, use_absolute_periods
+        )
 
 
 class RecencyWeightedApproxBasket90(RecencyWeightedApproxBasket):
@@ -195,8 +212,11 @@ class RecencyWeightedApproxBasket90(RecencyWeightedApproxBasket):
         as_at: date,
         feature_period: FeaturePeriod,
         first_day_of_week: str | None = None,
+        use_absolute_periods: bool = False,
     ) -> None:
-        super().__init__(as_at, feature_period, 0.9, first_day_of_week)
+        super().__init__(
+            as_at, feature_period, 0.9, first_day_of_week, use_absolute_periods
+        )
 
 
 class RecencyWeightedApproxBasket95(RecencyWeightedApproxBasket):
@@ -205,8 +225,11 @@ class RecencyWeightedApproxBasket95(RecencyWeightedApproxBasket):
         as_at: date,
         feature_period: FeaturePeriod,
         first_day_of_week: str | None = None,
+        use_absolute_periods: bool = False,
     ) -> None:
-        super().__init__(as_at, feature_period, 0.95, first_day_of_week)
+        super().__init__(
+            as_at, feature_period, 0.95, first_day_of_week, use_absolute_periods
+        )
 
 
 class RecencyWeightedApproxBasket99(RecencyWeightedApproxBasket):
@@ -215,5 +238,8 @@ class RecencyWeightedApproxBasket99(RecencyWeightedApproxBasket):
         as_at: date,
         feature_period: FeaturePeriod,
         first_day_of_week: str | None = None,
+        use_absolute_periods: bool = False,
     ) -> None:
-        super().__init__(as_at, feature_period, 0.99, first_day_of_week)
+        super().__init__(
+            as_at, feature_period, 0.99, first_day_of_week, use_absolute_periods
+        )

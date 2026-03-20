@@ -131,8 +131,15 @@ class MealkitFeatures(FeatureGenerator):
         | None = None,
         feature_stems: set[str] | list[str] | None = None,
         first_day_of_week: str | None = None,
+        use_absolute_periods: bool = False,
     ) -> None:
-        super().__init__(as_at, feature_periods, feature_stems, first_day_of_week)
+        super().__init__(
+            as_at,
+            feature_periods,
+            feature_stems,
+            first_day_of_week,
+            use_absolute_periods,
+        )
 
     FEATURE_CLASSES: set[type[Feature]] = {
         Count,
