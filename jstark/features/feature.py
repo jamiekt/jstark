@@ -11,6 +11,7 @@ from dateutil.relativedelta import relativedelta
 
 from pyspark.sql import Column
 import pyspark.sql.functions as f
+import pendulum
 
 from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
 from jstark.features.first_and_last_date_of_period import FirstAndLastDateOfPeriod
@@ -133,6 +134,60 @@ class Feature(metaclass=ABCMeta):
 
     @property
     def column_metadata(self) -> dict[str, str]:
+        period_absolute_start_period: str = ""
+        period_absolute_end_period: str = ""
+        match self.feature_period.period_unit_of_measure:
+            case PeriodUnitOfMeasure.DAY:
+                period_absolute_start_period = (
+                    pendulum.instance(self.as_at)
+                    .subtract(days=self.feature_period.start)
+                    .format("YYYYMMDD")
+                )
+                period_absolute_end_period = (
+                    pendulum.instance(self.as_at)
+                    .subtract(days=self.feature_period.end)
+                    .format("YYYYMMDD")
+                )
+            case PeriodUnitOfMeasure.WEEK:
+                period_absolute_start_period = self._week_label(self.start_date)
+                end_week_start = FirstAndLastDateOfPeriod(
+                    pendulum.instance(self.as_at).subtract(
+                        weeks=self.feature_period.end
+                    ),
+                    self._first_day_of_week,
+                ).first_date_in_week
+                period_absolute_end_period = self._week_label(end_week_start)
+            case PeriodUnitOfMeasure.MONTH:
+                period_absolute_start_period = (
+                    pendulum.instance(self.as_at)
+                    .subtract(months=self.feature_period.start)
+                    .format("YYYYMMM")
+                )
+                period_absolute_end_period = (
+                    pendulum.instance(self.as_at)
+                    .subtract(months=self.feature_period.end)
+                    .format("YYYYMMM")
+                )
+            case PeriodUnitOfMeasure.QUARTER:
+                dt_start = pendulum.instance(self.as_at).subtract(
+                    months=self.feature_period.start * 3
+                )
+                period_absolute_start_period = f"{dt_start.year}Q{dt_start.quarter}"
+                dt_end = pendulum.instance(self.as_at).subtract(
+                    months=self.feature_period.end * 3
+                )
+                period_absolute_end_period = f"{dt_end.year}Q{dt_end.quarter}"
+            case _:  # PeriodUnitOfMeasure.YEAR:
+                period_absolute_start_period = str(
+                    pendulum.instance(self.as_at)
+                    .subtract(years=self.feature_period.start)
+                    .year
+                )
+                period_absolute_end_period = str(
+                    pendulum.instance(self.as_at)
+                    .subtract(years=self.feature_period.end)
+                    .year
+                )
         return {
             "created-with-love-by": "https://github.com/jamiekt/jstark",
             "start-date": self.start_date.strftime("%Y-%m-%d"),
@@ -145,7 +200,46 @@ class Feature(metaclass=ABCMeta):
             "generated-at": datetime.now().strftime("%Y-%m-%d"),
             "commentary": self.commentary,
             "name-stem": str(type(self).__name__),
+            "period-absolute-start": period_absolute_start_period,
+            "period-absolute-end": period_absolute_end_period,
+            "period-absolute": period_absolute_start_period
+            if period_absolute_start_period == period_absolute_end_period
+            else f"{period_absolute_start_period}-{period_absolute_end_period}",
         }
+
+    def _week_label(self, week_start_date: date) -> str:
+        """Convert the first day of a week to a label like 2026W13.
+
+        W01 of a year starts on the first occurrence of first_day_of_week
+        on or before Jan 1 of that year.
+        """
+        weekdays = [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday",
+        ]
+        first_day_of_week = self._first_day_of_week or "Monday"
+        target_weekday = weekdays.index(first_day_of_week)
+        year = week_start_date.year
+
+        jan1 = date(year, 1, 1)
+        days_back = (jan1.weekday() - target_weekday) % 7
+        w01_start = pendulum.instance(jan1).subtract(days=days_back)
+
+        jan1_next = date(year + 1, 1, 1)
+        days_back_next = (jan1_next.weekday() - target_weekday) % 7
+        w01_start_next = pendulum.instance(jan1_next).subtract(days=days_back_next)
+
+        if week_start_date >= w01_start_next:
+            w01_start = w01_start_next
+            year = year + 1
+
+        week_number = (week_start_date - w01_start).days // 7 + 1
+        return f"{year}W{week_number:02d}"
 
     def __repr__(self) -> str:
         return (
