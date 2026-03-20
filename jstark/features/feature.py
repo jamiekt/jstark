@@ -24,6 +24,7 @@ class Feature(metaclass=ABCMeta):
         as_at: date,
         feature_period: FeaturePeriod,
         first_day_of_week: str | None = None,
+        use_absolute_periods: bool = False,
     ) -> None:
         self.feature_period = feature_period
         if isinstance(as_at, datetime):
@@ -35,6 +36,7 @@ class Feature(metaclass=ABCMeta):
             raise AsAtIsNotADate
         self._as_at = as_at
         self._first_day_of_week = first_day_of_week
+        self._use_absolute_periods = use_absolute_periods
 
     @property
     def feature_period(self) -> FeaturePeriod:
@@ -50,7 +52,12 @@ class Feature(metaclass=ABCMeta):
 
     @property
     def feature_name(self) -> str:
-        return f"{type(self).__name__}_{self.feature_period.mnemonic}"
+        suffix = (
+            self.column_metadata["period-absolute"]
+            if self._use_absolute_periods
+            else self.feature_period.mnemonic
+        )
+        return f"{type(self).__name__}_{suffix}"
 
     @property
     @abstractmethod
