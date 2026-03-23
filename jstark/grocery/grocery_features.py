@@ -47,7 +47,7 @@ from jstark.feature_generator import FeatureGenerator
 class GroceryFeatures(FeatureGenerator):
     def __init__(
         self,
-        as_at: date,
+        as_at: date | None = None,
         feature_periods: FeaturePeriodsType = None,
         feature_stems: set[str] | list[str] | None = None,
         first_day_of_week: str | None = None,
