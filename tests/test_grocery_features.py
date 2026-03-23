@@ -12,7 +12,7 @@ from jstark.exceptions import FeaturePeriodMnemonicIsInvalid
 
 def test_feature_period_mnemonic():
     pfg1 = GroceryFeatures(date.today(), [FeaturePeriod(PeriodUnitOfMeasure.DAY, 0, 0)])
-    pfg2 = GroceryFeatures(date.today(), ["0d0"])
+    pfg2 = GroceryFeatures().with_feature_periods(["0d0"]).with_as_at(date.today())
     assert (
         pfg1.feature_periods[0].period_unit_of_measure.value
         == pfg2.feature_periods[0].period_unit_of_measure.value

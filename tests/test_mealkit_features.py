@@ -14,7 +14,7 @@ def test_orderweeks(
     OrderWeeks is the number of weeks in which at least one order was placed
 
     """
-    mf = MealkitFeatures(as_at=as_at_timestamp, feature_periods=["52w0"])
+    mf = MealkitFeatures().with_as_at(as_at_timestamp).with_feature_periods(["52w0"])
     output_df = (
         dataframe_of_faker_mealkit_orders.groupBy()
         .agg(*mf.features)
