@@ -1,7 +1,6 @@
 from platform import python_version
 from datetime import date, datetime, timedelta
-from dateutil.relativedelta import relativedelta
-
+import pendulum
 import pytest
 from packaging import version
 from pyspark.sql import DataFrame
@@ -292,7 +291,7 @@ def test_last_month(luke_and_leia_purchases: DataFrame):
     assert {
         datetime.strptime(c.metadata["start-date"], "%Y-%m-%d").date()
         for c in df.schema
-    } == {date.today().replace(day=1) - relativedelta(months=1)}
+    } == {pendulum.date(date.today().year, date.today().month, 1).subtract(months=1)}
 
 
 def test_this_quarter(luke_and_leia_purchases: DataFrame):
@@ -318,21 +317,21 @@ def test_last_quarter(luke_and_leia_purchases: DataFrame):
     df = luke_and_leia_purchases.groupBy().agg(*gf.features)
     match date.today().month:
         case 1 | 2 | 3:
-            first_day_of_quarter = date.today().replace(day=1).replace(
-                month=1
-            ) - relativedelta(months=3)
+            first_day_of_quarter = pendulum.date(date.today().year, 1, 1).subtract(
+                months=3
+            )
         case 4 | 5 | 6:
-            first_day_of_quarter = date.today().replace(day=1).replace(
-                month=4
-            ) - relativedelta(months=3)
+            first_day_of_quarter = pendulum.date(date.today().year, 4, 1).subtract(
+                months=3
+            )
         case 7 | 8 | 9:
-            first_day_of_quarter = date.today().replace(day=1).replace(
-                month=7
-            ) - relativedelta(months=3)
+            first_day_of_quarter = pendulum.date(date.today().year, 7, 1).subtract(
+                months=3
+            )
         case _:  # all other months:
-            first_day_of_quarter = date.today().replace(day=1).replace(
-                month=10
-            ) - relativedelta(months=3)
+            first_day_of_quarter = pendulum.date(date.today().year, 10, 1).subtract(
+                months=3
+            )
     assert {
         datetime.strptime(c.metadata["start-date"], "%Y-%m-%d").date()
         for c in df.schema
@@ -354,7 +353,7 @@ def test_last_year(luke_and_leia_purchases: DataFrame):
     assert {
         datetime.strptime(c.metadata["start-date"], "%Y-%m-%d").date()
         for c in df.schema
-    } == {date.today().replace(day=1).replace(month=1) - relativedelta(years=1)}
+    } == {pendulum.date(date.today().year, 1, 1).subtract(years=1)}
 
 
 def test_this_month_vs_one_year_prior(luke_and_leia_purchases: DataFrame):
@@ -365,19 +364,20 @@ def test_this_month_vs_one_year_prior(luke_and_leia_purchases: DataFrame):
         for c in df.schema
     } == {
         date.today().replace(day=1),
-        date.today().replace(day=1) - relativedelta(years=1),
+        pendulum.date(date.today().year, date.today().month, 1).subtract(years=1),
     }
 
 
 def test_last_month_vs_one_year_prior(luke_and_leia_purchases: DataFrame):
     gf = GroceryFeatures(**LAST_MONTH_VS_ONE_YEAR_PRIOR, feature_stems={"BasketCount"})  # type: ignore[arg-type]
     df = luke_and_leia_purchases.groupBy().agg(*gf.features)
+    today_first = pendulum.date(date.today().year, date.today().month, 1)
     assert {
         datetime.strptime(c.metadata["start-date"], "%Y-%m-%d").date()
         for c in df.schema
     } == {
-        date.today().replace(day=1) - relativedelta(months=1),
-        date.today().replace(day=1) - relativedelta(months=1) - relativedelta(years=1),
+        today_first.subtract(months=1),
+        today_first.subtract(months=1).subtract(years=1),
     }
 
 
@@ -401,7 +401,9 @@ def test_this_quarter_vs_one_year_prior(luke_and_leia_purchases: DataFrame):
         for c in df.schema
     } == {
         first_day_of_quarter,
-        first_day_of_quarter - relativedelta(years=1),
+        pendulum.date(
+            first_day_of_quarter.year, first_day_of_quarter.month, 1
+        ).subtract(years=1),
     }
 
 
@@ -413,27 +415,29 @@ def test_last_quarter_vs_one_year_prior(luke_and_leia_purchases: DataFrame):
     df = luke_and_leia_purchases.groupBy().agg(*gf.features)
     match date.today().month:
         case 1 | 2 | 3:
-            first_day_of_quarter = date.today().replace(day=1).replace(
-                month=1
-            ) - relativedelta(months=3)
+            first_day_of_quarter = pendulum.date(date.today().year, 1, 1).subtract(
+                months=3
+            )
         case 4 | 5 | 6:
-            first_day_of_quarter = date.today().replace(day=1).replace(
-                month=4
-            ) - relativedelta(months=3)
+            first_day_of_quarter = pendulum.date(date.today().year, 4, 1).subtract(
+                months=3
+            )
         case 7 | 8 | 9:
-            first_day_of_quarter = date.today().replace(day=1).replace(
-                month=7
-            ) - relativedelta(months=3)
+            first_day_of_quarter = pendulum.date(date.today().year, 7, 1).subtract(
+                months=3
+            )
         case _:  # all other months:
-            first_day_of_quarter = date.today().replace(day=1).replace(
-                month=10
-            ) - relativedelta(months=3)
+            first_day_of_quarter = pendulum.date(date.today().year, 10, 1).subtract(
+                months=3
+            )
     assert {
         datetime.strptime(c.metadata["start-date"], "%Y-%m-%d").date()
         for c in df.schema
     } == {
         first_day_of_quarter,
-        first_day_of_quarter - relativedelta(years=1),
+        pendulum.date(
+            first_day_of_quarter.year, first_day_of_quarter.month, 1
+        ).subtract(years=1),
     }
 
 
@@ -444,9 +448,9 @@ def test_last_five_years(luke_and_leia_purchases: DataFrame):
         datetime.strptime(c.metadata["start-date"], "%Y-%m-%d").date()
         for c in df.schema
     } == {
-        date.today().replace(day=1).replace(month=1) - relativedelta(years=1),
-        date.today().replace(day=1).replace(month=1) - relativedelta(years=2),
-        date.today().replace(day=1).replace(month=1) - relativedelta(years=3),
-        date.today().replace(day=1).replace(month=1) - relativedelta(years=4),
-        date.today().replace(day=1).replace(month=1) - relativedelta(years=5),
+        pendulum.date(date.today().year, 1, 1).subtract(years=1),
+        pendulum.date(date.today().year, 1, 1).subtract(years=2),
+        pendulum.date(date.today().year, 1, 1).subtract(years=3),
+        pendulum.date(date.today().year, 1, 1).subtract(years=4),
+        pendulum.date(date.today().year, 1, 1).subtract(years=5),
     }

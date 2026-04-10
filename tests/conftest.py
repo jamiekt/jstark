@@ -1,9 +1,7 @@
 import uuid
 from decimal import Decimal
 from datetime import datetime, timedelta
-from dateutil.relativedelta import relativedelta
-
-
+import pendulum
 import pytest
 from pyspark.sql import DataFrame, SparkSession, Row
 import pyspark.sql.functions as f
@@ -12,6 +10,12 @@ from jstark.grocery import GroceryFeatures
 from jstark.feature_period import FeaturePeriod, PeriodUnitOfMeasure
 from jstark.sample.transactions import FakeGroceryTransactions
 from jstark.sample.mealkit_orders import FakeMealkitOrders
+
+
+def _subtract_months(dt: datetime, months: int) -> datetime:
+    """Subtract months from a datetime using pendulum, returning a plain datetime."""
+    d = pendulum.date(dt.year, dt.month, dt.day).subtract(months=months)
+    return datetime(d.year, d.month, d.day, dt.hour, dt.minute, dt.second)
 
 
 @pytest.fixture(scope="session")
@@ -81,7 +85,7 @@ def dataframe_of_purchases(
     }
     transactions = [
         {
-            "Timestamp": as_at_timestamp - relativedelta(months=12),
+            "Timestamp": _subtract_months(as_at_timestamp, 12),
             "Customer": "Luke",
             "Store": "Ealing",
             "Channel": "Instore",
@@ -97,7 +101,7 @@ def dataframe_of_purchases(
             ],
         },
         {
-            "Timestamp": as_at_timestamp - relativedelta(months=2),
+            "Timestamp": _subtract_months(as_at_timestamp, 2),
             "Customer": "Luke",
             "Store": "Twickenham",
             "Channel": "Online",
@@ -113,7 +117,7 @@ def dataframe_of_purchases(
             ],
         },
         {
-            "Timestamp": as_at_timestamp - relativedelta(months=1),
+            "Timestamp": _subtract_months(as_at_timestamp, 1),
             "Customer": "Leia",
             "Store": "Ealing",
             "Channel": "Instore",
@@ -186,62 +190,62 @@ def dataframe_of_purchases(
         {
             **chew_car,
             "Basket": uuid.uuid4(),
-            "Timestamp": chew_car_timestamp - relativedelta(months=3),
+            "Timestamp": _subtract_months(chew_car_timestamp, 3),
         },
         {
             **chew_car,
             "Basket": uuid.uuid4(),
-            "Timestamp": chew_car_timestamp - relativedelta(months=5),
+            "Timestamp": _subtract_months(chew_car_timestamp, 5),
         },
         {
             **chew_car,
             "Basket": uuid.uuid4(),
-            "Timestamp": chew_car_timestamp - relativedelta(months=6),
+            "Timestamp": _subtract_months(chew_car_timestamp, 6),
         },
         {
             **chew_car,
             "Basket": uuid.uuid4(),
-            "Timestamp": chew_car_timestamp - relativedelta(months=9),
+            "Timestamp": _subtract_months(chew_car_timestamp, 9),
         },
         {
             **chew_car,
             "Basket": uuid.uuid4(),
-            "Timestamp": chew_car_timestamp - relativedelta(months=10),
+            "Timestamp": _subtract_months(chew_car_timestamp, 10),
         },
         {
             **chew_car,
             "Basket": uuid.uuid4(),
-            "Timestamp": chew_car_timestamp - relativedelta(months=12),
+            "Timestamp": _subtract_months(chew_car_timestamp, 12),
         },
         {
             **chew_car,
             "Basket": uuid.uuid4(),
-            "Timestamp": chew_car_timestamp - relativedelta(months=13),
+            "Timestamp": _subtract_months(chew_car_timestamp, 13),
         },
         {
             **chew_car,
             "Basket": uuid.uuid4(),
-            "Timestamp": chew_car_timestamp - relativedelta(months=15),
+            "Timestamp": _subtract_months(chew_car_timestamp, 15),
         },
         {
             **chew_car,
             "Basket": uuid.uuid4(),
-            "Timestamp": chew_car_timestamp - relativedelta(months=16),
+            "Timestamp": _subtract_months(chew_car_timestamp, 16),
         },
         {
             **chew_car,
             "Basket": uuid.uuid4(),
-            "Timestamp": chew_car_timestamp - relativedelta(months=17),
+            "Timestamp": _subtract_months(chew_car_timestamp, 17),
         },
         {
             **chew_car,
             "Basket": uuid.uuid4(),
-            "Timestamp": chew_car_timestamp - relativedelta(months=18),
+            "Timestamp": _subtract_months(chew_car_timestamp, 18),
         },
         {
             **chew_car,
             "Basket": uuid.uuid4(),
-            "Timestamp": chew_car_timestamp - relativedelta(months=21),
+            "Timestamp": _subtract_months(chew_car_timestamp, 21),
         },
     ]
     flattened_transactions = FakeGroceryTransactions.flatten_transactions(transactions)
