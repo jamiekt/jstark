@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "jstark"
-description = ''
+description = 'Time-based feature engineering for machine learning using PySpark'
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
@@ -34,9 +34,10 @@ dynamic = ["version"]
 faker = ["faker>=40.0.0"]
 
 [project.urls]
-Documentation = "https://github.com/unknown/jstark#readme"
-Issues = "https://github.com/unknown/jstark/issues"
-Source = "https://github.com/unknown/jstark"
+Documentation = "https://github.com/jamiekt/jstark#readme"
+Issues = "https://github.com/jamiekt/jstark/issues"
+Source = "https://github.com/jamiekt/jstark"
+Homepage = "https://github.com/jamiekt/jstark"
 
 [tool.hatch.version]
 source = "vcs"
