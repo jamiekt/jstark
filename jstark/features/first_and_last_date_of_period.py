@@ -4,7 +4,8 @@ Helper class for figuring out dates relative to a given date
 """
 
 from datetime import date, timedelta
-from dateutil.relativedelta import relativedelta
+
+import pendulum
 
 
 class FirstAndLastDateOfPeriod:
@@ -54,11 +55,10 @@ class FirstAndLastDateOfPeriod:
 
     @property
     def last_date_in_month(self) -> date:
-        return (
-            self._date_in_period
-            + relativedelta(months=1, day=1)
-            - relativedelta(days=1)
+        first_of_month = pendulum.date(
+            self._date_in_period.year, self._date_in_period.month, 1
         )
+        return first_of_month.add(months=1).subtract(days=1)
 
     @property
     def first_date_in_quarter(self) -> date:

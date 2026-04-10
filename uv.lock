@@ -420,7 +420,6 @@ source = { editable = "." }
 dependencies = [
     { name = "pendulum" },
     { name = "pyspark" },
-    { name = "python-dateutil" },
 ]
 
 [package.optional-dependencies]
@@ -447,7 +446,6 @@ requires-dist = [
     { name = "faker", marker = "extra == 'faker'", specifier = ">=40.0.0" },
     { name = "pendulum", specifier = ">=3.2.0" },
     { name = "pyspark", specifier = ">=3.5" },
-    { name = "python-dateutil" },
 ]
 provides-extras = ["faker"]
 

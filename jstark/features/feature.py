@@ -6,9 +6,6 @@ All feature classes are derived from here
 from abc import ABCMeta, abstractmethod
 from datetime import date, timedelta, datetime
 from typing import Callable
-from dateutil.relativedelta import relativedelta
-
-
 from pyspark.sql import Column
 import pyspark.sql.functions as f
 import pendulum
@@ -89,13 +86,12 @@ class Feature(metaclass=ABCMeta):
 
     @property
     def start_date(self) -> date:
+        p_as_at = pendulum.date(self.as_at.year, self.as_at.month, self.as_at.day)
         n_days_ago = self.as_at - timedelta(days=self.feature_period.start)
         n_weeks_ago = self.as_at - timedelta(weeks=self.feature_period.start)
-        n_months_ago = self.as_at - relativedelta(months=self.feature_period.start)
-        n_quarters_ago = self.as_at - relativedelta(
-            months=self.feature_period.start * 3
-        )
-        n_years_ago = self.as_at - relativedelta(years=self.feature_period.start)
+        n_months_ago = p_as_at.subtract(months=self.feature_period.start)
+        n_quarters_ago = p_as_at.subtract(months=self.feature_period.start * 3)
+        n_years_ago = p_as_at.subtract(years=self.feature_period.start)
         match self.feature_period.period_unit_of_measure:
             case PeriodUnitOfMeasure.DAY:
                 return n_days_ago
@@ -112,11 +108,12 @@ class Feature(metaclass=ABCMeta):
 
     @property
     def end_date(self) -> date:
+        p_as_at = pendulum.date(self.as_at.year, self.as_at.month, self.as_at.day)
         n_days_ago = self.as_at - timedelta(days=self.feature_period.end)
         n_weeks_ago = self.as_at - timedelta(weeks=self.feature_period.end)
-        n_months_ago = self.as_at - relativedelta(months=self.feature_period.end)
-        n_quarters_ago = self.as_at - relativedelta(months=self.feature_period.end * 3)
-        n_years_ago = self.as_at - relativedelta(years=self.feature_period.end)
+        n_months_ago = p_as_at.subtract(months=self.feature_period.end)
+        n_quarters_ago = p_as_at.subtract(months=self.feature_period.end * 3)
+        n_years_ago = p_as_at.subtract(years=self.feature_period.end)
         match self.feature_period.period_unit_of_measure:
             case PeriodUnitOfMeasure.DAY:
                 last_day_of_period = n_days_ago

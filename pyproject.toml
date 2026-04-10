@@ -26,7 +26,6 @@ classifiers = [
 dependencies = [
   "pendulum>=3.2.0",
   "pyspark>=3.5",
-  "python-dateutil",
 ]
 
 dynamic = ["version"]
