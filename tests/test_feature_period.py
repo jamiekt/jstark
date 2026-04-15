@@ -1,5 +1,6 @@
 from platform import python_version
 from datetime import date, datetime, timedelta
+from freezegun import freeze_time
 import pendulum
 import pytest
 from packaging import version
@@ -11,7 +12,6 @@ from jstark.feature_period import (
     ALL_MONTHS_LAST_YEAR,
     ALL_QUARTERS_LAST_YEAR,
     ALL_MONTHS_THIS_YEAR,
-    ALL_QUARTERS_THIS_YEAR,
     TODAY,
     YESTERDAY,
     THIS_WEEK,
@@ -217,25 +217,55 @@ def test_all_quarters_last_year(luke_and_leia_purchases: DataFrame):
     } == expected_start_dates
 
 
-def test_all_quarters_this_year(luke_and_leia_purchases: DataFrame):
-    gf = GroceryFeatures(**ALL_QUARTERS_THIS_YEAR, feature_stems={"BasketCount"})  # type: ignore[arg-type]
-    df = luke_and_leia_purchases.groupBy().agg(*gf.features)
-    match date.today().month:
-        case 1 | 2 | 3:
-            first_month_of_quarters = [1]
-        case 4 | 5 | 6:
-            first_month_of_quarters = [1, 4]
-        case 7 | 8 | 9:
-            first_month_of_quarters = [1, 4, 7]
-        case _:  # all other months:
-            first_month_of_quarters = [1, 4, 7, 10]
-    expected_start_dates = {
-        date(date.today().year, i, 1) for i in first_month_of_quarters
-    }
-    assert {
-        datetime.strptime(c.metadata["start-date"], "%Y-%m-%d").date()
-        for c in df.schema
-    } == expected_start_dates
+@pytest.mark.parametrize(
+    "frozen_date,first_month_of_quarters",
+    [
+        ("2026-02-15", [1]),
+        ("2026-05-15", [1, 4]),
+        ("2026-08-15", [1, 4, 7]),
+        ("2026-11-15", [1, 4, 7, 10]),
+    ],
+    ids=["Q1", "Q2", "Q3", "Q4"],
+)
+def test_all_quarters_this_year(
+    luke_and_leia_purchases: DataFrame,
+    frozen_date: str,
+    first_month_of_quarters: list[int],
+):
+    import importlib
+    import jstark.feature_period as fp_module
+    import jstark.feature_generator as fg_module
+
+    # ALL_QUARTERS_THIS_YEAR is computed at module import time, so freezegun
+    # alone can't change it — we must reload feature_period under the frozen
+    # clock so the module-level code re-executes with the frozen date.
+    # Reloading creates a new FeaturePeriod class object, breaking isinstance
+    # and __eq__ checks in other modules that imported the original class. We
+    # also reload feature_generator so it picks up the new class. In the
+    # finally block we restore both module dicts from saved snapshots (rather
+    # than reloading again, which would create yet another class version)
+    # so subsequent tests see the original class identity.
+    saved_fp_dict = dict(fp_module.__dict__)
+    saved_fg_dict = dict(fg_module.__dict__)
+    try:
+        with freeze_time(frozen_date):
+            importlib.reload(fp_module)
+            importlib.reload(fg_module)
+            gf = GroceryFeatures(
+                **fp_module.ALL_QUARTERS_THIS_YEAR,  # type: ignore[arg-type]
+                feature_stems={"BasketCount"},
+            )
+            df = luke_and_leia_purchases.groupBy().agg(*gf.features)
+            expected_start_dates = {date(2026, i, 1) for i in first_month_of_quarters}
+            assert {
+                datetime.strptime(c.metadata["start-date"], "%Y-%m-%d").date()
+                for c in df.schema
+            } == expected_start_dates
+    finally:
+        fp_module.__dict__.clear()
+        fp_module.__dict__.update(saved_fp_dict)
+        fg_module.__dict__.clear()
+        fg_module.__dict__.update(saved_fg_dict)
 
 
 def test_today(luke_and_leia_purchases: DataFrame):
