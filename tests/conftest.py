@@ -41,12 +41,10 @@ def as_at_timestamp() -> datetime:
 
 
 @pytest.fixture(scope="session")
-def mealkit_orders_schema() -> StructType:
-    return FakeMealkitOrders().mealkit_orders_schema
-
-
-@pytest.fixture(scope="session")
 def dataframe_of_faker_mealkit_orders() -> DataFrame:
+    # Following line is to run code in df property that otherwise would be uncovered
+    # because that code only runs when seed is None
+    FakeMealkitOrders().df
     return FakeMealkitOrders(seed=42, number_of_orders=10000).df
 
 
