@@ -50,3 +50,30 @@ def test_with_use_absolute_periods():
     assert fg.use_absolute_periods is False
     fg = fg.with_use_absolute_periods(True)
     assert fg.use_absolute_periods is True
+
+
+def test_with_feature_stems():
+    fg = feature_generator.FeatureGenerator()
+    assert fg.feature_stems == set[str]()
+    fg = fg.with_feature_stems(
+        ["AverageGrossSpendPerBasket", "AverageNetSpendPerBasket"]
+    )
+    assert fg.feature_stems == {
+        "AverageGrossSpendPerBasket",
+        "AverageNetSpendPerBasket",
+    }
+
+
+def test_with_feature_stem():
+    fg = feature_generator.FeatureGenerator()
+    assert fg.feature_stems == set[str]()
+    fg = fg.with_feature_stem("AverageGrossSpendPerBasket")
+    assert fg.feature_stems == {"AverageGrossSpendPerBasket"}
+
+
+def test_without_feature_stem():
+    fg = feature_generator.FeatureGenerator().with_feature_stems(
+        ["AverageGrossSpendPerBasket", "AverageNetSpendPerBasket"]
+    )
+    fg = fg.without_feature_stem("AverageGrossSpendPerBasket")
+    assert fg.feature_stems == {"AverageNetSpendPerBasket"}
