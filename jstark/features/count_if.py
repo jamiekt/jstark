@@ -12,8 +12,5 @@ class CountIf(BaseFeature):
     def aggregator(self) -> Callable[[Column], Column]:
         return self.count_if_aggregator
 
-    def column_expression(self) -> Column:
-        return f.lit(1)
-
     def default_value(self) -> Column:
         return f.lit(0)
