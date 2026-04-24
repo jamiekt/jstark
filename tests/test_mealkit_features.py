@@ -25,6 +25,48 @@ def test_orderweeks(
     assert first["OrderCount_52w0"] == 903
 
 
+def test_allergens(dataframe_of_faker_mealkit_orders: DataFrame):
+    mf = MealkitFeatures(
+        as_at=date(2022, 1, 1),
+        feature_periods=["1q1", "2q2", "3q3", "4q4"],
+        feature_stems=["Allergens"],
+    )
+    output_df = dataframe_of_faker_mealkit_orders.groupBy().agg(*mf.features)
+    assert output_df.columns == [
+        "Allergens_1q1",
+        "Allergens_2q2",
+        "Allergens_3q3",
+        "Allergens_4q4",
+    ]
+    first = output_df.first()
+    assert first is not None
+    assert set(first["Allergens_1q1"]) == {"Gluten", "Eggs", "Milk", "Soy"}
+    assert set(first["Allergens_2q2"]) == {"Gluten", "Eggs", "Milk", "Soy"}
+    assert set(first["Allergens_3q3"]) == {"Gluten", "Eggs", "Milk", "Soy"}
+    assert set(first["Allergens_4q4"]) == {"Gluten", "Eggs", "Milk", "Soy"}
+
+
+def test_allergen_count(dataframe_of_faker_mealkit_orders: DataFrame):
+    mf = MealkitFeatures(
+        as_at=date(2022, 1, 1),
+        feature_periods=["1q1", "2q2", "3q3", "4q4"],
+        feature_stems=["AllergenCount"],
+    )
+    output_df = dataframe_of_faker_mealkit_orders.groupBy().agg(*mf.features)
+    assert output_df.columns == [
+        "AllergenCount_1q1",
+        "AllergenCount_2q2",
+        "AllergenCount_3q3",
+        "AllergenCount_4q4",
+    ]
+    first = output_df.first()
+    assert first is not None
+    assert first["AllergenCount_1q1"] == 4
+    assert first["AllergenCount_2q2"] == 4
+    assert first["AllergenCount_3q3"] == 4
+    assert first["AllergenCount_4q4"] == 4
+
+
 def test_as_at_timestamp(dataframe_of_faker_mealkit_orders: DataFrame):
     """
     We had a situation where as_at was being passed as a datetime (which we support)

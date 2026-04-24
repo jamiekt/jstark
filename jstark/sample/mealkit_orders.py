@@ -31,6 +31,7 @@ class FakeMealkitOrders:
                 StructField("Product", StringType(), True),
                 StructField("Recipe", StringType(), True),
                 StructField("Cuisine", StringType(), True),
+                StructField("Allergen", StringType(), True),
                 StructField("Quantity", IntegerType(), True),
                 StructField("Order", StringType(), True),
                 StructField("Discount", DecimalType(10, 2), True),
@@ -44,6 +45,7 @@ class FakeMealkitOrders:
                 "Customer": d["Customer"],
                 "Product": d["Product"],
                 "Cuisine": d["Cuisine"],
+                "Allergen": d["Allergen"],
                 "Order": d["Order"],
                 "Timestamp": d["Timestamp"],
                 **d2,
@@ -92,6 +94,16 @@ class FakeMealkitOrders:
             ],
         )
 
+        allergens_provider = DynamicProvider(
+            provider_name="allergen",
+            elements=[
+                "Gluten",
+                "Eggs",
+                "Milk",
+                "Soy",
+            ],
+        )
+
         fake = Faker()
         if self.seed:
             Faker.seed(self.seed)
@@ -104,6 +116,9 @@ class FakeMealkitOrders:
 
         cuisines_fake = Faker()
         cuisines_fake.add_provider(cuisines_provider)
+
+        allergens_fake = Faker()
+        allergens_fake.add_provider(allergens_provider)
 
         mealkit_orders = []
 
@@ -137,6 +152,7 @@ class FakeMealkitOrders:
                     "Order": str(uuid.uuid4()),
                     "Product": products_fake.product(),
                     "Cuisine": cuisines_fake.cuisine(),
+                    "Allergen": allergens_fake.allergen(),
                     "Recipes": recipes,
                     "Discount": Decimal(random.uniform(0, 5)),
                 }
