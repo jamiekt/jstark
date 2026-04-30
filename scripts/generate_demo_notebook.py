@@ -159,9 +159,10 @@ def main() -> None:
     """
     nb = build()
     nbformat.validate(nb)
+    serialized = json.loads(nbformat.writes(nb))
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     with OUTPUT.open("w", encoding="utf-8") as fh:
-        json.dump(nb, fh, indent=2, ensure_ascii=True)
+        json.dump(serialized, fh, indent=1, ensure_ascii=True, sort_keys=True)
         fh.write("\n")
     print(f"wrote {OUTPUT}")
 
