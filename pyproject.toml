@@ -49,6 +49,12 @@ source = "vcs"
 [tool.hatch.build.hooks.vcs]
 version-file = "jstark/_version.py"
 
+[tool.hatch.build.targets.wheel]
+packages = ["jstark"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"jstark/demo/GroceryFeatures_demo.ipynb" = "jstark/demo/GroceryFeatures_demo.ipynb"
+
 [dependency-groups]
 dev = [
   "pytest",
