@@ -115,6 +115,9 @@ def build() -> nbformat.NotebookNode:
         ),
     ]
 
+    for index, cell in enumerate(cells):
+        cell["id"] = f"cell-{index}"
+
     nb = new_notebook(cells=cells)
     nb.metadata["kernelspec"] = {
         "display_name": "Python 3",
