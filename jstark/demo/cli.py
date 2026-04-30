@@ -15,6 +15,7 @@ NOTEBOOK_NAME = "GroceryFeatures_demo.ipynb"
 
 
 def _build_parser() -> argparse.ArgumentParser:
+    """Create the argparse parser for jstark-demo."""
     parser = argparse.ArgumentParser(
         prog="jstark-demo",
         description=(
