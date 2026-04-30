@@ -32,6 +32,10 @@ dynamic = ["version"]
 
 [project.optional-dependencies]
 faker = ["faker>=40.0.0"]
+jupyter = ["notebook", "faker>=40.0.0"]
+
+[project.scripts]
+jstark-demo = "jstark.demo.cli:main"
 
 [project.urls]
 Documentation = "https://github.com/jamiekt/jstark#readme"
@@ -58,6 +62,8 @@ dev = [
   "cogapp>=3.6.0",
   "faker>=40.4.0",
   "freezegun",
+  "nbclient",
+  "ipykernel",
 ]
 
 [tool.ruff]
