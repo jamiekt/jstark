@@ -60,13 +60,13 @@ Entry point: `jstark-demo`. Implementation uses only the standard library
 
 Surface:
 
-```
+```text
 jstark-demo [-f | --force] [-h | --help]
 ```
 
 Behaviour:
 
-```
+```text
 locate bundled notebook via
     importlib.resources.files("jstark.demo") / "GroceryFeatures_demo.ipynb"
 target = Path.cwd() / "GroceryFeatures_demo.ipynb"
