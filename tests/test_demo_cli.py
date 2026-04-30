@@ -17,11 +17,13 @@ def _bundled_notebook_bytes() -> bytes:
 
 
 def test_copies_notebook_when_target_absent(tmp_path: Path) -> None:
+    """The CLI copies the bundled notebook to cwd when the target is absent."""
     result = subprocess.run(
         ["jstark-demo"],
         cwd=tmp_path,
         capture_output=True,
         text=True,
+        check=False,
     )
 
     assert result.returncode == 0, result.stderr
