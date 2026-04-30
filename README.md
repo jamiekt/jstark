@@ -76,6 +76,19 @@ output_df.select(
 +-----------+---------------+---------------+---------------+---------------+
 ```
 
+## Try the demo notebook
+
+A runnable Jupyter notebook is bundled with the wheel:
+
+```shell
+pip install jstark[jupyter]
+jstark-demo
+jupyter notebook GroceryFeatures_demo.ipynb
+```
+
+`jstark-demo` copies `GroceryFeatures_demo.ipynb` into your current directory.
+Use `jstark-demo --force` to overwrite an existing copy.
+
 ## Feature descriptions and references
 
 Every feature carries a description in its column metadata:
