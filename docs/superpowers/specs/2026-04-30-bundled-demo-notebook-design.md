@@ -111,9 +111,10 @@ end-to-end via `nbclient.NotebookClient` and asserts no cell raises. Targets
 `jstark/demo/GroceryFeatures_demo.ipynb` at its source location so it tests
 what is committed.
 
-**`tests/test_demo_cli.py`** — three cases, all invoking the real CLI via
-`subprocess.run([sys.executable, "-m", "jstark.demo.cli", ...])` (or the
-installed `jstark-demo` script) with `cwd=tmp_path`:
+**`tests/test_demo_cli.py`** — three cases, all invoking the installed
+`jstark-demo` script via `subprocess.run(["jstark-demo", ...], cwd=tmp_path)`.
+This tests the real entry point wired up by `[project.scripts]`, available
+because the project is installed into the dev environment by `uv sync`.
 
 - Happy path: target does not exist, CLI copies and exits 0, file exists at
   target path and matches source bytes.
