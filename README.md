@@ -230,13 +230,14 @@ schema = StructType(
         StructField("Customer", StringType(), True),
         StructField("Product", StringType(), True),
         StructField("Recipe", StringType(), True),
+        StructField("Allergen", StringType(), True),
         StructField("Quantity", IntegerType(), True),
         StructField("NetSpend", FloatType(), True),
         StructField("GrossSpend", FloatType(), True),
         StructField("Discount", FloatType(), True),
     ]
 )
-df = spark.createDataFrame([(datetime.combine(d, time.min), "1234567890", "Cuisine1", "Customer1",  "Product1", "Recipe1", 1, 1.2, 1.5, 0.3)], schema)
+df = spark.createDataFrame([(datetime.combine(d, time.min), "1234567890", "Cuisine1", "Customer1",  "Product1", "Recipe1", "Gluten", 1, 1.2, 1.5, 0.3)], schema)
 period = FeaturePeriod(PeriodUnitOfMeasure.MONTH, 3, 1)
 mf = MealkitFeatures(d, [period])
 output_df = df.groupBy().agg(*mf.features)
@@ -265,6 +266,8 @@ for name, description in sorted(
 ]]]-->
 | Feature | Description |
 | --- | --- |
+| AllergenCount_3m1 | Distinct count of Allergens between 2021-10-01 and 2021-12-31 |
+| Allergens_3m1 | Set of Allergens between 2021-10-01 and 2021-12-31 |
 | ApproxCustomerCount_3m1 | Approximate distinct count of Customers between 2021-10-01 and 2021-12-31 |
 | ApproxOrderCount_3m1 | Approximate distinct count of Orders between 2021-10-01 and 2021-12-31 |
 | ApproxProductCount_3m1 | Approximate distinct count of Products between 2021-10-01 and 2021-12-31 |
