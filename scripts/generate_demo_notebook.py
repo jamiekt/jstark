@@ -107,6 +107,27 @@ def build() -> nbformat.NotebookNode:
             'print(gf.references["AvgGrossSpendPerBasket_3m1"])'
         ),
         new_markdown_cell(
+            "## Absolute period labels\n"
+            "\n"
+            "By default, feature names carry the mnemonic of their period "
+            "(e.g. `BasketCount_1q1`). Calling `with_use_absolute_periods(True)` "
+            "rewrites the suffix as the concrete calendar period the mnemonic "
+            "resolves to, given `as_at`. For example, with `as_at=2022-01-01` "
+            "the mnemonic `1q1` becomes `2021Q4` and `2q2` becomes `2021Q3`."
+        ),
+        new_code_cell(
+            "gf_abs = (\n"
+            "    GroceryFeatures()\n"
+            "    .with_as_at(date(2022, 1, 1))\n"
+            '    .with_feature_periods(["1q1", "2q2"])\n'
+            "    .with_use_absolute_periods(True)\n"
+            ")\n"
+            'output_abs_df = input_df.groupBy("Store").agg(*gf_abs.features)\n'
+            "output_abs_df.select(\n"
+            '    "Store", "BasketCount_2021Q4", "BasketCount_2021Q3"\n'
+            ").show()"
+        ),
+        new_markdown_cell(
             "## Next steps\n"
             "\n"
             "See the "
