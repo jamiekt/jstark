@@ -31,3 +31,23 @@ def test_copies_notebook_when_target_absent(tmp_path: Path) -> None:
     assert target.exists()
     assert target.read_bytes() == _bundled_notebook_bytes()
     assert "Copied to" in result.stdout
+
+
+def test_refuses_when_target_exists(tmp_path: Path) -> None:
+    """The CLI refuses to overwrite an existing notebook without --force."""
+    target = tmp_path / NOTEBOOK_NAME
+    original = b"do not overwrite me"
+    target.write_bytes(original)
+
+    result = subprocess.run(
+        ["jstark-demo"],
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+    assert result.returncode == 1
+    assert target.read_bytes() == original
+    assert "already exists" in result.stderr
+    assert "--force" in result.stderr
