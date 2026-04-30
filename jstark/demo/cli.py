@@ -32,6 +32,7 @@ def _build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: list[str] | None = None) -> int:
+    """Run the jstark-demo CLI and return the process exit code."""
     args = _build_parser().parse_args(argv)
 
     source = Path(str(files("jstark.demo") / NOTEBOOK_NAME))
