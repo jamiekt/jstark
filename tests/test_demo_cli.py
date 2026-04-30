@@ -51,3 +51,20 @@ def test_refuses_when_target_exists(tmp_path: Path) -> None:
     assert target.read_bytes() == original
     assert "already exists" in result.stderr
     assert "--force" in result.stderr
+
+
+def test_force_overwrites_existing_target(tmp_path: Path) -> None:
+    """The --force flag overrides the refuse-to-overwrite behaviour."""
+    target = tmp_path / NOTEBOOK_NAME
+    target.write_bytes(b"do not overwrite me")
+
+    result = subprocess.run(
+        ["jstark-demo", "--force"],
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stderr
+    assert target.read_bytes() == _bundled_notebook_bytes()
