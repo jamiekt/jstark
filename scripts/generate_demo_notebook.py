@@ -24,6 +24,7 @@ OUTPUT = (
 
 
 def build() -> nbformat.NotebookNode:
+    """Build the demo notebook as an in-memory NotebookNode with stable cell IDs."""
     cells = [
         new_markdown_cell(
             "# jstark — GroceryFeatures demo\n"
