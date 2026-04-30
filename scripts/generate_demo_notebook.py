@@ -123,8 +123,8 @@ def build() -> nbformat.NotebookNode:
             "    .with_use_absolute_periods(True)\n"
             ")\n"
             'output_abs_df = input_df.groupBy("Store").agg(*gf_abs.features)\n'
-            "output_abs_df.select(\n"
-            '    "Store", "BasketCount_2021Q4", "BasketCount_2021Q3"\n'
+            "output_abs_df.select("
+            '"Store", "BasketCount_2021Q4", "BasketCount_2021Q3"'
             ").show()"
         ),
         new_markdown_cell(
@@ -162,7 +162,7 @@ def main() -> None:
     serialized = json.loads(nbformat.writes(nb))
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     with OUTPUT.open("w", encoding="utf-8") as fh:
-        json.dump(serialized, fh, indent=1, ensure_ascii=True, sort_keys=True)
+        json.dump(serialized, fh, indent=2, ensure_ascii=True, sort_keys=True)
         fh.write("\n")
     print(f"wrote {OUTPUT}")
 
