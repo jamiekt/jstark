@@ -25,11 +25,7 @@ Multiple periods can be calculated in a single Spark job:
 from datetime import date
 from jstark.grocery import GroceryFeatures
 
-gf = (
-    GroceryFeatures()
-    .with_as_at(date(2022, 1, 1))
-    .with_feature_periods(["3m1", "6m4"])
-)
+gf = GroceryFeatures().with_as_at(date(2022, 1, 1)).with_feature_periods(["3m1", "6m4"])
 output_df = input_df.groupBy("Store").agg(*gf.features)
 ```
 
@@ -95,21 +91,29 @@ Every feature carries a description in its column metadata:
 
 ```python
 from pprint import pprint
-pprint([(c.name, c.metadata["description"]) for c in output_df.schema if c.name.endswith("1q1")])
+
+pprint(
+    [
+        (c.name, c.metadata["description"])
+        for c in output_df.schema
+        if c.name.endswith("1q1")
+    ]
+)
 ```
 
 ```python
-[('BasketCount_1q1',
-  'Distinct count of Baskets between 2021-10-01 and 2021-12-31'),
- ...]
+[
+    ("BasketCount_1q1", "Distinct count of Baskets between 2021-10-01 and 2021-12-31"),
+    ...,
+]
 ```
 
 You can also inspect what input columns each feature requires:
 
 ```python
-gf.references["BasketCount_1q1"]                   # ['Basket', 'Timestamp']
-gf.references["CustomerCount_1q1"]                 # ['Customer', 'Timestamp']
-gf.references["AvgGrossSpendPerBasket_1q1"]        # ['Basket', 'GrossSpend', 'Timestamp']
+gf.references["BasketCount_1q1"]  # ['Basket', 'Timestamp']
+gf.references["CustomerCount_1q1"]  # ['Customer', 'Timestamp']
+gf.references["AvgGrossSpendPerBasket_1q1"]  # ['Basket', 'GrossSpend', 'Timestamp']
 ```
 
 All features require a `Timestamp` column ([TimestampType](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.types.TimestampType.html)). Most require additional columns depending on what they measure.
