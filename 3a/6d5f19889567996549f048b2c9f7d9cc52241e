@@ -1,0 +1,18 @@
+CLAUDE.md
+  h_b4679f0dbeb4a6 57
+README.md
+  h_b4679f0dbeb4a6 28,94-101,105-108,114-116
+docs/superpowers/plans/2026-04-30-bundled-demo-notebook.md
+  h_b4679f0dbeb4a6 59,168,226,401,606
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3a6d5f19889567996549f048b2c9f7d9cc52241e",
+  "prompts": {},
+  "humans": {
+    "h_b4679f0dbeb4a6": {
+      "author": "Jamie Thomson <854953+jamiekt@users.noreply.github.com>"
+    }
+  }
+}
