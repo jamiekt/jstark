@@ -56,7 +56,6 @@ class FakeMealkitOrders:
 
     @cached_property
     def df(self) -> DataFrame:
-
         products_provider = DynamicProvider(
             provider_name="product",
             elements=[

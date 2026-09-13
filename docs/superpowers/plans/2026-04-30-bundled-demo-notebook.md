@@ -56,6 +56,7 @@ This stub exists only so `pyproject.toml` can reference the entry point in the n
 #
 # SPDX-License-Identifier: MIT
 """CLI that copies the bundled demo notebook into the user's cwd."""
+
 from __future__ import annotations
 
 import argparse
@@ -164,6 +165,7 @@ Create `tests/test_demo_cli.py`:
 #
 # SPDX-License-Identifier: MIT
 """Tests for the jstark-demo CLI."""
+
 from __future__ import annotations
 
 import subprocess
@@ -221,6 +223,7 @@ Replace the body of `jstark/demo/cli.py` with:
 #
 # SPDX-License-Identifier: MIT
 """CLI that copies the bundled demo notebook into the user's cwd."""
+
 from __future__ import annotations
 
 import argparse
@@ -395,6 +398,7 @@ The script programmatically builds the `.ipynb` using `nbformat`. Keeping the ge
 Run from the repo root:
     uv run python scripts/generate_demo_notebook.py
 """
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -599,6 +603,7 @@ Create `tests/test_demo_notebook.py`:
 #
 # SPDX-License-Identifier: MIT
 """Execute the bundled demo notebook end-to-end."""
+
 from __future__ import annotations
 
 from pathlib import Path

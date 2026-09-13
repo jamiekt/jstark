@@ -54,11 +54,7 @@ Both branches inherit from `Feature`, which handles date range calculation (`sta
 
 Features are used by passing them to PySpark's `agg()`:
 ```python
-gf = (
-    GroceryFeatures()
-    .with_as_at(date(2022, 1, 1))
-    .with_feature_periods(["3m1", "6m4"])
-)
+gf = GroceryFeatures().with_as_at(date(2022, 1, 1)).with_feature_periods(["3m1", "6m4"])
 output_df = input_df.groupBy("Store").agg(*gf.features)
 ```
 
