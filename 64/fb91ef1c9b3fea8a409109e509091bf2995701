@@ -1,0 +1,14 @@
+.github/workflows/build.yml
+  h_b4679f0dbeb4a6 61
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "64fb91ef1c9b3fea8a409109e509091bf2995701",
+  "prompts": {},
+  "humans": {
+    "h_b4679f0dbeb4a6": {
+      "author": "Jamie Thomson <854953+jamiekt@users.noreply.github.com>"
+    }
+  }
+}
